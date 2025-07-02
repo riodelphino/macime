@@ -12,12 +12,30 @@ class InputSource {
     }
 
     static func change(id: String) {
-        guard let inputSource = selectCapableInputSources.filter({ $0.id == id }).first else { return }
+        guard let inputSource = selectCapableInputSources.first(where: { $0.id == id }) else {
+            Swift.print("Input source not found or not selectable.")
+            return
+        }
         TISSelectInputSource(inputSource)
     }
 
-    // 確認用
-    static func print() {
+    static func printCurrent() {
+        for source in selectCapableInputSources {
+            if source.isSelected {
+                Swift.print(source.id)
+                return
+            }
+        }
+        Swift.print("No selected input source found.")
+    }
+
+    static func printList() {
+        for source in selectCapableInputSources {
+            Swift.print(source.id)
+        }
+    }
+
+    static func printDetails() {
         for source in inputSources {
             Swift.print("id:[\(source.id)]")
             Swift.print("localizedName:[\(source.localizedName)]")
@@ -57,20 +75,31 @@ extension TISInputSource {
 }
 
 //  ╭──────────────────────────────────────────────────────────────────────────────╮
-//  │                                  Main Loop                                   │
+//  │                                  Main Logic                                  │
 //  ╰──────────────────────────────────────────────────────────────────────────────╯
 
-let arg = CommandLine.arguments
-if arg.count == 2 {
-    InputSource.change(id: arg[1])
-} else {
-    InputSource.print()
+let args = CommandLine.arguments
+
+switch args.count {
+case 1:
+    // No argument: show current IME
+    InputSource.printCurrent()
+
+case 2:
+    switch args[1] {
+    case "--list":
+        InputSource.printList()
+    case "--list-detail":
+        InputSource.printDetails()
+    default:
+        InputSource.change(id: args[1])
+    }
+
+default:
+    Swift.print("Usage:")
+    Swift.print("  ime-select                 # Show current IME ID")
+    Swift.print("  ime-select --list          # List all selectable IME IDs")
+    Swift.print("  ime-select --list-detail   # List all IMEs with detail")
+    Swift.print("  ime-select <id>            # Switch to specific IME")
 }
 
-//  ╭──────────────────────────────────────────────────────────────────────────────╮
-//  │                                  Change IME                                  │
-//  ╰──────────────────────────────────────────────────────────────────────────────╯
-// Ref: https://qiita.com/SolaRayLino/items/8d01eebb550d871c35cd
-// Run: `swift ime-select.swift`
-// Compile: `swiftc -emit-executable ime-select.swift`
-// Execute: `./ime-select`

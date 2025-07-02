@@ -1,5 +1,15 @@
 import Cocoa
 import InputMethodKit
+import Foundation
+
+// JSON出力用の構造体
+struct InputSourceInfo: Codable {
+    let id: String
+    let localizedName: String
+    let isSelectCapable: Bool
+    let isSelected: Bool
+    let sourceLanguages: [String]
+}
 
 class InputSource {
     fileprivate static var inputSources: [TISInputSource] {
@@ -33,7 +43,7 @@ class InputSource {
         return sources.map { $0.localizedName }
     }
 
-    static func listDetails(availableOnly: Bool) -> [[String: Any]] {
+    static func listDetails(availableOnly: Bool) -> [InputSourceInfo] {
         let sources = availableOnly ? selectCapableInputSources : inputSources
         return sources.map { $0.asDict() }
     }
@@ -65,14 +75,42 @@ extension TISInputSource {
         return getProperty(kTISPropertyInputSourceLanguages) as? [String] ?? []
     }
 
-    func asDict() -> [String: Any] {
-        return [
-            "id": id,
-            "localizedName": localizedName,
-            "isSelectCapable": isSelectCapable,
-            "isSelected": isSelected,
-            "sourceLanguages": sourceLanguages
-        ]
+    func asDict() -> InputSourceInfo {
+        return InputSourceInfo(
+            id: id,
+            localizedName: localizedName,
+            isSelectCapable: isSelectCapable,
+            isSelected: isSelected,
+            sourceLanguages: sourceLanguages
+        )
+    }
+}
+
+// 保存・読み込み機能
+class IMEStorage {
+    private static let saveKey = "com.ime-select.saved-id"
+    
+    static func save(id: String) {
+        UserDefaults.standard.set(id, forKey: saveKey)
+        UserDefaults.standard.synchronize()
+    }
+    
+    static func load() -> String? {
+        return UserDefaults.standard.string(forKey: saveKey)
+    }
+}
+
+// JSON出力用のヘルパー
+func outputJSON<T: Encodable>(_ data: T) {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    do {
+        let jsonData = try encoder.encode(data)
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print(jsonString)
+        }
+    } catch {
+        print("JSON encoding error: \(error)")
     }
 }
 
@@ -80,11 +118,14 @@ extension TISInputSource {
 // │                         MAIN                              │
 // ╰────────────────────────────────────────────────────────────╯
 
-let args = Array(CommandLine.arguments.dropFirst())  // ArraySliceを配列に変換
+let args = Array(CommandLine.arguments.dropFirst())
 var showList = false
 var showDetail = false
 var showNameOnly = false
 var availableOnly = false
+var useJSON = false
+var saveCurrentID = false
+var loadSavedID = false
 var toggleTargets: [String]? = nil
 var switchToID: String? = nil
 
@@ -101,6 +142,12 @@ while i < args.count {
         availableOnly = true
     case "--name":
         showNameOnly = true
+    case "--json":
+        useJSON = true
+    case "--save":
+        saveCurrentID = true
+    case "--load":
+        loadSavedID = true
     case "--toggle":
         i += 1
         if i < args.count {
@@ -119,59 +166,155 @@ func println(_ str: String) {
     Swift.print(str)
 }
 
-// 1. toggle
+// 1. save current ID
+if saveCurrentID {
+    if let current = InputSource.current() {
+        IMEStorage.save(id: current.id)
+        if useJSON {
+            outputJSON(["action": "save", "id": current.id, "status": "success"])
+        } else {
+            println("Saved: \(current.id)")
+        }
+    } else {
+        if useJSON {
+            outputJSON(["action": "save", "status": "error", "message": "No current input source"])
+        } else {
+            println("Error: No current input source")
+        }
+    }
+    exit(0)
+}
+
+// 2. load saved ID
+if loadSavedID {
+    if let savedID = IMEStorage.load() {
+        if let switched = InputSource.change(id: savedID) {
+            if useJSON {
+                outputJSON(["action": "load", "id": switched.id, "status": "success"])
+            } else {
+                println(switched.id)
+            }
+        } else {
+            if useJSON {
+                outputJSON(["action": "load", "id": savedID, "status": "error", "message": "Failed to switch"])
+            } else {
+                println("Error: Failed to switch to \(savedID)")
+            }
+        }
+    } else {
+        if useJSON {
+            outputJSON(["action": "load", "status": "error", "message": "No saved input source"])
+        } else {
+            println("Error: No saved input source")
+        }
+    }
+    exit(0)
+}
+
+// 3. toggle
 if let targets = toggleTargets {
     if let currentID = InputSource.current()?.id,
        let idx = targets.firstIndex(of: currentID) {
         let next = targets[(idx + 1) % targets.count]
         if let switched = InputSource.change(id: next) {
-            println(switched.id)
+            if useJSON {
+                outputJSON(["action": "toggle", "from": currentID, "to": switched.id, "status": "success"])
+            } else {
+                println(switched.id)
+            }
         }
     } else if let first = targets.first,
               let switched = InputSource.change(id: first) {
-        println(switched.id)
+        if useJSON {
+            outputJSON(["action": "toggle", "to": switched.id, "status": "success"])
+        } else {
+            println(switched.id)
+        }
     } else {
-        println("Toggle failed.")
+        if useJSON {
+            outputJSON(["action": "toggle", "status": "error", "message": "Toggle failed"])
+        } else {
+            println("Toggle failed.")
+        }
     }
     exit(0)
 }
 
-// 2. switch by ID
+// 4. switch by ID
 if let id = switchToID {
     if let switched = InputSource.change(id: id) {
-        println(switched.id)
+        if useJSON {
+            outputJSON(["action": "switch", "id": switched.id, "status": "success"])
+        } else {
+            println(switched.id)
+        }
     } else {
-        println("Switch failed.")
+        if useJSON {
+            outputJSON(["action": "switch", "id": id, "status": "error", "message": "Switch failed"])
+        } else {
+            println("Switch failed.")
+        }
     }
     exit(0)
 }
 
-// 3. detail
+// 5. detail
 if showDetail {
     let sources = InputSource.listDetails(availableOnly: availableOnly)
-    for dict in sources {
-        for (k, v) in dict {
-            println("\(k): \(v)")
+    if useJSON {
+        outputJSON(sources)
+    } else {
+        for info in sources {
+            println("id: \(info.id)")
+            println("localizedName: \(info.localizedName)")
+            println("isSelectCapable: \(info.isSelectCapable)")
+            println("isSelected: \(info.isSelected)")
+            println("sourceLanguages: \(info.sourceLanguages)")
+            println("--------------------")
         }
-        println("--------------------")
     }
     exit(0)
 }
 
-// 4. list
+// 6. list
 if showList {
-    let list = showNameOnly
-        ? InputSource.listNames(availableOnly: availableOnly)
-        : InputSource.listIDs(availableOnly: availableOnly)
-    for item in list {
-        println(item)
+    if showNameOnly {
+        let names = InputSource.listNames(availableOnly: availableOnly)
+        if useJSON {
+            outputJSON(names)
+        } else {
+            for name in names {
+                println(name)
+            }
+        }
+    } else {
+        let ids = InputSource.listIDs(availableOnly: availableOnly)
+        if useJSON {
+            outputJSON(ids)
+        } else {
+            for id in ids {
+                println(id)
+            }
+        }
     }
     exit(0)
 }
 
-// 5. current
+// 7. current (default)
 if let current = InputSource.current() {
-    println(showNameOnly ? current.localizedName : current.id)
+    if useJSON {
+        if showNameOnly {
+            outputJSON(["name": current.localizedName])
+        } else {
+            outputJSON(["id": current.id])
+        }
+    } else {
+        println(showNameOnly ? current.localizedName : current.id)
+    }
 } else {
-    println("No current input source")
+    if useJSON {
+        outputJSON(["error": "No current input source"])
+    } else {
+        println("No current input source")
+    }
 }

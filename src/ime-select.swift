@@ -1,10 +1,6 @@
 import Cocoa
 import InputMethodKit
 
-enum OutputFormat {
-    case json, raw
-}
-
 class InputSource {
     fileprivate static var inputSources: [TISInputSource] {
         let inputSourceNSArray = TISCreateInputSourceList(nil, false).takeRetainedValue() as NSArray
@@ -30,6 +26,11 @@ class InputSource {
     static func listIDs(availableOnly: Bool) -> [String] {
         let sources = availableOnly ? selectCapableInputSources : inputSources
         return sources.map { $0.id }
+    }
+
+    static func listNames(availableOnly: Bool) -> [String] {
+        let sources = availableOnly ? selectCapableInputSources : inputSources
+        return sources.map { $0.localizedName }
     }
 
     static func listDetails(availableOnly: Bool) -> [[String: Any]] {
@@ -66,23 +67,23 @@ extension TISInputSource {
 
     func asDict() -> [String: Any] {
         return [
-            "id": self.id,
-            "localizedName": self.localizedName,
-            "isSelectCapable": self.isSelectCapable,
-            "isSelected": self.isSelected,
-            "sourceLanguages": self.sourceLanguages
+            "id": id,
+            "localizedName": localizedName,
+            "isSelectCapable": isSelectCapable,
+            "isSelected": isSelected,
+            "sourceLanguages": sourceLanguages
         ]
     }
 }
 
-// ╭────────────────────────────────────────────────────────────────────────────╮
-// │                                   MAIN                                     │
-// ╰────────────────────────────────────────────────────────────────────────────╯
+// ╭────────────────────────────────────────────────────────────╮
+// │                         MAIN                              │
+// ╰────────────────────────────────────────────────────────────╯
 
 let args = CommandLine.arguments.dropFirst()
-var outputFormat: OutputFormat = .json
 var showList = false
 var showDetail = false
+var showNameOnly = false
 var availableOnly = false
 var toggleTargets: [String]? = nil
 var switchToID: String? = nil
@@ -92,17 +93,14 @@ var i = 0
 while i < args.count {
     let arg = args[i]
     switch arg {
-    case "--output":
-        i += 1
-        if i < args.count {
-            outputFormat = (args[i] == "raw") ? .raw : .json
-        }
     case "--list":
         showList = true
     case "--detail":
         showDetail = true
     case "--available":
         availableOnly = true
+    case "--name":
+        showNameOnly = true
     case "--toggle":
         i += 1
         if i < args.count {
@@ -116,81 +114,64 @@ while i < args.count {
     i += 1
 }
 
-// 出力関数
-func printOutput(_ value: Any) {
-    switch outputFormat {
-    case .json:
-        let jsonObject: Any
-        if let string = value as? String {
-            jsonObject = ["value": string]
-        } else {
-            jsonObject = value
-        }
-        if JSONSerialization.isValidJSONObject(jsonObject),
-           let data = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
-           let str = String(data: data, encoding: .utf8) {
-            Swift.print(str)
-        } else {
-            Swift.print("{\"error\": \"Invalid JSON\"}")
-        }
-    case .raw:
-        if let str = value as? String {
-            Swift.print(str)
-        } else if let arr = value as? [Any] {
-            for item in arr {
-                Swift.print(item)
-            }
-        } else if let dict = value as? [String: Any] {
-            for (key, val) in dict {
-                Swift.print("\(key): \(val)")
-            }
-        }
-    }
+// 実行関数
+func println(_ str: String) {
+    Swift.print(str)
 }
 
-// ❶ トグル
+// 1. toggle
 if let targets = toggleTargets {
     if let currentID = InputSource.current()?.id,
        let idx = targets.firstIndex(of: currentID) {
         let next = targets[(idx + 1) % targets.count]
         if let switched = InputSource.change(id: next) {
-            printOutput((outputFormat == .json) ? switched.asDict() : switched.id)
+            println(switched.id)
         }
-    } else if let first = targets.first, let switched = InputSource.change(id: first) {
-        printOutput((outputFormat == .json) ? switched.asDict() : switched.id)
+    } else if let first = targets.first,
+              let switched = InputSource.change(id: first) {
+        println(switched.id)
     } else {
-        Swift.print("Toggle failed.")
+        println("Toggle failed.")
     }
     exit(0)
 }
 
-// ❷ 切り替え
+// 2. switch by ID
 if let id = switchToID {
     if let switched = InputSource.change(id: id) {
-        printOutput((outputFormat == .json) ? switched.asDict() : switched.id)
+        println(switched.id)
     } else {
-        Swift.print("Switch failed.")
+        println("Switch failed.")
     }
     exit(0)
 }
 
-// ❸ 一覧系
+// 3. detail
 if showDetail {
-    let result = InputSource.listDetails(availableOnly: availableOnly)
-    printOutput(result)
+    let sources = InputSource.listDetails(availableOnly: availableOnly)
+    for dict in sources {
+        for (k, v) in dict {
+            println("\(k): \(v)")
+        }
+        println("--------------------")
+    }
     exit(0)
 }
 
+// 4. list
 if showList {
-    let result = InputSource.listIDs(availableOnly: availableOnly)
-    printOutput(result)
+    let list = showNameOnly
+        ? InputSource.listNames(availableOnly: availableOnly)
+        : InputSource.listIDs(availableOnly: availableOnly)
+    for item in list {
+        println(item)
+    }
     exit(0)
 }
 
-// ❹ 現在のIME
+// 5. current
 if let current = InputSource.current() {
-    printOutput((outputFormat == .json) ? current.id : current.id)
+    println(showNameOnly ? current.localizedName : current.id)
 } else {
-    Swift.print("No current input source")
+    println("No current input source")
 }
-

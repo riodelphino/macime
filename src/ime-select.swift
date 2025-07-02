@@ -80,7 +80,7 @@ extension TISInputSource {
 // │                         MAIN                              │
 // ╰────────────────────────────────────────────────────────────╯
 
-let args = CommandLine.arguments.dropFirst()
+let args = Array(CommandLine.arguments.dropFirst())  // ArraySliceを配列に変換
 var showList = false
 var showDetail = false
 var showNameOnly = false

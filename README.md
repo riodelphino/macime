@@ -5,7 +5,8 @@
 
 An alternative for [im-select](https://github.com/daipeihust/im-select) in MacOS.
 
-In nvim there was a slight time lag after executing the `im-select` command.
+In nvim, there was a slight time lag after executing the `im-select` command.
+
 This code is written in swift, so 10-60% faster than `im-select`. (It depends the commands.)
 
 The original swift code is here. Thank you for sharing!
@@ -66,39 +67,51 @@ sudo rm /usr/local/bin/ime-select
 
 ### List up IME methods
 ```bash
-./ime-select --list # id list (e.g. com.apple.keylayout.ABC)
-./ime-select --list --name # name list (e.g. ABC)
-./ime-select --list --detail # detailed list
-./ime-select --list --json # json list
-./ime-select --list --available # filter only available to be selected
+ime-select --list # id list (e.g. com.apple.keylayout.ABC)
+ime-select --list --name # name list (e.g. ABC)
+ime-select --list --detail # detailed list
+ime-select --list --json # json list
+ime-select --list --available # filter only available to be selected
 ```
 
 ### Select IME methods
 ```bash
 # Select English input method
-./ime-select com.apple.keylayout.ABC
+ime-select com.apple.keylayout.ABC
 
 # Select Japanese(MacOS) input method
-./ime-select com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese
+ime-select com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese
 
 # Select Google Japanese input method
-./ime-select com.google.inputmethod.Japanese.base
+ime-select com.google.inputmethod.Japanese.base
 ```
 
 ### Toggle IME methods
 ```bash
 # Toggle 1 -> 2 -> 3 -> 1 ...
-./ime-select --toggle com.apple.keylayout.ABC,com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese,com.google.inputmethod.Japanese.base
+ime-select --toggle com.apple.keylayout.ABC,com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese,com.google.inputmethod.Japanese.base
 ```
 IME methods are separated by ','.
 
 ### Save and Load IME methods
 ```bash
-./ime-select --save # Save only
-./ime-select --save com.apple.keylayout.ABC # Save and Select at once
-./ime-select --load # Load saved IME
+ime-select --save # Save only
+ime-select --save com.apple.keylayout.ABC # Save and Select at once
+ime-select --load # Load saved IME
 ```
-Sample usage: Use `--save` When you exit insert-mode in nvim, Use `--load` when you return to insert-mode to restore.
+
+#### Sample use cases
+
+Use `--save` When you exit insert-mode in nvim, Use `--load` when you return to insert-mode to restore.
+
+
+#### Comparison
+
+`im-select`:
+Need calling twice. Check IME method by `im-select` -> Select IME method `im-select com.apple.keylayout.ABC`)
+
+`ime-select`:
+Save and select at once! Less time lag!
 
 
 ## Reffer

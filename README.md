@@ -13,10 +13,10 @@ The original swift code is here. Thank you for sharing!
 
 ## Why macime?
 
-- Written in swift
-- Rich features
-- Reduce 10-60% time lag of `im-select` or `macism`. (It depends the command usages.)
-
+1. Written in swift (faster)
+2. Reduce time lag 10-60% than similar tools. (It depends the command usages.)
+3. Rich features
+4. Easier implementing to nvim
 
 ## Feature
 

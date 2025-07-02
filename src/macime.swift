@@ -2,7 +2,7 @@ import Cocoa
 import InputMethodKit
 import Foundation
 
-// JSON出力用の構造体
+// JSON output structure
 struct InputSourceInfo: Codable {
     let id: String
     let localizedName: String
@@ -30,7 +30,6 @@ class InputSource {
     }
 
     static func current() -> TISInputSource? {
-        // より確実な方法で現在の入力ソースを取得
         guard let currentInputSource = TISCopyCurrentKeyboardInputSource()?.takeRetainedValue() else {
             return nil
         }
@@ -47,13 +46,9 @@ class InputSource {
         return sources.map { $0.localizedName }
     }
 
-    // static func listDetails(availableOnly: Bool) -> [InputSourceInfo] {
-    //     let sources = availableOnly ? selectCapableInputSources : inputSources
-    //     return sources.map { $0.asDict() }
-    // }
     static func listDetails(availableOnly: Bool) -> [InputSourceInfo] {
         let sources = availableOnly ? selectCapableInputSources : inputSources
-        return sources.map { $0.asDict() } // ✅ OK：asDict() が InputSourceInfo 型を返す
+        return sources.map { $0.asDict() }
     }
 }
 
@@ -94,7 +89,7 @@ extension TISInputSource {
     }
 }
 
-// 保存・読み込み機能
+// 
 class IMEStorage {
     private static let saveKey = "com.ime-select.saved-id"
     
@@ -108,29 +103,7 @@ class IMEStorage {
     }
 }
 
-// // JSON出力用のヘルパー
-// func outputJSON(_ data: Any) {
-//     do {
-//         let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
-//         if let jsonString = String(data: jsonData, encoding: .utf8) {
-//             print(jsonString)
-//         }
-//     } catch {
-//         // JSON変換失敗時のエラー出力（JSON or print）
-//         let fallback = [
-//             "error": "JSON serialization error",
-//             "message": "\(error)"
-//         ]
-//         if let fallbackData = try? JSONSerialization.data(withJSONObject: fallback, options: .prettyPrinted),
-//            let fallbackString = String(data: fallbackData, encoding: .utf8) {
-//             print(fallbackString)
-//         } else {
-//             print("JSON serialization failed and fallback failed: \(error)")
-//         }
-//     }
-// }
-
-// JSON出力用のヘルパー（Codable向け）
+// JSON output helper for Codable
 func outputCodableJSON<T: Encodable>(_ data: T) {
     do {
         let encoder = JSONEncoder()
@@ -145,7 +118,7 @@ func outputCodableJSON<T: Encodable>(_ data: T) {
     }
 }
 
-// 任意のDictionaryやArrayなどを出力（Any向け）※完全なSwift型で構成されたときのみ安全
+// JSON output helper for Dictionary and Array (Any) ※ only for swift type
 func outputJSON(_ data: Any) {
     do {
         let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
@@ -159,7 +132,7 @@ func outputJSON(_ data: Any) {
 }
 
 // ╭────────────────────────────────────────────────────────────╮
-// │                         MAIN                              │
+// │                          MAIN                              │
 // ╰────────────────────────────────────────────────────────────╯
 
 let args = Array(CommandLine.arguments.dropFirst())
@@ -173,7 +146,7 @@ var loadSavedID = false
 var toggleTargets: [String]? = nil
 var switchToID: String? = nil
 
-// 引数パース
+// Parse args
 var i = 0
 while i < args.count {
     let arg = args[i]
@@ -227,7 +200,7 @@ func eprintln(_ message: String) {
     }
 }
 
-// 実行関数
+// Excuting function
 func println(_ str: String) {
     Swift.print(str)
 }
@@ -237,7 +210,7 @@ if saveCurrentID {
     if let current = InputSource.current() {
         IMEStorage.save(id: current.id)
         
-        // 引数にIDが指定されていれば、保存後にそのIDに切り替え
+        // If an ID is specified, switch to that ID after saving
         if let targetID = switchToID {
             if let switched = InputSource.change(id: targetID) {
                 if useJSON {
@@ -297,13 +270,12 @@ if loadSavedID {
 
 // 3. toggle
 if let targets = toggleTargets {
-    // デバッグ用：利用可能な入力ソースをチェック
+    // For debugging: Check available input sources
     let availableIDs = InputSource.listIDs(availableOnly: true)
     let validTargets = targets.filter { availableIDs.contains($0) }
     
     if validTargets.isEmpty {
         if useJSON {
-            //-- outputJSON(["action": "toggle", "status": "error", "message": "No valid targets found", "targets": targets, "available": availableIDs])
             outputJSON([ "action": "toggle", "status": "error", "message": "No valid targets found", "targets": targets, "available": availableIDs ] as [String: Any])
         } else {
             println("Error: No valid targets found")
@@ -340,7 +312,7 @@ if let targets = toggleTargets {
     exit(0)
 }
 
-// 4. switch by ID (--save と組み合わせていない場合のみ)
+// 4. switch by ID (without `--save`)
 if let id = switchToID, !saveCurrentID {
     if let switched = InputSource.change(id: id) {
         if useJSON {

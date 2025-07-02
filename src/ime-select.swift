@@ -30,7 +30,11 @@ class InputSource {
     }
 
     static func current() -> TISInputSource? {
-        return selectCapableInputSources.first(where: { $0.isSelected })
+        // より確実な方法で現在の入力ソースを取得
+        guard let currentInputSource = TISCopyCurrentKeyboardInputSource()?.takeRetainedValue() else {
+            return nil
+        }
+        return currentInputSource
     }
 
     static func listIDs(availableOnly: Bool) -> [String] {
@@ -43,9 +47,13 @@ class InputSource {
         return sources.map { $0.localizedName }
     }
 
+    // static func listDetails(availableOnly: Bool) -> [InputSourceInfo] {
+    //     let sources = availableOnly ? selectCapableInputSources : inputSources
+    //     return sources.map { $0.asDict() }
+    // }
     static func listDetails(availableOnly: Bool) -> [InputSourceInfo] {
         let sources = availableOnly ? selectCapableInputSources : inputSources
-        return sources.map { $0.asDict() }
+        return sources.map { $0.asDict() } // ✅ OK：asDict() が InputSourceInfo 型を返す
     }
 }
 
@@ -81,7 +89,7 @@ extension TISInputSource {
             localizedName: localizedName,
             isSelectCapable: isSelectCapable,
             isSelected: isSelected,
-            sourceLanguages: sourceLanguages
+            sourceLanguages: sourceLanguages as NSArray as! [String]
         )
     }
 }
@@ -100,17 +108,53 @@ class IMEStorage {
     }
 }
 
-// JSON出力用のヘルパー
-func outputJSON<T: Encodable>(_ data: T) {
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = .prettyPrinted
+// // JSON出力用のヘルパー
+// func outputJSON(_ data: Any) {
+//     do {
+//         let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
+//         if let jsonString = String(data: jsonData, encoding: .utf8) {
+//             print(jsonString)
+//         }
+//     } catch {
+//         // JSON変換失敗時のエラー出力（JSON or print）
+//         let fallback = [
+//             "error": "JSON serialization error",
+//             "message": "\(error)"
+//         ]
+//         if let fallbackData = try? JSONSerialization.data(withJSONObject: fallback, options: .prettyPrinted),
+//            let fallbackString = String(data: fallbackData, encoding: .utf8) {
+//             print(fallbackString)
+//         } else {
+//             print("JSON serialization failed and fallback failed: \(error)")
+//         }
+//     }
+// }
+
+// JSON出力用のヘルパー（Codable向け）
+func outputCodableJSON<T: Encodable>(_ data: T) {
     do {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
         let jsonData = try encoder.encode(data)
         if let jsonString = String(data: jsonData, encoding: .utf8) {
             print(jsonString)
         }
     } catch {
-        print("JSON encoding error: \(error)")
+        eprintln("JSON encoding error: \(error)")
+        exit(1)
+    }
+}
+
+// 任意のDictionaryやArrayなどを出力（Any向け）※完全なSwift型で構成されたときのみ安全
+func outputJSON(_ data: Any) {
+    do {
+        let jsonData = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print(jsonString)
+        }
+    } catch {
+        eprintln("JSON serialization error: \(error)")
+        exit(1)
     }
 }
 
@@ -158,7 +202,29 @@ while i < args.count {
     default:
         break
     }
+    if switchToID != nil && loadSavedID == true {
+        error("--save option and switchToID cannot be specified simultaneously.")
+    }
+    if let targets = toggleTargets, !targets.isEmpty && loadSavedID == true {
+        error("--load and --toggle cannot be specified simultaneously.")
+    }
     i += 1
+}
+
+func error(_ message: String) {
+    let msg = "ERROR: " + message
+    if useJSON {
+        outputJSON(["error": msg])
+    } else {
+        eprintln(msg)
+    }
+    exit(1)
+}
+
+func eprintln(_ message: String) {
+    if let data = (message + "\n").data(using: .utf8) {
+        FileHandle.standardError.write(data)
+    }
 }
 
 // 実行関数
@@ -166,14 +232,32 @@ func println(_ str: String) {
     Swift.print(str)
 }
 
-// 1. save current ID
+// 1. save current ID (and optionally switch)
 if saveCurrentID {
     if let current = InputSource.current() {
         IMEStorage.save(id: current.id)
-        if useJSON {
-            outputJSON(["action": "save", "id": current.id, "status": "success"])
+        
+        // 引数にIDが指定されていれば、保存後にそのIDに切り替え
+        if let targetID = switchToID {
+            if let switched = InputSource.change(id: targetID) {
+                if useJSON {
+                    outputJSON(["action": "save_and_switch", "saved": current.id, "switched_to": switched.id, "status": "success"])
+                } else {
+                    println("Saved: \(current.id), Switched to: \(switched.id)")
+                }
+            } else {
+                if useJSON {
+                    outputJSON(["action": "save_and_switch", "saved": current.id, "target": targetID, "status": "switch_failed"])
+                } else {
+                    println("Saved: \(current.id), but failed to switch to: \(targetID)")
+                }
+            }
         } else {
-            println("Saved: \(current.id)")
+            if useJSON {
+                outputJSON(["action": "save", "id": current.id, "status": "success"])
+            } else {
+                println("Saved: \(current.id)")
+            }
         }
     } else {
         if useJSON {
@@ -213,9 +297,25 @@ if loadSavedID {
 
 // 3. toggle
 if let targets = toggleTargets {
+    // デバッグ用：利用可能な入力ソースをチェック
+    let availableIDs = InputSource.listIDs(availableOnly: true)
+    let validTargets = targets.filter { availableIDs.contains($0) }
+    
+    if validTargets.isEmpty {
+        if useJSON {
+            //-- outputJSON(["action": "toggle", "status": "error", "message": "No valid targets found", "targets": targets, "available": availableIDs])
+            outputJSON([ "action": "toggle", "status": "error", "message": "No valid targets found", "targets": targets, "available": availableIDs ] as [String: Any])
+        } else {
+            println("Error: No valid targets found")
+            println("Targets: \(targets)")
+            println("Available: \(availableIDs)")
+        }
+        exit(0)
+    }
+    
     if let currentID = InputSource.current()?.id,
-       let idx = targets.firstIndex(of: currentID) {
-        let next = targets[(idx + 1) % targets.count]
+       let idx = validTargets.firstIndex(of: currentID) {
+        let next = validTargets[(idx + 1) % validTargets.count]
         if let switched = InputSource.change(id: next) {
             if useJSON {
                 outputJSON(["action": "toggle", "from": currentID, "to": switched.id, "status": "success"])
@@ -223,7 +323,7 @@ if let targets = toggleTargets {
                 println(switched.id)
             }
         }
-    } else if let first = targets.first,
+    } else if let first = validTargets.first,
               let switched = InputSource.change(id: first) {
         if useJSON {
             outputJSON(["action": "toggle", "to": switched.id, "status": "success"])
@@ -240,8 +340,8 @@ if let targets = toggleTargets {
     exit(0)
 }
 
-// 4. switch by ID
-if let id = switchToID {
+// 4. switch by ID (--save と組み合わせていない場合のみ)
+if let id = switchToID, !saveCurrentID {
     if let switched = InputSource.change(id: id) {
         if useJSON {
             outputJSON(["action": "switch", "id": switched.id, "status": "success"])
@@ -259,18 +359,23 @@ if let id = switchToID {
 }
 
 // 5. detail
-if showDetail {
-    let sources = InputSource.listDetails(availableOnly: availableOnly)
-    if useJSON {
-        outputJSON(sources)
-    } else {
-        for info in sources {
-            println("id: \(info.id)")
-            println("localizedName: \(info.localizedName)")
-            println("isSelectCapable: \(info.isSelectCapable)")
-            println("isSelected: \(info.isSelected)")
-            println("sourceLanguages: \(info.sourceLanguages)")
+if showDetail && !showList {
+    if let current = InputSource.current() {
+        if useJSON {
+            outputCodableJSON(current.asDict())
+        } else {
+            println("id: \(current.id)")
+            println("localizedName: \(current.localizedName)")
+            println("isSelectCapable: \(current.isSelectCapable)")
+            println("isSelected: \(current.isSelected)")
+            println("sourceLanguages: \(current.sourceLanguages)")
             println("--------------------")
+        }
+    } else {
+        if useJSON {
+            outputJSON(["error": "No current input source"])
+        } else {
+            println("No current input source")
         }
     }
     exit(0)
@@ -278,7 +383,21 @@ if showDetail {
 
 // 6. list
 if showList {
-    if showNameOnly {
+    if showDetail {
+        let details = InputSource.listDetails(availableOnly: availableOnly)
+        if useJSON {
+            outputCodableJSON(details)
+        } else {
+            for detail in details {
+                println("id: \(detail.id)")
+                println("localizedName: \(detail.localizedName)")
+                println("isSelectCapable: \(detail.isSelectCapable)")
+                println("isSelected: \(detail.isSelected)")
+                println("sourceLanguages: \(detail.sourceLanguages)")
+                println("--------------------")
+            }
+        }
+    } else if showNameOnly {
         let names = InputSource.listNames(availableOnly: availableOnly)
         if useJSON {
             outputJSON(names)

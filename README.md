@@ -1,4 +1,4 @@
-# macime.swift
+# macime
 
 > [!Warning]
 > Still a prototype. Use with caution. Feedback and issues are welcome!

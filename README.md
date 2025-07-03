@@ -109,7 +109,7 @@ macime com.google.inputmethod.Japanese.base
 # Toggle 1 -> 2 -> 3 -> 1 ...
 macime --toggle com.apple.keylayout.ABC,com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese,com.google.inputmethod.Japanese.base
 ```
-IME methods should be separated by ','.
+IME methods should be separated by `,`
 
 ### Save and Load IME methods
 ```bash

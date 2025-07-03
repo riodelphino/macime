@@ -136,12 +136,12 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 It works with such a tiny code, and faster!
 
 
-## Reffer
+## Resources
 
 - [https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
 
 
-## Related projects
+## Related
 
 - [im-select](https://github.com/daipeihust/im-select)
 - [macism](https://github.com/laishulu/macism)

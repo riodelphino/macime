@@ -7,7 +7,7 @@ An alternative for [macism](https://github.com/laishulu/macism) and [im-select](
 
 `macism` reduces the slight time lag for executing these command in MacOS's nvim, and provide convenient features.
 
-The original swift code is here. Thank you for sharing!
+The original swift code is here. Thank you for sharing!  
 [https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
 
 
@@ -21,8 +21,8 @@ The original swift code is here. Thank you for sharing!
 ## Feature
 
 * Show current IME method
-* Show IME List
-* Select IME method
+* Show IME methods list
+* Select an IME method
 * Toggle several IME methods in sequence
 * Save current IME method, and Load it later
 * Save and select at once (less time lag)
@@ -120,18 +120,17 @@ macime --load # Load saved IME
 
 ## Setup for nvim
 
-for nvim:
 * Use `--save` when you exit insert-mode, to save current IME method.
 * Use `--load` when you return to insert-mode, to restore it.
 
 init.lua:
 ```lua
-vim.api.nvim_create_autocmd('InsertEnter', {
-   callback = function() vim.fn.jobstart({ 'macime', '--load' }) end,
-})
-
 vim.api.nvim_create_autocmd('InsertLeave', {
    callback = function() vim.fn.jobstart({ 'macime', '--save', 'com.apple.keylayout.ABC' }) end,
+})
+
+vim.api.nvim_create_autocmd('InsertEnter', {
+   callback = function() vim.fn.jobstart({ 'macime', '--load' }) end,
 })
 ```
 It works with such a tiny code, and faster!

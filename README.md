@@ -135,6 +135,22 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 ```
 It works with such a tiny code, and faster!
 
+To exclude specific filetypes:
+```lua
+vim.api.nvim_create_autocmd('InsertLeave', {
+   callback = function() vim.fn.jobstart({ 'macime', '--save', 'com.apple.keylayout.ABC' }) end,
+})
+
+vim.api.nvim_create_autocmd('InsertEnter', {
+   callback = function()
+      local exclude_list = { 'TelescopePrompt', 'snacks_picker_input' }
+      local filetype = vim.bo.filetype
+      local is_allowed_filetype = not vim.tbl_contains(exclude_list, filetype)
+      if is_allowed_filetype then vim.fn.jobstart({ 'macime', '--load' }) end
+   end,
+})
+
+```
 
 ## Resources
 

@@ -151,6 +151,12 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 
 ```
+## Show and Delete the defaults key
+
+```bash
+defaults read macime # to read the key
+defaults delete macime # to delete the key
+```
 
 ## Resources
 

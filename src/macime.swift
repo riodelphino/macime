@@ -91,7 +91,7 @@ extension TISInputSource {
 
 // 
 class IMEStorage {
-    private static let saveKey = "com.ime-select.saved-id"
+    private static let saveKey = "com.macime.saved-id"
     
     static func save(id: String) {
         UserDefaults.standard.set(id, forKey: saveKey)

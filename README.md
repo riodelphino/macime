@@ -6,7 +6,7 @@ On older Macs, these tools require `waiting for a moment` each time until switch
 
 `macime` is a faster Swift-based IME auto-switching tool, which reduces this latency and also provides additional convenient features.
 
-Thanks for the original swift code:
+Thanks for the original swift code:  
 [https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
 
 
@@ -171,7 +171,7 @@ defaults delete macime # to delete the key
 ## Known Issues
 
 - Occasionally it becomes impossible to set the IME mode `ON` by `right cmd` key with `karabiner`.
-   - `left cmd` = IME OFF (EISUU) / `right cmd` = IME ON (KANA), in my karabiner config.
+   - `left cmd` = IME OFF (EISU) / `right cmd` = IME ON (KANA), in my karabiner config.
    - To solve it temporaly, set the IME `OFF` by `left cmd` key
    - I'm not sure which cause this issue, `karabiner` or `macime`.
 

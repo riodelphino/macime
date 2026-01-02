@@ -15,5 +15,5 @@ indent_size = 3
 trim_trailing_whitespace = false
 
 [*.swift]
-indent_size = 2
+indent_size = 3
 max_line_length = off

@@ -1,13 +1,12 @@
 # macime
 
-> [!Warning]
-> Still a prototype. Use with caution. Feedback and issues are welcome!
+Alternative to [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) on macOS.
 
-An alternative for [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) in MacOS.
+On older Macs, these tools require `waiting for a moment` each time until switching IME mode.
 
-`macism` reduces the slight time lag for executing these command in MacOS's nvim, and provide convenient features.
+`macime` is a faster Swift-based IME auto-switching tool, which reduces this latency and also provides additional convenient features.
 
-The original swift code is here. Thank you for sharing!  
+Thanks for the original swift code:
 [https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
 
 
@@ -16,7 +15,8 @@ The original swift code is here. Thank you for sharing!
 1. Written in swift (faster)
 2. Reduce time lag 10-60% than similar tools. (It depends the command usages.)
 3. Rich features
-4. Easier implementing to nvim
+4. Easier setup to nvim
+
 
 ## Feature
 
@@ -31,20 +31,30 @@ The original swift code is here. Thank you for sharing!
 
 ## Requirements
 
-* MacOS
+* macOS
 
 
 ## Install
 ```bash
 git clone https://github.com/riodelphino/macime
-cd macime/src
-# swiftc macime.swift -o macime # If you modified source code
+cd macime
+
+# Create link
 sudo ln -s "$(pwd)/macime" /usr/local/bin/macime
+# Or just add to PATH
+export PATH=$PATH:$(pwd)
 ```
 
 ## Uninstall
 ```bash
 sudo rm /usr/local/bin/macime
+```
+
+## Compile
+
+Only when you modified the source code, compile it (basically not necessary):
+```bash
+swiftc src/macime.swift -o macime
 ```
 
 ## Usage
@@ -151,8 +161,22 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 
 ```
+## Show and Delete the defaults key
 
-## Resources
+```bash
+defaults read macime # to read the key
+defaults delete macime # to delete the key
+```
+
+## Known Issues
+
+- Occasionally it becomes impossible to set the IME mode `ON` by `right cmd` key with `karabiner`.
+   - `left cmd` = IME OFF (EISUU) / `right cmd` = IME ON (KANA), in my karabiner config.
+   - To solve it temporaly, set the IME `OFF` by `left cmd` key
+   - I'm not sure which cause this issue, `karabiner` or `macime`.
+
+
+## Refers
 
 - [https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
 

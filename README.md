@@ -32,28 +32,44 @@ Thanks for the original swift code:
 ## Requirements
 
 * macOS
+* bash or zsh (May work with other shells)
 
 
 ## Install
+
+1. Clone
 ```bash
 git clone https://github.com/riodelphino/macime
-cd macime
+```
+2. Install (Choose one)
 
-# Create link
-sudo ln -s "$(pwd)/macime" /usr/local/bin/macime
-# Or just add to PATH
-export PATH=$PATH:$(pwd)
+A. Create symlink (Recommended):
+```bash
+sudo ln -s /path/to/macime/macime /usr/local/bin/macime
+```
+
+B. Add to PATH in `.profile` or `.zprofile`:
+```bash
+export PATH="$PATH:/path/to/macime"
 ```
 
 ## Uninstall
+
+A. Remove symlink:
 ```bash
 sudo rm /usr/local/bin/macime
+```
+
+B. Remove the PATH entry in `.profile` or `.zprofile`:
+```bash
+export PATH="$PATH:/path/to/macime"
 ```
 
 ## Compile
 
 Only when you modified the source code, compile it (basically not necessary):
 ```bash
+cd /path/to/macime
 swiftc src/macime.swift -o macime
 ```
 
@@ -161,11 +177,19 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 
 ```
-## Show and Delete the defaults key
 
+## IME method is saved in defaults
+
+To read the saved IME method:
 ```bash
-defaults read macime # to read the key
-defaults delete macime # to delete the key
+defaults read macime
+# {
+#    "com.macime.saved-id" = "com.apple.keylayout.ABC";
+# }
+```
+To delete the saved IME method:
+```bash
+defaults delete macime
 ```
 
 ## Known Issues
@@ -173,7 +197,7 @@ defaults delete macime # to delete the key
 - Occasionally it becomes impossible to set the IME mode `ON` by `right cmd` key with `karabiner`.
    - `left cmd` = IME OFF (EISU) / `right cmd` = IME ON (KANA), in my karabiner config.
    - To solve it temporaly, set the IME `OFF` by `left cmd` key
-   - I'm not sure which cause this issue, `karabiner` or `macime`.
+   - This issue is likely releated to `macime` rather than `Karabiner`.
 
 
 ## Refers

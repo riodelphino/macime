@@ -3,6 +3,12 @@ import Foundation
 import InputMethodKit
 
 // ╭───────────────────────────────────────────────────────────────╮
+// │                             Const                             │
+// ╰───────────────────────────────────────────────────────────────╯
+
+let VERSION = "2.0.0"
+
+// ╭───────────────────────────────────────────────────────────────╮
 // │                            struct                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
@@ -12,7 +18,7 @@ struct Opts {
    var list: Bool = false
    var detail: Bool = false
    var json = false
-   var show: String? = nil  // ["curr","prev"] に出来るんじゃ？ loop にできるし
+   var shows: [String] = []
    var newID: String? = nil
 }
 
@@ -117,7 +123,6 @@ extension TISInputSource {
    }
 
    // Return IME info as specific data type
-   // func getInfo() -> (str: String, json: [String: Any]) { // TODO: REMOVE
    var getInfo: (str: String, json: [String: Any]) {
       var _str = ""
       var _json: [String: Any] = [:]
@@ -134,26 +139,8 @@ extension TISInputSource {
          + "isSelectCapable: \(isSelectCapable)\n"
          + "isSelected: \(isSelected)\n"
          + "sourceLanguages: \(sourceLanguages)\n"
-         + "\n"
       return (_str, _json)
    }
-
-   // // Return IME info as proper data type // TODO: REMOVE
-   // func getInfo(opts: Opts) -> (id: String, str: String, json: [String: Any]) {
-   //    if opts.detail {
-   //       if opts.json {
-   //          return getInfoAs()
-   //       } else {
-   //          return getInfoAs()
-   //       }
-   //    } else {
-   //       if opts.json {
-   //          return getInfoAs()
-   //       } else {
-   //          return getInfoAs()
-   //       }
-   //    }
-   // }
 }
 
 // ╭────────────────────────────────────────────────────────────╮
@@ -173,45 +160,55 @@ while i < args.count {
    switch arg {
    case "--detail":
       opts.detail = true
-   case "--available":
+   case "--select-capable":
       opts.selectCapable = true
    case "--json":
       opts.json = true
    case "--show":
       if i + 1 < args.count {
-         opts.show = args[i + 1]
+         let show = args[i + 1]
+         switch show {
+         case "prev":
+            opts.shows.append("prev")
+         case "curr":
+            opts.shows.append("curr")
+         case "both":
+            opts.shows.append("prev")
+            opts.shows.append("curr")
+         default:
+            stderr("'--show requires both|curr|prev'")
+            exit(1)
+         }
          i += 1
       } else {
          stderr("'--show' requires both|curr|prev")
+         exit(1)
       }
+   case "--version", "-v":
+      stdout("macime " + VERSION)
+      exit(0)
    default:
       opts.newID = arg  // IME method ID
       break
    }
    i += 1
 }
-if !opts.list {
-   if opts.show == nil {
-      opts.show = "curr"  // As default
-   }
-   if opts.newID == nil {
-      opts.show = "curr"  // ⭐️ list ではなく、newID が指定なし: get したいだけの "macime" のみだった場合の処理。あとのGet のとこに影響あり
-   }
-}
 
 // Prioritize `list` sub command
 if opts.list == true {
    opts.newID = nil
 }
+// Return previous IME as default
+if !opts.list {
+   opts.shows = ["prev"]
+}
 
-// var outJson: Dictionary<String, Any> = [:]
-
-var sources: [TISInputSource]
-
-sources = MacIME.list(selectCapable: opts.selectCapable)
 if opts.list {
+   var sources: [TISInputSource]
    var outJson: [Any] = []
    var outStr: [String] = []
+
+   sources = MacIME.list(selectCapable: opts.selectCapable)
 
    if opts.detail {
       if opts.json {
@@ -243,7 +240,10 @@ if opts.list {
       }
    }
 } else {  // Set or Get
+   var sources: [String: TISInputSource] = [:]
+   // if sources["prev"] != nil {
    if let prev = MacIME.current() {
+      sources["prev"] = prev
       var outJson: [String: Any] = [:]
       var outStr: [String] = []
 
@@ -251,52 +251,64 @@ if opts.list {
       if let _newID = opts.newID {
          // Set & Get
          if let curr = MacIME.change(id: _newID) {
+            sources["curr"] = curr
             if opts.detail {
                if opts.json {
                   // prev/curr IME detail as JSON
-                  if opts.show == "both" || opts.show == "prev" {
-                     outJson["prev"] = prev.getInfo.json
-                  }
-                  if opts.show == "both" || opts.show == "curr" {
-                     outJson["curr"] = curr.getInfo.json
+                  for show in opts.shows {
+                     outJson[show] = sources[show]!.getInfo.json
                   }
                   MacIME.outputJSON(outJson)
                } else {
                   // prev/curr IME detail as string
-                  if opts.show == "both" || opts.show == "prev" {
-                     outStr.append(prev.getInfo.str)
-                  }
-                  if opts.show == "both" || opts.show == "curr" {
-                     outStr.append(curr.getInfo.str)
+                  for show in opts.shows {
+                     outStr.append(sources[show]!.getInfo.str)
                   }
                   stdout(outStr.joined(separator: "\n"))
                }
             } else {
                if opts.json {
                   // prev/curr IME id as JSON
-                  if opts.show == "both" || opts.show == "prev" {
-                     outJson["prev"] = prev.id
+                  for show in opts.shows {
+                     outJson[show] = sources[show]!.id
                   }
-                  if opts.show == "both" || opts.show == "curr" {
-                     outJson["curr"] = curr.id
-                  }
+                  MacIME.outputJSON(outJson)
                } else {
                   // prev/curr IME id as string
-                  if opts.show == "both" || opts.show == "prev" {
-                     outStr.append(prev.id)
-                  }
-                  if opts.show == "both" || opts.show == "curr" {
-                     outStr.append(curr.id)
+                  for show in opts.shows {
+                     outStr.append(sources[show]!.id)
                   }
                   stdout(outStr.joined(separator: "\n"))
                }
             }
          } else {  // Switching error
-            stderr("failed to switch to: \(_newID)")
+            stderr("Failed to switch to: \(_newID)")
             exit(1)
          }
       } else {
-         // TODO: get current ID
+         // get current IME
+         if let curr = MacIME.current() {
+            if opts.detail {
+               if opts.json {
+                  // curr IME detail as JSON
+                  MacIME.outputJSON(curr.getInfo.json)
+               } else {
+                  // curr IME detail as string
+                  stdout(curr.getInfo.str)
+               }
+            } else {
+               if opts.json {
+                  // curr IME id as JSON
+                  MacIME.outputJSON(curr.getInfo.json)  // TODO: NEED THIS ???
+               } else {
+                  // curr IME id as string
+                  stdout(curr.id)
+               }
+            }
+         } else {  // Switching error
+            stderr("Failed to get current IME")
+            exit(1)
+         }
 
       }
    }

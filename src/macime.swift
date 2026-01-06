@@ -7,6 +7,7 @@ import InputMethodKit
 // ╰───────────────────────────────────────────────────────────────╯
 
 let VERSION = "2.0.0"
+let TEMP_DIR = "/tmp/riodelphino.macime/prev"
 
 // ╭───────────────────────────────────────────────────────────────╮
 // │                            struct                             │
@@ -15,11 +16,14 @@ let VERSION = "2.0.0"
 // Commmand line args
 struct Opts {
    var selectCapable: Bool = false
-   var list: Bool = false
+   var subcmd: String? = nil
+   var save: Bool = false
+   var load: Bool = false
    var detail: Bool = false
    var json = false
    var shows: [String] = []
    var newID: String? = nil
+   var sessionID: String? = nil
 }
 
 // ╭───────────────────────────────────────────────────────────────╮
@@ -98,6 +102,17 @@ class MacIME {
       }
    }
 
+   static func getStoredPath(_ sessionID: String?) -> String {
+      var basename: String = ""
+      if let sessionID = opts.sessionID {
+         basename = sessionID
+      } else {
+         basename = "DEFAULT"
+      }
+
+      let path = TEMP_DIR + "/" + basename
+      return path
+   }
 }
 
 // Extend TISInputSource for easy access to the properties
@@ -154,9 +169,31 @@ var opts = Opts()
 var i = 0
 while i < args.count {
    let arg = args[i]
-   if i == 0, arg == "list" {
-      opts.list = true
+   if i == 0 {
+      switch arg {
+      case "set":
+         opts.subcmd = "set"
+         if i + 1 < args.count {
+            opts.newID = args[i + 1]
+            i += 1
+         } else {
+            stderr("'set' sub-command requires IME ID")
+            exit(1)
+         }
+         i += 1
+         continue
+      case "get", "list", "load":
+         opts.subcmd = arg
+         i += 1
+         continue
+      // case "save":
+      //    opts.save = true
+      default:
+         stderr("'macime' requires sub-command: set|get|list|load")
+         exit(1)
+      }
    }
+
    switch arg {
    case "--detail":
       opts.detail = true
@@ -164,6 +201,10 @@ while i < args.count {
       opts.selectCapable = true
    case "--json":
       opts.json = true
+   case "--save":
+      opts.save = true
+   // case "--load":
+   //    opts.load = true
    case "--show":
       if i + 1 < args.count {
          let show = args[i + 1]
@@ -182,6 +223,14 @@ while i < args.count {
          i += 1
       } else {
          stderr("'--show' requires both|curr|prev")
+         exit(1)
+      }
+   case "--session-id":
+      if i + 1 < args.count {
+         opts.sessionID = args[i + 1]
+         i += 1
+      } else {
+         stderr("'--session-id' requires variable")
          exit(1)
       }
    case "--version", "-v":
@@ -203,13 +252,24 @@ if !opts.list {
    opts.shows = ["prev"]
 }
 
-if opts.list {
+switch opts.subcmd {
+case "load":
+   let path = MacIME.getStoredPath(opts.sessionID)
+   let prev_id = try String(contentsOfFile: path, encoding: .utf8)
+   if prev_id != "" {
+      let curr = MacIME.change(id: prev_id)
+      if curr != nil {
+         // Success
+      } else {
+         stderr("Failed to load: \(prev_id)")
+         exit(1)
+      }
+   }
+case "list":
    var sources: [TISInputSource]
    var outJson: [Any] = []
    var outStr: [String] = []
-
    sources = MacIME.list(selectCapable: opts.selectCapable)
-
    if opts.detail {
       if opts.json {
          // list detail as json
@@ -239,77 +299,42 @@ if opts.list {
          stdout(outStr.joined(separator: "\n"))
       }
    }
-} else {  // Set or Get
-   var sources: [String: TISInputSource] = [:]
-   // if sources["prev"] != nil {
+case "set":
+   // Switch to new ID
    if let prev = MacIME.current() {
-      sources["prev"] = prev
-      var outJson: [String: Any] = [:]
-      var outStr: [String] = []
-
-      // Switch to new ID
       if let _newID = opts.newID {
-         // Set & Get
-         if let curr = MacIME.change(id: _newID) {
-            sources["curr"] = curr
-            if opts.detail {
-               if opts.json {
-                  // prev/curr IME detail as JSON
-                  for show in opts.shows {
-                     outJson[show] = sources[show]!.getInfo.json
-                  }
-                  MacIME.outputJSON(outJson)
-               } else {
-                  // prev/curr IME detail as string
-                  for show in opts.shows {
-                     outStr.append(sources[show]!.getInfo.str)
-                  }
-                  stdout(outStr.joined(separator: "\n"))
-               }
-            } else {
-               if opts.json {
-                  // prev/curr IME id as JSON
-                  for show in opts.shows {
-                     outJson[show] = sources[show]!.id
-                  }
-                  MacIME.outputJSON(outJson)
-               } else {
-                  // prev/curr IME id as string
-                  for show in opts.shows {
-                     outStr.append(sources[show]!.id)
-                  }
-                  stdout(outStr.joined(separator: "\n"))
-               }
+         let curr = MacIME.change(id: _newID)
+         if curr != nil {
+            if opts.save {  // Save to /tmp
+               let path = MacIME.getStoredPath(opts.sessionID)
+               try prev.id.write(toFile: path, atomically: true, encoding: .utf8)
             }
          } else {  // Switching error
             stderr("Failed to switch to: \(_newID)")
             exit(1)
          }
-      } else {
-         // get current IME
-         if let curr = MacIME.current() {
-            if opts.detail {
-               if opts.json {
-                  // curr IME detail as JSON
-                  MacIME.outputJSON(curr.getInfo.json)
-               } else {
-                  // curr IME detail as string
-                  stdout(curr.getInfo.str)
-               }
-            } else {
-               if opts.json {
-                  // curr IME id as JSON
-                  MacIME.outputJSON(curr.getInfo.json)  // TODO: NEED THIS ???
-               } else {
-                  // curr IME id as string
-                  stdout(curr.id)
-               }
-            }
-         } else {  // Switching error
-            stderr("Failed to get current IME")
-            exit(1)
-         }
-
       }
    }
+case "get":
+   if let curr = MacIME.current() {
+      if opts.detail {
+         if opts.json {
+            // curr IME detail as JSON
+            MacIME.outputJSON(curr.getInfo.json)
+         } else {
+            // curr IME detail as string
+            stdout(curr.getInfo.str)
+         }
+      } else {
+         if opts.json {
+            // curr IME id as JSON
+            MacIME.outputJSON(curr.id)
+         } else {
+            // curr IME id as string
+            stdout(curr.id)
+         }
+      }
+   }
+default:
+   break
 }

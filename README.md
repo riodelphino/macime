@@ -7,7 +7,7 @@ On older Macs, these tools require `waiting for a moment` each time until switch
 `macime` is a faster Swift-based IME auto-switching tool, which reduces this latency and also provides additional convenient features.
 
 Thanks for the original swift code:  
-[https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
+[Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
 
 
 ## Why macime?
@@ -20,7 +20,7 @@ Thanks for the original swift code:
 
 ## version
 
-`v2.0.0`
+`v2.0.1`
 
 Totally modified and refactored from `v1.x`.  
 `v2.x` saves the previous IME in `/tmp` dir.
@@ -135,7 +135,7 @@ macime set com.apple.keylayout.ABC
 macime set com.apple.keylayout.ABC --save
 # previous IME ID is saved at `/tmp/riodelphino.macime/prev/DEFAULT`
 
-# Set IME & save previous IME as {session_id}
+# Set IME & save previous IME as <session_id>
 macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 # previous IME ID is saved at `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
@@ -146,7 +146,7 @@ macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 macime load
 # Read previous IME ID from `/tmp/riodelphino.macime/prev/DEFAULT`, then set it.
 
-# Load IME from `{session_id}`
+# Load IME from `<session_id>`
 macime load --session-id nvim-1001
 # Read previous IME ID from `/tmp/riodelphino.macime/prev/nvim-1001`, then set it.
 ```
@@ -160,10 +160,44 @@ macime list --select-capable # show only selectable IME methods
 # --detail, --json and --select-capable can be mixtured
 ```
 
-## Setup for nvim
+## Integration
 
-* Use `macime set --save --session-id {session_id}` when you exit insert-mode, to save current IME method.
-* Use `macime load --session-id {sessiond_id}` when you return to insert-mode, to restore it.
+### nvim
+
+- In `InsertLeave` event: Set `com.apple.keylayout.ABC` while auto saving current IME. 
+- In `InsertEnter` event: Restore the saved previous IME.
+
+#### Simple setup
+
+Save IME ID into a single common file `/tmp/riodelphino.macime/prev/DEFAULT`.  
+(Works fine in most cases.)
+
+* Use `macime set <IME_ID> --save` to save
+* Use `macime load` to restore it
+
+init.lua:
+```lua
+vim.api.nvim_create_autocmd('InsertLeave', {
+   callback = function()
+      vim.fn.jobstart({ 'macime', 'set', 'com.apple.keylayout.ABC', '--save' })
+   end,
+})
+vim.api.nvim_create_autocmd('InsertEnter', {
+   callback = function()
+      vim.fn.jobstart({ 'macime', 'load' })
+   end,
+})
+```
+
+#### Robust setup
+
+Use this setup when you feel wierd in [#simple-setup](#simple-setup), or you switch `nvim` instance so often.
+
+Save into a separated file per nvim's process id. (e.g. `/tmp/riodelphino.macime/prev/nvim-<pid>`)  
+This manages previous IME independently.
+
+* Use `macime set --save --session-id nvim-<pid>` to save into a separated file.
+* Use `macime load --session-id nvim-<pid>` to restore it.
 
 init.lua:
 ```lua
@@ -181,12 +215,15 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 ```
 
-To exclude specific filetypes:
+#### Exclude Specific Filetypes
+
+Exclude specific filetypes from auto saving/restoring.
+
+init.lua:
 ```lua
 vim.api.nvim_create_autocmd('InsertLeave', {
    callback = function()
-      local session_id = 'nvim-' .. vim.fn.getpid()
-      vim.fn.jobstart({ 'macime', 'set', 'com.apple.keylayout.ABC', '--save', '--session-id', session_id })
+      vim.fn.jobstart({ 'macime', 'set', 'com.apple.keylayout.ABC', '--save' })
    end,
 })
 vim.api.nvim_create_autocmd('InsertEnter', {
@@ -194,16 +231,14 @@ vim.api.nvim_create_autocmd('InsertEnter', {
       local exclude_list = { 'TelescopePrompt', 'snacks_picker_input' }
       local filetype = vim.bo.filetype
       local is_allowed_filetype = not vim.tbl_contains(exclude_list, filetype)
-      local session_id = 'nvim-' .. vim.fn.getpid()
-      if is_allowed_filetype then vim.fn.jobstart({ 'macime', 'load', '--session-id', session_id }) end
+      if is_allowed_filetype then vim.fn.jobstart({ 'macime', 'load' }) end
    end,
 })
 ```
 
-## Saved IME ID Path
+## Stored in Temporary dir
 
-The previous IME ID is stored in `/tmp/riodelphino.macime/prev/{session_id}`
-
+The previous IME ID is stored in `/tmp/riodelphino.macime/prev/<session_id>`.  
 These files are deleted when you shutdown macOS.
 
 
@@ -226,14 +261,19 @@ vim.o.timeoutlen = 0 -- 0 ~ 50
    - Which is this issue releated to `macime` or `Karabiner`?
 
 
-## CHANGELOG
+## Changelog
 
-See [CHANGELOG](CHANGELOG)
+See [CHANGELOG](CHANGELOG.md)
+
+
+## License
+
+MIT License. See [LICENSE](LICENSE)
 
 
 ## Refers
 
-- [https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58)
+- [Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
 
 
 ## Related

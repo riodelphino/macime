@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2.0.2] - 2026-01-08
+
+### Changed
+- Add `macime.nvim` plugin to `README.md`
+- Fix `--version` to return version
+
 ## [2.0.1] - 2026-01-08
 
 ### Changed

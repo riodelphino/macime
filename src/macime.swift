@@ -6,7 +6,7 @@ import InputMethodKit
 // │                             Const                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
-let VERSION = "2.0.1"
+let VERSION = "2.0.2"
 let TEMP_DIR = "/tmp/riodelphino.macime/prev"
 
 // ╭───────────────────────────────────────────────────────────────╮
@@ -185,8 +185,9 @@ while i < args.count {
             opts.subcmd = arg
             i += 1
             continue
-        // case "save":
-        //    opts.save = true
+        case "--version", "-v":
+            stdout("macime " + VERSION)
+            exit(0)
         default:
             stderr("'macime' requires sub-command: set|get|list|load")
             exit(1)
@@ -202,8 +203,6 @@ while i < args.count {
         opts.json = true
     case "--save":
         opts.save = true
-    // case "--load":
-    //    opts.load = true
     case "--session-id":
         if i + 1 < args.count {
             opts.sessionID = args[i + 1]
@@ -212,9 +211,6 @@ while i < args.count {
             stderr("'--session-id' requires variable")
             exit(1)
         }
-    case "--version", "-v":
-        stdout("macime " + VERSION)
-        exit(0)
     default:
         opts.newID = arg  // IME method ID
         break

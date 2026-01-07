@@ -20,7 +20,7 @@ Thanks for the original swift code:
 
 ## version
 
-`v2.0.1`
+`v2.0.2`
 
 Totally modified and refactored from `v1.x`.  
 `v2.x` saves the previous IME in `/tmp` dir.
@@ -164,8 +164,18 @@ macime list --select-capable # show only selectable IME methods
 
 ### nvim
 
+Direction:
 - In `InsertLeave` event: Set `com.apple.keylayout.ABC` while auto saving current IME. 
 - In `InsertEnter` event: Restore the saved previous IME.
+
+
+#### Plugin
+
+Install wrapper plugin:
+[riodelphino/macime.nvim](https://github.com/riodelphino/macime.nvim)
+
+It's recommended strongly because the plugin includes all following code and the setup is so easy.
+
 
 #### Simple setup
 
@@ -280,4 +290,5 @@ MIT License. See [LICENSE](LICENSE)
 
 - [im-select](https://github.com/daipeihust/im-select)
 - [macism](https://github.com/laishulu/macism)
+- [macime.nvim](https://github.com/riodelphino/macime.nvim)
 

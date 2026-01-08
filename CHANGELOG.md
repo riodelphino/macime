@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2.2.0] - 2026-01-09
+
+### Changed
+- Optimize the file structure
+- Enable `swift build`
+- Enable installing with `brew`
+- Remove `cocoa`
+
 ## [2.1.0] - 2026-01-08
 
 ### Changed

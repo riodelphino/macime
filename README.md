@@ -44,32 +44,15 @@ Totally modified and refactored from `v1.x`.
 
 ## Install
 
-1. Clone
 ```bash
-git clone https://github.com/riodelphino/macime
-```
-2. Install (Choose one)
-
-A. Create symlink (Recommended):
-```bash
-sudo ln -s /path/to/macime/macime /usr/local/bin/macime
-```
-
-B. Add to PATH in `.profile` or `.zprofile`:
-```bash
-export PATH="$PATH:/path/to/macime"
+brew tap riodelphino/tap
+brew install macime
 ```
 
 ## Uninstall
 
-A. Remove symlink:
 ```bash
-sudo rm /usr/local/bin/macime
-```
-
-B. Remove the PATH entry in `.profile` or `.zprofile`:
-```bash
-export PATH="$PATH:/path/to/macime"
+brew uninstall macime
 ```
 
 ## Compile

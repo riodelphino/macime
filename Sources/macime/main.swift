@@ -1,4 +1,3 @@
-import Cocoa
 import Foundation
 import InputMethodKit
 
@@ -36,7 +35,7 @@ enum MacIMEError: Error {
    case createTempDirFailed(String)
    case saveFailed(String)
    case loadFailed(String)
-   case jsonSerializationFailed(Any)
+   case jsonSerializationFailed(String)
 }
 
 // Input/Output
@@ -59,18 +58,16 @@ enum IO {
          FileHandle.standardOutput.write(data)
          FileHandle.standardOutput.write("\n".data(using: .utf8)!)
       } catch {
-         throw MacIMEError.jsonSerializationFailed(value)
+         throw MacIMEError.jsonSerializationFailed("Invalid JSON Object")
       }
    }
 }
 
 // File system
 enum FS {
-   static let fileManager = FileManager.default
-
    static func createDir(_ dirPath: String) -> Bool {
       do {
-         try fileManager.createDirectory(
+         try FileManager.default.createDirectory(
             atPath: dirPath, withIntermediateDirectories: true, attributes: nil)
       } catch {
          return false
@@ -79,7 +76,7 @@ enum FS {
    }
 
    static func pathExists(_ path: String) -> Bool {
-      return fileManager.fileExists(atPath: path)
+      return FileManager.default.fileExists(atPath: path)
    }
 
    static func read(_ path: String) -> String? {
@@ -387,6 +384,8 @@ struct App {
             IO.err("Cannot get current IME")
          case .createTempDirFailed(let dir):
             IO.err("Cannot create temp directory: \(dir)")
+         case .jsonSerializationFailed(let msg):
+            IO.err("Serializing JSON failed: \(msg)")
          default:
             IO.err("Unhandled error: \(e)")
          }

@@ -18,14 +18,6 @@ Thanks for the original swift code:
 4. Easy setup to nvim
 
 
-## version
-
-`v2.2.1`
-
-Totally modified and refactored from `v1.x`.  
-`v2.x` saves the previous IME in `/tmp` dir.
-
-
 ## Feature
 
 * Show the current IME
@@ -55,20 +47,12 @@ brew install macime
 brew uninstall macime
 ```
 
-## Compile
-
-Only when you modified the source code, compile it (basically not necessary):
-```bash
-cd /path/to/macime
-swiftc src/macime.swift -o macime
-```
-
 ## Usage
 
 Show `macime` version:
 ```bash
 macime --version
-# macime v2.2.1
+# macime v2.x.x
 ```
 
 Sub commands:
@@ -174,12 +158,25 @@ vim.o.timeoutlen = 0 -- 0 ~ 50
 
 - Occasionally it becomes impossible to set the IME mode `ON` by `right cmd` key with `karabiner`.
    - `left cmd` = IME OFF (EISU) / `right cmd` = IME ON (KANA), in my karabiner config.
-   - To solve it temporaly, set the IME `OFF` by `left cmd` key
    - Which is this issue releated to `macime` or `Karabiner`?
+   - Solutions: To solve it temporaly, set the IME `OFF` by `left cmd` key
 
 - `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) avoid `macime set` command to work.
-   - Because they are still alpha version.
-   - Uninstalling them solves it.
+   - I guess it's because they are still alpha version.
+   - Solutions: Uninstalling them solves it.
+
+
+## Contribute
+
+Contributions are welcome:
+```bash
+# Clone
+git clone https://github.com/riodelphino/macime
+cd macime
+
+# Build
+swift build
+```
 
 
 ## Changelog

@@ -1,4 +1,10 @@
 # CHANGELOG
+## [2.2.2] - 2026-01-09
+
+### Changed
+- Add contributions to `README.md`
+- Chore in `README.md`
+
 ## [2.2.1] - 2026-01-09
 
 ### Changed

@@ -20,7 +20,7 @@ Thanks for the original swift code:
 
 ## version
 
-`v2.0.2`
+`v2.1.0`
 
 Totally modified and refactored from `v1.x`.  
 `v2.x` saves the previous IME in `/tmp` dir.
@@ -85,7 +85,7 @@ swiftc src/macime.swift -o macime
 Show `macime` version:
 ```bash
 macime --version
-# macime v2.0.0
+# macime v2.1.0
 ```
 
 Sub commands:
@@ -162,89 +162,13 @@ macime list --select-capable # show only selectable IME methods
 
 ## Integration
 
-### nvim
+### Neovim
 
-Direction:
-- In `InsertLeave` event: Set `com.apple.keylayout.ABC` while auto saving current IME. 
-- In `InsertEnter` event: Restore the saved previous IME.
-
-
-#### Plugin
-
-Install wrapper plugin:
+(Recommended) Install wrapper plugin:
 [riodelphino/macime.nvim](https://github.com/riodelphino/macime.nvim)
 
-It's recommended strongly because the plugin includes all following code and the setup is so easy.
+For more details, see [doc/integration.md](doc/integration.md).
 
-
-#### Simple setup
-
-Save IME ID into a single common file `/tmp/riodelphino.macime/prev/DEFAULT`.  
-(Works fine in most cases.)
-
-* Use `macime set <IME_ID> --save` to save
-* Use `macime load` to restore it
-
-init.lua:
-```lua
-vim.api.nvim_create_autocmd('InsertLeave', {
-   callback = function()
-      vim.fn.jobstart({ 'macime', 'set', 'com.apple.keylayout.ABC', '--save' })
-   end,
-})
-vim.api.nvim_create_autocmd('InsertEnter', {
-   callback = function()
-      vim.fn.jobstart({ 'macime', 'load' })
-   end,
-})
-```
-
-#### Robust setup
-
-Use this setup when you feel wierd in [#simple-setup](#simple-setup), or you switch `nvim` instance so often.
-
-Save into a separated file per nvim's process id. (e.g. `/tmp/riodelphino.macime/prev/nvim-<pid>`)  
-This manages previous IME independently.
-
-* Use `macime set --save --session-id nvim-<pid>` to save into a separated file.
-* Use `macime load --session-id nvim-<pid>` to restore it.
-
-init.lua:
-```lua
-vim.api.nvim_create_autocmd('InsertLeave', {
-   callback = function()
-      local session_id = 'nvim-' .. vim.fn.getpid()
-      vim.fn.jobstart({ 'macime', 'set', 'com.apple.keylayout.ABC', '--save', '--session-id', session_id })
-   end,
-})
-vim.api.nvim_create_autocmd('InsertEnter', {
-   callback = function()
-      local session_id = 'nvim-' .. vim.fn.getpid()
-      vim.fn.jobstart({ 'macime', 'load', '--session-id', session_id })
-   end,
-})
-```
-
-#### Exclude Specific Filetypes
-
-Exclude specific filetypes from auto saving/restoring.
-
-init.lua:
-```lua
-vim.api.nvim_create_autocmd('InsertLeave', {
-   callback = function()
-      vim.fn.jobstart({ 'macime', 'set', 'com.apple.keylayout.ABC', '--save' })
-   end,
-})
-vim.api.nvim_create_autocmd('InsertEnter', {
-   callback = function()
-      local exclude_list = { 'TelescopePrompt', 'snacks_picker_input' }
-      local filetype = vim.bo.filetype
-      local is_allowed_filetype = not vim.tbl_contains(exclude_list, filetype)
-      if is_allowed_filetype then vim.fn.jobstart({ 'macime', 'load' }) end
-   end,
-})
-```
 
 ## Stored in Temporary dir
 
@@ -269,6 +193,10 @@ vim.o.timeoutlen = 0 -- 0 ~ 50
    - `left cmd` = IME OFF (EISU) / `right cmd` = IME ON (KANA), in my karabiner config.
    - To solve it temporaly, set the IME `OFF` by `left cmd` key
    - Which is this issue releated to `macime` or `Karabiner`?
+
+- `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) avoid `macime set` command to work.
+   - Because they are still alpha version.
+   - Uninstalling them solves it.
 
 
 ## Changelog

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [2.1.0] - 2026-01-08
+
+### Changed
+- Add error handling
+- Split Neovim sample code into `integration.md`
+- Restructure the entire code
+- Fix 'path not exists' error by creating temporary dir if not exists
+- Add `azookey` caution to `README.md`
+
 ## [2.0.2] - 2026-01-08
 
 ### Changed

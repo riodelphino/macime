@@ -1,4 +1,8 @@
 # CHANGELOG
+## [2.2.1] - 2026-01-09
+
+### Changed
+- Fix for `brew install`
 
 ## [2.2.0] - 2026-01-09
 

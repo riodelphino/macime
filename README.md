@@ -20,7 +20,7 @@ Thanks for the original swift code:
 
 ## version
 
-`v2.1.0`
+`v2.2.1`
 
 Totally modified and refactored from `v1.x`.  
 `v2.x` saves the previous IME in `/tmp` dir.
@@ -68,7 +68,7 @@ swiftc src/macime.swift -o macime
 Show `macime` version:
 ```bash
 macime --version
-# macime v2.1.0
+# macime v2.2.1
 ```
 
 Sub commands:

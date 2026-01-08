@@ -5,7 +5,7 @@ import InputMethodKit
 // │                             Const                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
-let VERSION = "2.1.0"
+let VERSION = "2.2.1"
 let TEMP_DIR = "/tmp/riodelphino.macime/prev"
 
 // ╭───────────────────────────────────────────────────────────────╮

@@ -1,4 +1,11 @@
 # CHANGELOG
+## [2.2.3] - 2026-01-10
+
+### Changed
+- Add `--help` option
+- Use `MACIME_TEMP_DIR` environment variable if exists
+- Change dir `/tmp/riodelphino.macime/prev` to  `/tmp/riodelphino.macime`
+
 ## [2.2.2] - 2026-01-09
 
 ### Changed

@@ -5,8 +5,57 @@ import InputMethodKit
 // │                             Const                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
-let VERSION = "2.2.2"
-let TEMP_DIR = "/tmp/riodelphino.macime/prev"
+let VERSION = "2.2.3"
+let DEFAULT_TEMP_DIR = "/tmp/riodelphino.macime"
+let HELP_STR = """
+   Usage: macime [-v | --version] [-h | --help] [get|set|load}list] [<args>]
+
+   Get current IME
+      macime get [--detail] [--json]
+
+   Set IME 
+      macime set <IME_id> [--save] [--session-id <session_id>]
+
+      Set IME only (no save)
+         macime set <IME_id>
+      
+      Set IME while saving current IME to `DEFAULT` file in temp dir
+         macime set <IME_id> --save
+      
+      Set IME while saving current IME to `<session_id>` file in temp dir
+         macime set <IME_id> --save --session-id <session_id>
+
+   Load (restore) IME
+      macime load [--session-id <session_id>]
+
+      Load previouse IME from `DEFAULT` file in temp dir
+         macime load
+
+      Load previous IME from `<session_id>` file in temp dir
+         macime load --session-id <session_id>
+
+   List IME
+      macime list [--detail] [--select-capable] [--json]
+
+
+   OPTIONS:
+
+      --detail
+         Show detailed IME info
+         
+      --select-capable
+         Show only selectable IME
+
+      --json
+         Output as json
+
+      --save
+         Save current IME
+
+      --session-id <session_id>
+         Specify the save filename
+
+   """
 
 // ╭───────────────────────────────────────────────────────────────╮
 // │                            struct                             │
@@ -142,6 +191,9 @@ enum ARG {
             case "--version", "-v":
                IO.out("macime " + VERSION)
                exit(0)
+            case "--help", "-h":
+               IO.out(HELP_STR)
+               exit(0)
             default:
                IO.err("Usage: 'macime set|get|list|load [options]'")
                exit(1)
@@ -230,15 +282,21 @@ class MacIME {
       return prev_id
    }
 
+   static func getTempDir() -> String {
+      let tempDir = ProcessInfo.processInfo.environment["MACIME_TEMP_DIR"] ?? DEFAULT_TEMP_DIR
+      return tempDir
+   }
+
    static func getStoredPath(_ sessionID: String?) -> String {
       let basename = sessionID ?? "DEFAULT"
-      return TEMP_DIR + "/" + basename
+      return getTempDir() + "/" + basename
    }
 
    static func ensureTempDirExists() throws {
-      if !FS.pathExists(TEMP_DIR) {
-         guard FS.createDir(TEMP_DIR) else {
-            throw MacIMEError.createTempDirFailed(TEMP_DIR)
+      let tempDir = getTempDir()
+      if !FS.pathExists(tempDir) {
+         guard FS.createDir(tempDir) else {
+            throw MacIMEError.createTempDirFailed(tempDir)
          }
       }
    }
@@ -377,13 +435,13 @@ struct App {
       } catch let e as MacIMEError {
          switch e {
          case .notFound(let id):
-            IO.err("IME not found: \(id)")
+            IO.err("IME not found: '\(id)'")
          case .selectFailed(let id, let osstatus):
             IO.err("IME switch failed: '\(id)' (\(String(osstatus)))")
          case .getCurrentFailed:
             IO.err("Cannot get current IME")
          case .createTempDirFailed(let dir):
-            IO.err("Cannot create temp directory: \(dir)")
+            IO.err("Cannot create temp directory: '\(dir)'")
          case .jsonSerializationFailed(let msg):
             IO.err("Serializing JSON failed: \(msg)")
          default:

@@ -47,6 +47,18 @@ brew install macime
 brew uninstall macime
 ```
 
+## Setup
+
+`macime set` with `--save` option keeps previous IME as files in temporaly directory.
+Default save directory is `/tmp/riodelphino.macime`.
+
+To change it, add this line in `~/.profile`:
+```bash
+export MACIME_TEMP_DIR="/path/to/your/temp_dir"
+```
+Make sure you have write/read permissions to the directory.
+
+
 ## Usage
 
 Show `macime` version:
@@ -139,7 +151,7 @@ For more details, see [doc/integration.md](doc/integration.md).
 
 ## Stored in Temporary dir
 
-The previous IME ID is stored in `/tmp/riodelphino.macime/prev/<session_id>`.  
+The previous IME ID is stored in `/tmp/riodelphino.macime/<session_id>`.  
 These files are deleted when you shutdown macOS.
 
 

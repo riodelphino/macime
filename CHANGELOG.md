@@ -1,4 +1,9 @@
 # CHANGELOG
+## [2.2.5] - 2026-01-10
+
+### Changed
+- Update version in command to 2.2.5
+
 ## [2.2.4] - 2026-01-10
 
 ### Changed

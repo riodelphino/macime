@@ -5,7 +5,7 @@ import InputMethodKit
 // │                             Const                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
-let VERSION = "2.2.3"
+let VERSION = "2.2.5"
 let DEFAULT_TEMP_DIR = "/tmp/riodelphino.macime"
 let HELP_STR = """
    Usage: macime [-v | --version] [-h | --help] [get|set|load}list] [<args>]

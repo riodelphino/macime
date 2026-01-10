@@ -67,6 +67,11 @@ macime --version
 # macime v2.x.x
 ```
 
+Show `macime` help:
+```bash
+macime --help
+```
+
 Sub commands:
 ```bash
 macime get [options]

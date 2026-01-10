@@ -1,4 +1,9 @@
 # CHANGELOG
+## [2.2.4] - 2026-01-10
+
+### Changed
+- doc: Add `--help` option to `README.md`
+
 ## [2.2.3] - 2026-01-10
 
 ### Changed

@@ -171,16 +171,15 @@ vim.o.timeoutlen = 0 -- 0 ~ 50
 > This config affects other keybinds in `nvim`.
 
 
-## Known Issues
+## Issues
 
-- Occasionally it becomes impossible to set the IME mode `ON` by `right cmd` key with `karabiner`.
-   - `left cmd` = IME OFF (EISU) / `right cmd` = IME ON (KANA), in my karabiner config.
-   - Which is this issue releated to `macime` or `Karabiner`?
-   - Solutions: To solve it temporaly, set the IME `OFF` by `left cmd` key
+### azookey prevents macime to change IME
 
-- `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) avoid `macime set` command to work.
-   - I guess it's because they are still alpha version.
-   - Solutions: Uninstalling them solves it.
+`azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
+I guess it's because they are still alpha version.
+
+Solutions for now:
+   - Uninstal `azookey`
 
 
 ## Contribute

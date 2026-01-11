@@ -1,4 +1,11 @@
 # CHANGELOG
+## [2.2.6] - 2026-01-11
+
+### Changed
+- Move an issue to `macime.nvim`
+- Refactor help
+- Change `macime --version` to return `2.2.6` (not `macime v2.2.6`)
+
 ## [2.2.5] - 2026-01-10
 
 ### Changed

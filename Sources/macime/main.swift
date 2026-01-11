@@ -5,10 +5,16 @@ import InputMethodKit
 // │                             Const                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
-let VERSION = "2.2.5"
+let VERSION = "2.2.6"
 let DEFAULT_TEMP_DIR = "/tmp/riodelphino.macime"
 let HELP_STR = """
-   Usage: macime [-v | --version] [-h | --help] [get|set|load}list] [<args>]
+   Usage: macime <sub_command> [<options>]
+
+   Sub commands:
+      get     Get current IME
+      set     Set IME
+      load    Restore IME
+      list    List IMEs
 
    Get current IME
       macime get [--detail] [--json]
@@ -34,7 +40,7 @@ let HELP_STR = """
       Load previous IME from `<session_id>` file in temp dir
          macime load --session-id <session_id>
 
-   List IME
+   List IMEs
       macime list [--detail] [--select-capable] [--json]
 
 
@@ -189,7 +195,7 @@ enum ARG {
                i += 1
                continue
             case "--version", "-v":
-               IO.out("macime " + VERSION)
+               IO.out(VERSION)
                exit(0)
             case "--help", "-h":
                IO.out(HELP_STR)

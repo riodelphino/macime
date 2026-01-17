@@ -1,74 +1,67 @@
 # CHANGELOG
-## [2.2.6] - 2026-01-11
+## [2.3.0](https://github.com/riodelphino/macime/compare/v2.2.6...v2.3.0) (2026-01-18)
 
-### Changed
-- Move an issue to `macime.nvim`
-- Refactor help
-- Change `macime --version` to return `2.2.6` (not `macime v2.2.6`)
+* **docs:** Reformat `CHANGELOG.md`
 
-## [2.2.5] - 2026-01-10
+## [2.2.6](https://github.com/riodelphino/macime/compare/v2.2.5...v2.2.6) (2026-01-11)
 
-### Changed
-- Update version in command to 2.2.5
+* **docs:** Move an issue to `macime.nvim`
+* **fix:** Refactor help
+* **fix:** Change `macime --version` to return `2.2.6` (not `macime v2.2.6`)
 
-## [2.2.4] - 2026-01-10
+## [2.2.5](https://github.com/riodelphino/macime/compare/v2.2.4...v2.2.5) (2026-01-10)
 
-### Changed
-- doc: Add `--help` option to `README.md`
+* **chore:** Update version in command to 2.2.5
 
-## [2.2.3] - 2026-01-10
+## [2.2.4](https://github.com/riodelphino/macime/compare/v2.2.3...v2.2.4) (2026-01-10)
 
-### Changed
-- Add `--help` option
-- Use `MACIME_TEMP_DIR` environment variable if exists
-- Change dir `/tmp/riodelphino.macime/prev` to  `/tmp/riodelphino.macime`
+* **docs:** Add `--help` option to `README.md`
 
-## [2.2.2] - 2026-01-09
+## [2.2.3](https://github.com/riodelphino/macime/compare/v2.2.2...v2.2.3) (2026-01-10)
 
-### Changed
-- Add contributions to `README.md`
-- Chore in `README.md`
+* **docs:** Add `--help` option
+* **feat:** Use `MACIME_TEMP_DIR` environment variable if exists
+* **fix:** Change dir `/tmp/riodelphino.macime/prev` to  `/tmp/riodelphino.macime`
 
-## [2.2.1] - 2026-01-09
+## [2.2.2](https://github.com/riodelphino/macime/compare/v2.2.1...v2.2.2) (2026-01-09)
 
-### Changed
-- Fix for `brew install`
+* **docs:** Add contributions to `README.md`
+* **docs:** Chore in `README.md`
 
-## [2.2.0] - 2026-01-09
+## [2.2.1](https://github.com/riodelphino/macime/compare/v2.2.0...v2.2.1) (2026-01-09)
 
-### Changed
-- Optimize the file structure
-- Enable `swift build`
-- Enable installing with `brew`
-- Remove `cocoa`
+* **fix:** Some fixes for `brew install`
 
-## [2.1.0] - 2026-01-08
+## [2.2.0](https://github.com/riodelphino/macime/compare/v2.1.0...v2.2.0) (2026-01-09)
 
-### Changed
-- Add error handling
-- Split Neovim sample code into `integration.md`
-- Restructure the entire code
-- Fix 'path not exists' error by creating temporary dir if not exists
-- Add `azookey` caution to `README.md`
+* **refactor:** Optimize the file structure
+* **build:** Enable `swift build`
+* **feat:** Enable installing with `brew`
+* **chore:** Remove `cocoa`
 
-## [2.0.2] - 2026-01-08
+## [2.1.0](https://github.com/riodelphino/macime/compare/v2.0.2...v2.1.0) (2026-01-08)
 
-### Changed
-- Add `macime.nvim` plugin to `README.md`
-- Fix `--version` to return version
+* **chore:** Add error handling
+* **docs:** Split Neovim sample code into `integration.md`
+* **refactor:** Restructure the entire code
+* **fix:** Fix `path not exists` error by creating temporary dir if not exists
+* **docs:** Add `azookey` caution to `README.md`
 
-## [2.0.1] - 2026-01-08
+## [2.0.2](https://github.com/riodelphino/macime/compare/v2.0.1...v2.0.2) (2026-01-08)
 
-### Changed
-- Remove unused `--show` option completely
-- Refactor `README.md`
-- Add `LICENSE`
-- Change `CHANGELOG` filetype to markdown
+* **docs:** Add `macime.nvim` plugin to `README.md`
+* **fix:** Fix `--version` to return version
 
-## [2.0.0] - 2026-01-07
+## [2.0.1](https://github.com/riodelphino/macime/compare/v2.0.0...v2.0.1) (2026-01-08)
 
-### Changed
-- Totally modified & refactored from `v1.x`
-- Add sub-commands
-- Save previous IME in `/tmp` dir
+* **fix:** Remove unused `--show` option completely
+* **docs:** Reine `README.md`
+* **docs:** Add `LICENSE`
+* **docs:** Change `CHANGELOG` filetype to markdown
+
+## [2.0.0](https://github.com/riodelphino/macime/compare/v1.0.3...v2.0.0) (2026-01-07)
+
+* **feat:** Totally modified & refactored from `v1.x`
+* **feat:** Add sub-commands
+* **feat:** Save previous IME in `/tmp` dir
 

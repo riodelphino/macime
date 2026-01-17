@@ -5,7 +5,7 @@ import InputMethodKit
 // │                             Const                             │
 // ╰───────────────────────────────────────────────────────────────╯
 
-let VERSION = "2.2.6"
+let VERSION = "2.3.0"
 let DEFAULT_TEMP_DIR = "/tmp/riodelphino.macime"
 let HELP_STR = """
    Usage: macime <sub_command> [<options>]
@@ -13,6 +13,7 @@ let HELP_STR = """
    Sub commands:
       get     Get current IME
       set     Set IME
+      save    Save IME
       load    Restore IME
       list    List IMEs
 
@@ -30,6 +31,15 @@ let HELP_STR = """
       
       Set IME while saving current IME to `<session_id>` file in temp dir
          macime set <IME_id> --save --session-id <session_id>
+
+   Save IME
+      macime save [--session-id <session_id>]
+
+      Save current IME to `DEFAULT` file in temp dir
+         macime save
+
+      Save current IME to `<session_id>` file in temp dir
+         macime save --session-id <session_id>
 
    Load (restore) IME
       macime load [--session-id <session_id>]
@@ -190,7 +200,7 @@ enum ARG {
                }
                i += 1
                continue
-            case "get", "list", "load":
+            case "get", "list", "save", "load":
                opts.subcmd = arg
                i += 1
                continue
@@ -201,7 +211,7 @@ enum ARG {
                IO.out(HELP_STR)
                exit(0)
             default:
-               IO.err("Usage: 'macime set|get|list|load [options]'")
+               IO.err("Usage: 'macime set|get|list|save|load [options]'")
                exit(1)
             }
          }
@@ -237,6 +247,11 @@ enum ARG {
       // Prioritize `list` sub command
       if opts.subcmd == "list" {
          opts.newID = nil
+      }
+
+      // Ommit `--save` option in `save` sub command
+      if opts.subcmd == "save" {
+         opts.save = false
       }
 
       // dump(opts, name: "opts")  // for debug
@@ -361,6 +376,14 @@ struct App {
          try MacIME.ensureTempDirExists()
 
          switch opts.subcmd {
+         case "save":
+            if let curr = try MacIME.current() {
+               let path = MacIME.getStoredPath(opts.sessionID)
+               let success = FS.write(path, curr.id)
+               guard success else {
+                  throw MacIMEError.saveFailed(path)
+               }
+            }
          case "load":
             if let prev_id = MacIME.previous(session_id: opts.sessionID) {
                let _ = try MacIME.select(id: prev_id)

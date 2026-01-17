@@ -20,13 +20,13 @@ Thanks for the original swift code:
 
 ## Feature
 
-* get: Show current IME
-* set: Switch to a specified IME
-* set & save: Switch IME while saving the previous one
-* load: Restore the previously used IME
-* Output results in plain text or JSON
+* Get current IME
+* Set a specified IME
+* Save current IME
+* Load(Restore) the previous IME
+* Switch IME while saving the previous one (in single step)
 * List all IMEs
-
+* Output results in plain text or JSON
 
 ## Requirements
 
@@ -48,7 +48,10 @@ brew uninstall macime
 
 ## Setup
 
-`macime set` with `--save` option keeps previous IME as files in temporaly directory.
+Following commands save current IME as files in temporaly directory:
+- `macime set` with `--save` option
+- `macime save`
+
 Default save directory is `/tmp/riodelphino.macime`.
 
 To change it, add this line in `~/.profile`:
@@ -76,6 +79,7 @@ Sub commands:
 macime get [options]
 macime set <IME_ID> [options]
 macime list [options]
+macime save [options]
 macime load [options]
 ```
 
@@ -89,8 +93,11 @@ Optionally saves the previous IME.
 `list`
 List available IMEs.
 
+`save`
+Save current IME.
+
 `load`
-Restore the previously saved IME.
+Restore the previous IME.
 
 
 ### Get current IME
@@ -114,24 +121,34 @@ macime get --detail --json
 # Set IME
 macime set com.apple.keylayout.ABC
 
-# Set IME & save previous IME as `DEFAULT`
+# Set IME while saving current IME as `DEFAULT`
 macime set com.apple.keylayout.ABC --save
-# previous IME ID is saved at `/tmp/riodelphino.macime/prev/DEFAULT`
+# The IME ID is saved at `/tmp/riodelphino.macime/prev/DEFAULT`
 
-# Set IME & save previous IME as <session_id>
+# Set IME while saving current IME as <session_id>
 macime set com.apple.keylayout.ABC --save --session-id nvim-1001
-# previous IME ID is saved at `/tmp/riodelphino.macime/prev/nvim-1001`
+# The IME ID is saved at `/tmp/riodelphino.macime/prev/nvim-1001`
+```
+### Save IME
+```bash
+# Save current IME to `DEFAULT`
+macime save
+# Current IME ID is set to `/tmp/riodelphino.macime/prev/DEFAULT`
+
+# Save current IME to `<session_id>`
+macime save --session-id nvim-1001
+# Current IME ID is set to `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
 
 ### Load IME
 ```bash
 # Load IME from `DEFAULT`
 macime load
-# Read previous IME ID from `/tmp/riodelphino.macime/prev/DEFAULT`, then set it.
+# Reads previous IME ID from `/tmp/riodelphino.macime/prev/DEFAULT`, then set it.
 
 # Load IME from `<session_id>`
 macime load --session-id nvim-1001
-# Read previous IME ID from `/tmp/riodelphino.macime/prev/nvim-1001`, then set it.
+# Reads previous IME ID from `/tmp/riodelphino.macime/prev/nvim-1001`, then set it.
 ```
 
 ### List IME

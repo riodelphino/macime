@@ -13,25 +13,24 @@ Thanks for the original swift code:
 ## Why macime?
 
 1. Written in swift (faster)
-2. Reduce time lag 10-60% than similar tools. (It depends the command usages.)
-3. Rich features
-4. Easy setup to nvim
+2. Reduce time lag 50% than similar tools (on set IME with saving current IME)
+3. Easy setup with nvim (using [macime.nvim](https://github.com/riodelphino/macime.nvim) or adding simple code)
+4. Show IMEs list (style: list|detailed|json and combined with them)
 
 
 ## Feature
 
-* Show the current IME
-* List all available IMEs
+* get: Show current IME
+* set: Switch to a specified IME
+* set & save: Switch IME while saving the previous one
+* load: Restore the previously used IME
 * Output results in plain text or JSON
-* Switch to a specified IME
-* Switch IME while saving the previous one
-* Restore the previously used IME
+* List all IMEs
 
 
 ## Requirements
 
 * macOS
-* bash or zsh (May work with other shells)
 
 
 ## Install

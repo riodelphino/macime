@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [2.3.0](https://github.com/riodelphino/macime/compare/v2.2.6...v2.3.0) (2026-01-18)
 
+* **docs:** Refine `README.md`
 * **docs:** Reformat `CHANGELOG.md`
 
 ## [2.2.6](https://github.com/riodelphino/macime/compare/v2.2.5...v2.2.6) (2026-01-11)

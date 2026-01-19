@@ -1,5 +1,8 @@
 import Foundation
 import InputMethodKit
+import MacIMECore
+
+Args.test()
 
 // ╭───────────────────────────────────────────────────────────────╮
 // │                             Const                             │

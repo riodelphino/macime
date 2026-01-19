@@ -4,10 +4,10 @@
 <dict>
     <key>Label</key>
     <string>com.riodelphino.macimed</string>
-    
+   
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/macimed</string>
+        <string>#{opt_bin}/macimed</string>
     </array>
     
     <key>RunAtLoad</key>
@@ -16,10 +16,11 @@
     <key>KeepAlive</key>
     <true/>
     
+
     <key>StandardErrorPath</key>
-    <string>/tmp/riodelphino.macimed.err</string>
+    <string>#{var}/log/macimed.err</string>
     
     <key>StandardOutPath</key>
-    <string>/tmp/riodelphino.macimed.out</string>
+    <string>#{var}/log/macimed.out</string>
 </dict>
 </plist>

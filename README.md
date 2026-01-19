@@ -42,9 +42,15 @@ brew tap riodelphino/tap
 brew install macime
 ```
 
-## Start and Stop launchd Service
+## Uninstall
 
-Optional, but strongly recommended for faster switching.
+```bash
+brew uninstall macime
+```
+
+## Start/Stop Service
+
+Optional. Maybe slightly faster.
 
 ```bash
 # Start macimed service
@@ -52,28 +58,10 @@ brew services start macime
 
 # Stop macimed service
 brew services stop macime
+
+# Manually start (for test, to see the log)
+macimed
 ```
-
-## Uninstall
-
-```bash
-brew uninstall macime
-```
-
-## Setup
-
-Following commands save current IME as files in temporaly directory:
-- `macime set` with `--save` option
-- `macime save`
-
-Default save directory is `/tmp/riodelphino.macime`.
-
-To change it, add this line in `~/.profile`:
-```bash
-export MACIME_TEMP_DIR="/path/to/your/temp_dir"
-```
-Make sure you have write/read permissions to the directory.
-
 
 ## Usage
 
@@ -82,7 +70,6 @@ Make sure you have write/read permissions to the directory.
 Show `macime` version:
 ```bash
 macime --version
-# macime v2.x.x
 ```
 
 Show `macime` help:
@@ -181,11 +168,7 @@ macime list --select-capable # show only selectable IME methods
 `macimed` command is bundled with `macime`.  
 This command is used by `launchd` if you enabled it by `brew services start macime`.
 
-You can test it with:
-1. `macimed` in the shell, then it starts to listen.
-2. ...
-
-TODO: Create TEST code with swift or sh?
+You can manually start it by `macimed` to see log.
 
 
 ## Integration
@@ -226,7 +209,7 @@ Solutions for now:
    - Uninstal `azookey`
 
 
-## Contribute
+## Contribution
 
 Contributions are welcome:
 ```bash
@@ -234,9 +217,15 @@ Contributions are welcome:
 git clone https://github.com/riodelphino/macime
 cd macime
 
-# Build
+# Build for debug
 swift build
+# Build for release
+swift build -c release
 ```
+
+## Others
+
+**Deprecated**: `$MACIME_TEMP_DIR` environmental value
 
 
 ## Changelog

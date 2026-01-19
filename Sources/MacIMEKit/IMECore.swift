@@ -63,7 +63,7 @@ public struct IMECore {
                let path = getStoredPath(state.sessionID)
                let success = File.write(path, curr.id)
                guard success else {
-                  throw AppError.saveFailed(path)  // FIX: IMECore 内で処理すべきか？
+                  throw AppError.saveFailed(path)  // FIX: Should treat in IMECore?
                }
                return Response(status: .ok, content: "")
             }
@@ -113,16 +113,14 @@ public struct IMECore {
             // Switch to new ID
             if let curr = try current() {
                let currID = curr.id  // Need to save here
-               IO.out("1: " + currID)  // DEBUG: なんで ABC にしかならんの？
                if let _newID = state.newID {
                   let _ = try select(id: _newID)
                   // Save to /tmp
                   if state.save {
                      let path = getStoredPath(state.sessionID)
                      let success = File.write(path, currID)
-                     IO.out("2: " + currID)  // DEBUG: なんで ABC にしかならんの？
                      guard success else {
-                        throw AppError.saveFailed(path)  // FIX: こういうのは外へ伝播させないで内部で処理させたほうがいい？
+                        throw AppError.saveFailed(path)  // FIX: Shold handle this internally instead of propagating it to the outside?
                      }
                   }
                }

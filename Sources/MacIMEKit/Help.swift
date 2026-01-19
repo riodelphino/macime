@@ -65,6 +65,14 @@ public enum Help {
 
       """
    public static let macimed = """
-      macimed help
+      Usage: macimed
+
+      This is a daemon tool that wraps `macime` command for launchd service.
+
+      Start service with brew
+        brew services start macime 
+
+      Start service manually
+         launchctl load ~/Library/LaunchAgents/com.riodelphino.macimed.plist
       """
 }

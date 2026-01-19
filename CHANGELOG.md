@@ -1,11 +1,11 @@
 # CHANGELOG
 
 
-## [3.0.0](https://github.com/riodelphino/macime/compare/v2.3.0...v3.0.0) (2026-01-19)
+## [3.0.0](https://github.com/riodelphino/macime/compare/v2.3.0...v3.0.0) (2026-01-20)
 
-* **feat!:** BREAKING CHANGE! Add launchd service wrapper `macimed` ⭐️
-* **chore:** `$MACIME_TEMP_DIR` is deprecated ⭐️ later
-* **fix:** Parsing args error with `--session-id <session_id>` on `macimed` ⭐️ later
+* **feat!:** BREAKING CHANGE! Add launchd service wrapper `macimed`
+* **chore:** `$MACIME_TEMP_DIR` is deprecated
+* **fix:** Parsing args error with `--session-id <session_id>` on `macimed`
 * **fix** Deprecate output json directory (Output json as string instead)
 
 ## [2.3.0](https://github.com/riodelphino/macime/compare/v2.2.6...v2.3.0) (2026-01-18)

@@ -55,19 +55,21 @@ public struct IMECore {
 
    public static func execute(_ state: CmdState) -> Response {
       do {
-         try ensureTempDirExists()
 
          switch state.subcmd {
          case "save":
+            try ensureTempDirExists()
             if let curr = try current() {
                let path = getStoredPath(state.sessionID)
                let success = File.write(path, curr.id)
                guard success else {
-                  throw AppError.saveFailed(path)
+                  throw AppError.saveFailed(path)  // FIX: IMECore 内で処理すべきか？
                }
                return Response(status: .ok, content: "")
             }
+            return Response(status: .err, content: "Cannot get current IME ID.")
          case "load":
+            try ensureTempDirExists()
             if let prev_id = previous(session_id: state.sessionID) {
                let _ = try select(id: prev_id)
                return Response(status: .ok, content: "")
@@ -109,17 +111,19 @@ public struct IMECore {
             }
          case "set":
             // Switch to new ID
-            if let prev = try current() {
+            if let curr = try current() {
+               let currID = curr.id  // Need to save here
+               IO.out("1: " + currID)  // DEBUG: なんで ABC にしかならんの？
                if let _newID = state.newID {
                   let _ = try select(id: _newID)
                   // Save to /tmp
                   if state.save {
                      let path = getStoredPath(state.sessionID)
-                     let success = File.write(path, prev.id)
+                     let success = File.write(path, currID)
+                     IO.out("2: " + currID)  // DEBUG: なんで ABC にしかならんの？
                      guard success else {
                         throw AppError.saveFailed(path)  // FIX: こういうのは外へ伝播させないで内部で処理させたほうがいい？
                      }
-                     return Response(status: .ok, content: "")
                   }
                }
             }

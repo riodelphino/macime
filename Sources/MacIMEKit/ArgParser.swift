@@ -2,8 +2,21 @@ import Foundation
 
 // Arguments
 public enum ArgParser {
-   public static func parse() -> CmdState {
-      let args = Array(CommandLine.arguments.dropFirst())
+
+   // Get command-line args as String array
+   public static func getCmdArgs() -> [String] {
+      return Array(CommandLine.arguments.dropFirst())
+   }
+
+   // Split command with args to String array
+   public static func splitArgs(_ cmd: String) -> [String] {
+      let trimmed = cmd.trimmingCharacters(in: .whitespacesAndNewlines)
+      let parts = trimmed.split(separator: " ").map(String.init)
+      return parts
+   }
+
+   // Parse args array into CmdState
+   public static func parse(_ args: [String]) -> CmdState {
       var state = CmdState()
 
       // Parse args

@@ -12,6 +12,15 @@ public enum File {
       return true
    }
 
+   public static func removePath(_ path: String) -> Bool {
+      do {
+         try FileManager.default.removeItem(atPath: path)
+      } catch {
+         return false
+      }
+      return true
+   }
+
    public static func pathExists(_ path: String) -> Bool {
       return FileManager.default.fileExists(atPath: path)
    }

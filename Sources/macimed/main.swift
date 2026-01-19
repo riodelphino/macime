@@ -4,7 +4,6 @@ import MacIMEKit
 
 public let cmdSpec = CmdSpec(name: "macime", version: "3.0.0", help: Help.macimed)
 public let state = ArgParser.parse()
-// App.run(state)
 
 // ╭───────────────────────────────────────────────────────────────╮
 // │                        Utilities                              │

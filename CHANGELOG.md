@@ -6,6 +6,7 @@
 * **feat!:** BREAKING CHANGE! Add launchd service wrapper `macimed` ⭐️
 * **chore:** `$MACIME_TEMP_DIR` is deprecated ⭐️ later
 * **fix:** Parsing args error with `--session-id <session_id>` on `macimed` ⭐️ later
+* **fix** Deprecate output json directory (Output json as string instead)
 
 ## [2.3.0](https://github.com/riodelphino/macime/compare/v2.2.6...v2.3.0) (2026-01-18)
 

@@ -52,4 +52,120 @@ public struct IMECore {
          }
       }
    }
+
+   public static func execute(_ state: CmdState) -> Response {
+      do {
+         try ensureTempDirExists()
+
+         switch state.subcmd {
+         case "save":
+            if let curr = try current() {
+               let path = getStoredPath(state.sessionID)
+               let success = File.write(path, curr.id)
+               guard success else {
+                  throw AppError.saveFailed(path)
+               }
+               return Response(status: .ok, content: "")
+            }
+         case "load":
+            if let prev_id = previous(session_id: state.sessionID) {
+               let _ = try select(id: prev_id)
+               return Response(status: .ok, content: "")
+            }
+            return Response(status: .err, content: "Previous IME ID is not set.")  // FIX: Trigger an MacIMEError?
+         case "list":
+            var sources: [TISInputSource]
+            var outJson: [Any] = []
+            var outStr: [String] = []
+            sources = list(selectCapable: state.selectCapable)
+            if state.detail {
+               if state.json {
+                  // list detail as json
+                  for source in sources {
+                     outJson.append(source.getInfo.json)
+                  }
+                  return Response(status: .ok, content: try Util.jsonToString(outJson))
+               } else {
+                  // list detail as str
+                  for source in sources {
+                     outStr.append(source.getInfo.str)
+                  }
+                  return Response(status: .ok, content: outStr.joined(separator: "\n"))
+               }
+            } else {
+               if state.json {
+                  // list id as json
+                  for source in sources {
+                     outJson.append(source.id)
+                  }
+                  return Response(status: .ok, content: try Util.jsonToString(outJson))
+               } else {
+                  // list id as str
+                  for source in sources {
+                     outStr.append(source.id)
+                  }
+                  return Response(status: .ok, content: outStr.joined(separator: "\n"))
+               }
+            }
+         case "set":
+            // Switch to new ID
+            if let prev = try current() {
+               if let _newID = state.newID {
+                  let _ = try select(id: _newID)
+                  // Save to /tmp
+                  if state.save {
+                     let path = getStoredPath(state.sessionID)
+                     let success = File.write(path, prev.id)
+                     guard success else {
+                        throw AppError.saveFailed(path)  // FIX: こういうのは外へ伝播させないで内部で処理させたほうがいい？
+                     }
+                     return Response(status: .ok, content: "")
+                  }
+               }
+            }
+         case "get":
+            if let curr = try current() {
+               if state.detail {
+                  if state.json {
+                     // curr IME detail as JSON
+                     return Response(status: .ok, content: try Util.jsonToString(curr.getInfo.json))
+                  } else {
+                     // curr IME detail as string
+                     return Response(status: .ok, content: curr.getInfo.str)
+                  }
+               } else {
+                  if state.json {
+                     // curr IME id as JSON
+                     return Response(status: .ok, content: try Util.jsonToString(curr.id))
+                  } else {
+                     // curr IME id as string
+                     return Response(status: .ok, content: curr.id)
+                  }
+               }
+            }
+         default:
+            return Response(
+               status: .err, content: "Invalid Sub-command: \(state.subcmd ?? "UNKNOWN")")
+         }
+      } catch let e as AppError {
+         switch e {
+         case .notFound(let id):
+            return Response(status: .err, content: "IME not found: '\(id)'")
+         case .selectFailed(let id, let osstatus):
+            return Response(
+               status: .err, content: "IME switch failed: '\(id)' (\(String(osstatus)))")
+         case .getCurrentFailed:
+            return Response(status: .err, content: "Cannot get current IME")
+         case .createTempDirFailed(let dir):
+            return Response(status: .err, content: "Cannot create temp directory: '\(dir)'")
+         case .jsonSerializationFailed(let msg):
+            return Response(status: .err, content: "Serializing JSON failed: \(msg)")
+         default:
+            return Response(status: .err, content: "Unhandled error: \(e)")
+         }
+      } catch {
+         return Response(status: .err, content: "Unexpected error: \(error)")
+      }
+      return Response(status: .err, content: "")  // FIX: How to remove this?
+   }
 }

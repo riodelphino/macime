@@ -1,4 +1,12 @@
 # CHANGELOG
+
+
+## [3.0.0](https://github.com/riodelphino/macime/compare/v2.3.0...v3.0.0) (2026-01-19)
+
+* **feat!:** BREAKING CHANGE! Add launchd service wrapper `macimed` ⭐️
+* **chore:** `$MACIME_TEMP_DIR` is deprecated ⭐️ later
+* **fix:** Parsing args error with `--session-id <session_id>` on `macimed` ⭐️ later
+
 ## [2.3.0](https://github.com/riodelphino/macime/compare/v2.2.6...v2.3.0) (2026-01-18)
 
 * **feat:** Add `macime save` sub command

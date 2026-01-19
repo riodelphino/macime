@@ -1,6 +1,6 @@
 import Foundation
 
-let SOCKET_PATH = "/tmp/riodelphino.macime.sock"
+let SOCKET_PATH = "/tmp/riodelphino.macimed.sock"
 
 // ╭───────────────────────────────────────────────────────────────╮
 // │                        Utilities                              │
@@ -22,39 +22,7 @@ func cleanupSocket() {
 // │                    Command Processing                         │
 // ╰───────────────────────────────────────────────────────────────╯
 
-// func processCommand(_ cmd: String) -> String {
-//    let trimmed = cmd.trimmingCharacters(in: .whitespacesAndNewlines)
-//    let parts = trimmed.split(separator: " ", maxSplits: 2).map(String.init)
-//
-//    guard parts.count > 0 else {
-//       return "ERROR: Empty command\n"
-//    }
-//
-//    switch parts[0] {
-//    case "echo":
-//       // テスト用: echo コマンド
-//       let message = parts.count > 1 ? parts[1...].joined(separator: " ") : "hello"
-//       return "ECHO: \(message)\n"
-//
-//    case "ping":
-//       return "PONG\n"
-//
-//    case "time":
-//       let now = Date()
-//       return "TIME: \(now)\n"
-//
-//    case "hello":
-//       return "Hello from macimed!\n"
-//
-//    case "get":
-//       return "get!\n"
-//
-//    default:
-//       return "ERROR: Unknown command '\(parts[0])'\n"
-//    }
-// }
-
-func processCommand(_ cmd: String) -> String {
+func processCommand(_ cmd: String) -> String {  // TODO: This should be replaced with `import MacIMECore`
    let trimmed = cmd.trimmingCharacters(in: .whitespacesAndNewlines)
    let parts = trimmed.split(separator: " ", maxSplits: 3).map(String.init)
 
@@ -62,7 +30,7 @@ func processCommand(_ cmd: String) -> String {
       return "ERROR: Empty command\n"
    }
 
-   // macime コマンドを subprocess で実行
+   // Execute macime command as subprocess TODO: This should be replaced with `import MacIMECore`
    let process = Process()
    process.executableURL = URL(fileURLWithPath: "/usr/local/bin/macime")
    process.arguments = parts
@@ -113,6 +81,11 @@ func handleClient(_ client: Int32) {
    log("Sending response: '\(response.trimmingCharacters(in: .newlines))'")
 
    let _ = write(client, response, response.count)
+}
+
+func getSocketPath() -> String {
+   // let socketPath = ProcessInfo.processInfo.environment["MACIME_SOCKET_PATH"] ?? SOCKET_PATH
+   return SOCKET_PATH
 }
 
 // ╭───────────────────────────────────────────────────────────────╮

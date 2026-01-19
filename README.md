@@ -13,9 +13,11 @@ Thanks for the original swift code:
 ## Why macime?
 
 1. Written in swift (faster)
-2. Reduce time lag 50% than similar tools (on set IME with saving current IME)
+2. Reduces time lag than similar tools:
+   - Reduces 50% (with using `set` and `--save` together)
+   - Reduces 75% (with launchd service)
 3. Easy setup with nvim (using [macime.nvim](https://github.com/riodelphino/macime.nvim) or adding simple code)
-4. Show IMEs list (style: list|detailed|json and combined with them)
+4. Shows IMEs list (style: list|detailed|json and combined with them)
 
 
 ## Feature
@@ -40,6 +42,18 @@ brew tap riodelphino/tap
 brew install macime
 ```
 
+## Start and Stop launchd Service
+
+Optional, but strongly recommended for faster switching.
+
+```bash
+# Start macimed service
+brew services start macime
+
+# Stop macimed service
+brew services stop macime
+```
+
 ## Uninstall
 
 ```bash
@@ -62,6 +76,8 @@ Make sure you have write/read permissions to the directory.
 
 
 ## Usage
+
+### macime
 
 Show `macime` version:
 ```bash
@@ -100,7 +116,7 @@ Save current IME.
 Restore the previous IME.
 
 
-### Get current IME
+#### Get current IME
 ```bash
 macime get
 # com.apple.keylayout.ABC
@@ -116,7 +132,7 @@ macime get --detail --json
 # {"isSelectCapable":true,"isSelected":true,"sourceLanguages":["en","af", ... ,"zu"],"localizedName":"ABC","id":"com.apple.keylayout.ABC"}
 ```
 
-### Set IME
+#### Set IME
 ```bash
 # Set IME
 macime set com.apple.keylayout.ABC
@@ -129,7 +145,7 @@ macime set com.apple.keylayout.ABC --save
 macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 # The IME ID is saved at `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
-### Save IME
+#### Save IME
 ```bash
 # Save current IME to `DEFAULT`
 macime save
@@ -140,7 +156,7 @@ macime save --session-id nvim-1001
 # Current IME ID is set to `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
 
-### Load IME
+#### Load IME
 ```bash
 # Load IME from `DEFAULT`
 macime load
@@ -151,7 +167,7 @@ macime load --session-id nvim-1001
 # Reads previous IME ID from `/tmp/riodelphino.macime/prev/nvim-1001`, then set it.
 ```
 
-### List IME
+#### List IME
 ```bash
 macime list # id list
 macime list --detail # detailed list
@@ -159,6 +175,18 @@ macime list --json # json list
 macime list --select-capable # show only selectable IME methods
 # --detail, --json and --select-capable can be mixtured
 ```
+
+### macimed
+
+`macimed` command is bundled with `macime`.  
+This command is used by `launchd` if you enabled it by `brew services start macime`.
+
+You can test it with:
+1. `macimed` in the shell, then it starts to listen.
+2. ...
+
+TODO: Create TEST code with swift or sh?
+
 
 ## Integration
 

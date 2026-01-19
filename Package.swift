@@ -17,22 +17,22 @@ let package = Package(
    targets: [
       // Shared library with common logic
       .target(
-         name: "MacIMECore",
+         name: "MacIMEKit",
          dependencies: [],
-         path: "Sources/MacIMECore"
+         path: "Sources/MacIMEKit"
       ),
 
       // macime CLI tool
       .executableTarget(
          name: "macime",
-         dependencies: ["MacIMECore"],
+         dependencies: ["MacIMEKit"],
          path: "Sources/macime"
       ),
 
       // macimed daemon
       .executableTarget(
          name: "macimed",
-         dependencies: ["MacIMECore"],
+         dependencies: ["MacIMEKit"],
          path: "Sources/macimed",
          resources: [
             .copy("Resources/com.riodelphino.macimed.plist")

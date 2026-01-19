@@ -1,6 +1,10 @@
 import Foundation
+import InputMethodKit
+import MacIMEKit
 
-let SOCKET_PATH = "/tmp/riodelphino.macimed.sock"
+public let cmdSpec = CmdSpec(name: "macime", version: "3.0.0", help: Help.macimed)
+public let state = ArgParser.parse()
+// App.run(state)
 
 // ╭───────────────────────────────────────────────────────────────╮
 // │                        Utilities                              │
@@ -15,7 +19,7 @@ func log(_ msg: String) {
 }
 
 func cleanupSocket() {
-   try? FileManager.default.removeItem(atPath: SOCKET_PATH)
+   try? FileManager.default.removeItem(atPath: config.sockPath)
 }
 
 // ╭───────────────────────────────────────────────────────────────╮
@@ -83,11 +87,6 @@ func handleClient(_ client: Int32) {
    let _ = write(client, response, response.count)
 }
 
-func getSocketPath() -> String {
-   // let socketPath = ProcessInfo.processInfo.environment["MACIME_SOCKET_PATH"] ?? SOCKET_PATH
-   return SOCKET_PATH
-}
-
 // ╭───────────────────────────────────────────────────────────────╮
 // │                    Daemon Main                                │
 // ╰───────────────────────────────────────────────────────────────╯
@@ -107,7 +106,7 @@ func startDaemon() throws {
    var addr = sockaddr_un()
    addr.sun_family = sa_family_t(AF_UNIX)
 
-   let pathCStr = (SOCKET_PATH as NSString).utf8String!
+   let pathCStr = (config.sockPath as NSString).utf8String!
    strncpy(
       &addr.sun_path.0, pathCStr,
       MemoryLayout.size(ofValue: addr.sun_path) - 1)
@@ -122,7 +121,7 @@ func startDaemon() throws {
       throw NSError(domain: "bind", code: -1, userInfo: ["msg": "bind() failed"])
    }
 
-   log("Socket bound to \(SOCKET_PATH)")
+   log("Socket bound to \(config.sockPath)")
 
    guard listen(fd, 5) == 0 else {
       throw NSError(domain: "listen", code: -1, userInfo: ["msg": "listen() failed"])
@@ -148,7 +147,7 @@ func startDaemon() throws {
 // ╰───────────────────────────────────────────────────────────────╯
 
 do {
-   log("macimed v1.0 starting...")
+   log("macimed \(cmdSpec.version) starting...")
    try startDaemon()
 } catch {
    log("ERROR: \(error)")

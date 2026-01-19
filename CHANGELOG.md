@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [3.0.1](https://github.com/riodelphino/macime/compare/v3.0.0...v3.0.1) (2026-01-20)
+
+* **fix:** Use full path for calling `macime` from `macimed`
 
 ## [3.0.0](https://github.com/riodelphino/macime/compare/v2.3.0...v3.0.0) (2026-01-20)
 

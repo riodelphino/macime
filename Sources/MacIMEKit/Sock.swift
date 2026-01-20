@@ -18,10 +18,10 @@ public struct Sock {
    // ╰───────────────────────────────────────────────────────────────╯
 
    public static func processCommand(_ cmd: String) -> Response {  // TODO: This should be replaced with `import MacIMECore`
-      let args = ArgParser.splitArgs(cmd)
-      // let state: CmdState = ArgParser.parse(args)
 
       // NOT WORKS
+      // let args = ArgParser.splitArgs(cmd)
+      // let state: CmdState = ArgParser.parse(args)
       // let response: Response = IMECore.execute(state)
       // return response
       //
@@ -30,6 +30,8 @@ public struct Sock {
       // See:
       //   - https://stackoverflow.com/questions/26612735/os-x-how-to-get-tisinputsourceref-keyboard-layout-of-current-active-window-of
       //   - https://leopard-adc.pepas.com/documentation/TextFonts/Reference/TextInputSourcesReference/TextInputSourcesReference.pdf?utm_source=chatgpt.com
+
+      let args = ArgParser.splitArgs(cmd)
 
       let process = Process()
       process.executableURL = URL(fileURLWithPath: "/usr/local/bin/macime")

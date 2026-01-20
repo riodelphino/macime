@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [3.0.2](https://github.com/riodelphino/macime/compare/v3.0.2...v3.0.3) (2026-01-20)
+## [3.0.3](https://github.com/riodelphino/macime/compare/v3.0.2...v3.0.3) (2026-01-20)
 
+* **chore:** Add `config.macimePath`
 * **docs:** Add command usage to restart launchd service
 
 ## [3.0.2](https://github.com/riodelphino/macime/compare/v3.0.1...v3.0.2) (2026-01-20)

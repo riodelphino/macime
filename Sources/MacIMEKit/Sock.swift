@@ -34,7 +34,7 @@ public struct Sock {
       let args = ArgParser.splitArgs(cmd)
 
       let process = Process()
-      process.executableURL = URL(fileURLWithPath: "/usr/local/bin/macime")
+      process.executableURL = URL(fileURLWithPath: config.macimePath)
       process.arguments = args
 
       let pipe = Pipe()

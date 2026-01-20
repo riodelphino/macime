@@ -5,7 +5,7 @@ public struct Sock {
       let timestamp = ISO8601DateFormatter().string(from: Date())
       let logMsg = "[\(timestamp)] \(msg)\n"
       if let data = logMsg.data(using: .utf8) {
-         FileHandle.standardOutput.write(data)
+         FileHandle.standardError.write(data)  // standardOutput is not appropriate here
       }
    }
 
@@ -47,11 +47,11 @@ public struct Sock {
 
          let data = pipe.fileHandleForReading.readDataToEndOfFile()
          if let output = String(data: data, encoding: .utf8) {
-            return Response(status: .ok, content: output.isEmpty ? "OK\n" : output)
+            return Response(status: .ok, content: output)
          }
-         return Response(status: .err, content: "ERROR: No output\n")
+         return Response(status: .err, content: "ERROR: No output")
       } catch {
-         return Response(status: .err, content: "ERROR: \(error.localizedDescription)\n")
+         return Response(status: .err, content: "ERROR: \(error.localizedDescription)")
       }
    }
 
@@ -82,10 +82,14 @@ public struct Sock {
 
       switch response.status {
       case .ok:
-         log("Sending response: '\(response.content.trimmingCharacters(in: .newlines))'")
+         var msg = response.content.trimmingCharacters(in: .newlines)
+         msg = msg.isEmpty ? "OK" : msg
+         log("Sending response: '\(msg)'")
          let _ = write(client, response.content, response.content.count)
       case .err:
-         log("Sending error   : '\(response.content.trimmingCharacters(in: .newlines))'")
+         var msg = response.content.trimmingCharacters(in: .newlines)
+         msg = msg.isEmpty ? "ERROR" : msg
+         log("Sending error   : '\(msg)'")
          let _ = write(client, response.content, response.content.count)
       }
    }

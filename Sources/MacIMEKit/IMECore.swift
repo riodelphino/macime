@@ -2,9 +2,19 @@ import Foundation
 import InputMethodKit
 
 public struct IMECore {
+   // Lazy load
+   private static var _sources: [TISInputSource]?
+
    public static var sources: [TISInputSource] {
-      let sourceNSArray = TISCreateInputSourceList(nil, false).takeRetainedValue() as NSArray
-      return sourceNSArray as! [TISInputSource]
+      if let cached = _sources {
+         return cached
+      }
+      let arr =
+         TISCreateInputSourceList(nil, false)
+         .takeRetainedValue() as NSArray
+      let list = arr as! [TISInputSource]
+      _sources = list
+      return list
    }
 
    public static func select(id: String) throws -> TISInputSource {
@@ -138,7 +148,8 @@ public struct IMECore {
                      return Response(status: .ok, content: try Util.jsonToString(outJson))
                   } else {
                      // curr IME detail as string
-                     let outStr: String = "\(curr.describe(format: .keyValue, fields: detail))"
+                     let outStr: String =
+                        "\(curr.describe(format: .keyValue, fields: detail))"
                      return Response(status: .ok, content: outStr)
                   }
                } else {

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [3.0.5](https://github.com/riodelphino/macime/compare/v3.0.4...v3.0.5) (2026-01-21)
+
+* **docs:** macime is blazing faster!
+* **docs:** Add log, err, tmp directories, and chore
+
 ## [3.0.4](https://github.com/riodelphino/macime/compare/v3.0.3...v3.0.4) (2026-01-21)
 
 * **docs:** Fix upgradingx and launchd code examples

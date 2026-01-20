@@ -190,10 +190,12 @@ You can manually start it by `macimed` to monitor log.
 
 Log:
 * /usr/local/var/log/macimed.log
+* /private/tmp/riodelphino.macimed.log
 * /opt/homebrew/var/log/macimed.log (Apple Silicon)
 
 Error:
 * /usr/local/var/log/macimed.err
+* /private/tmp/riodelphino.macimed.err
 * /opt/homebrew/var/log//macimed.err (Apple Silicon)
 
 
@@ -209,7 +211,14 @@ For more details, see [doc/integration.md](doc/integration.md).
 
 ## Stored in Temporary dir
 
-The previous IME ID is stored in `/tmp/riodelphino.macime/<session_id>`.  
+The previous IME ID is stored in:
+
+When directly executing `macimed`:
+* `/tmp/riodelphino.macime/<session_id>`
+
+With `brew services start`:
+* `/private/tmp/riodelphino.macime/<session_id>`
+
 These files are deleted when you shutdown macOS.
 
 

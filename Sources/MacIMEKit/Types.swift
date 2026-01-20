@@ -1,7 +1,7 @@
 import Foundation
 
 public struct Config {
-   public static var version: String = "3.0.4"
+   public static var version: String = "3.0.5"
    public static var tempDir: String = "/tmp/riodelphino.macime"
    public static var sockPath: String = "/tmp/riodelphino.macimed.sock"
    public static var macimePath: String = "/usr/local/bin/macime"

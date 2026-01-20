@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## [3.0.3](https://github.com/riodelphino/macime/compare/v3.0.2...v3.0.3) (2026-01-20)
+## [3.0.3](https://github.com/riodelphino/macime/compare/v3.0.2...v3.0.3) (2026-01-21)
 
-* **feat:** Show elapsed time in `macimed` log
+* **chore:** Remove single-quote in `macimed` log
+* **chore:** Show elapsed time in `macimed` log
 * **refactor:** Replace `getInfo()` to flexible `describe()`
 * **refactor:** Combine struct/enum into `Type.swift`
 * **chore:** Add `config.macimePath`

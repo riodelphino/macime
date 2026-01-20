@@ -76,24 +76,24 @@ public struct Sock {
             String(bytes: buffer[0..<bytesRead], encoding: .utf8)?.trimmingCharacters(
                 in: .whitespacesAndNewlines) ?? ""
 
-        log("Received command: '\(command)'")
+        log("Received command: \(command)")
 
         var response: Response = Response(status: .err, content: "")
         let ms = Util.elapsed {  // FIX: error is not caught
             response = processCommand(command)
         }
-        log("Elapsed time    : '\(ms)ms'")
+        log("Elapsed time    : \(ms)ms")
 
         switch response.status {
         case .ok:
             var msg = response.content.trimmingCharacters(in: .newlines)
             msg = msg.isEmpty ? "OK" : msg
-            log("Sending response: '\(msg)'")
+            log("Sending response: \(msg)")
             let _ = write(client, response.content, response.content.count)
         case .err:
             var msg = response.content.trimmingCharacters(in: .newlines)
             msg = msg.isEmpty ? "ERROR" : msg
-            log("Sending error   : '\(msg)'")
+            log("Sending error   : \(msg)")
             let _ = write(client, response.content, response.content.count)
         }
     }

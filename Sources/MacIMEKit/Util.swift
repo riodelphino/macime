@@ -12,4 +12,12 @@ public enum Util {
       }
       return jsonString
    }
+
+   public static func elapsed(_ block: () throws -> Void) rethrows -> Int {
+      let s = DispatchTime.now()
+      try block()
+      let e = DispatchTime.now()
+      let ms = Double(e.uptimeNanoseconds - s.uptimeNanoseconds) / 1_000_000
+      return Int(ms.rounded())
+   }
 }

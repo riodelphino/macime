@@ -78,7 +78,11 @@ public struct Sock {
 
         log("Received command: '\(command)'")
 
-        let response = processCommand(command)
+        var response: Response = Response(status: .err, content: "")
+        let ms = Util.elapsed {  // FIX: error is not caught
+            response = processCommand(command)
+        }
+        log("Elapsed time    : '\(ms)ms'")
 
         switch response.status {
         case .ok:

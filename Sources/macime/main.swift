@@ -1,10 +1,10 @@
 import Foundation
 import MacIMEKit
 
-public let cmdSpec = CmdSpec(name: "macime", version: config.version, help: Help.macime)
+public let cmdSpec = CmdSpec(name: "macime", version: Config.version, help: Help.macime)
 
-public let args = ArgParser.getCmdArgs()
-public let state = ArgParser.parse(args)
+public let args = CmdArgs.getCmdArgs()
+public let state = CmdArgs.parse(args)
 
 let response = IMECore.execute(state)
 

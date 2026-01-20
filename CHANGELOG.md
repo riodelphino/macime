@@ -2,6 +2,7 @@
 
 ## [3.0.3](https://github.com/riodelphino/macime/compare/v3.0.2...v3.0.3) (2026-01-20)
 
+* **refactor:** Combine struct/enum into `Type.swift`
 * **chore:** Add `config.macimePath`
 * **docs:** Add command usage to restart launchd service
 

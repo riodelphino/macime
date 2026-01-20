@@ -23,7 +23,7 @@ extension TISInputSource {
    }
 
    // Return IME info as specific data type
-   public var getInfo: (str: String, json: [String: Any]) {
+   public var getInfo: (str: String, json: [String: Any]) {  // TODO: Convert jsonToSTring
       var _str = ""
       var _json: [String: Any] = [:]
       _json = [

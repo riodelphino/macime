@@ -1,7 +1,7 @@
 import Foundation
 
 // Arguments
-public enum ArgParser {
+public enum CmdArgs {
 
    // Get command-line args as String array
    public static func getCmdArgs() -> [String] {
@@ -41,7 +41,7 @@ public enum ArgParser {
                i += 1
                continue
             case "--version", "-v":
-               IO.out(config.version)
+               IO.out(Config.version)
                exit(0)
             case "--help", "-h":
                IO.out(Help.macime)

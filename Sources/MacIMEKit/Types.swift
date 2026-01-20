@@ -1,3 +1,55 @@
+import Foundation
+
+public struct Config {
+   public static var version: String = "3.0.3"
+   public static var tempDir: String = "/tmp/riodelphino.macime"
+   public static var sockPath: String = "/tmp/riodelphino.macimed.sock"
+   public static var macimePath: String = "/usr/local/bin/macime"
+   public init() {}
+}
+
+public enum AppError: Error {
+   case notFound(String)
+   case selectFailed(String, OSStatus)
+   case getCurrentFailed
+   case getPreviousFailed(String?)
+   case createTempDirFailed(String)
+   case saveFailed(String)
+   case loadFailed(String)
+   case jsonSerializationFailed(String)
+}
+
+public struct CmdSpec {
+   public let name: String  // macime|macimed
+   public let version: String
+   public let help: String
+   public init(name: String, version: String, help: String) {
+      self.name = name
+      self.version = version
+      self.help = help
+   }
+}
+
+// Keeps commmand line args
+public struct CmdState {
+   public var subcmd: String? = nil
+   public var save: Bool = false
+   public var newID: String? = nil
+   public var selectCapable: Bool = false
+   public var detail: Bool = false
+   public var json = false
+   public var sessionID: String? = nil
+   public init() {}
+}
+
+public enum ResponseStatus {
+   case ok, err
+}
+public struct Response {
+   public var status: ResponseStatus
+   public var content: String
+}
+
 public enum Help {
    public static let macime = """
       Usage: macime <sub_command> [<options>]

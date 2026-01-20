@@ -42,13 +42,13 @@ public struct IMECore {
 
    public static func getStoredPath(_ sessionID: String?) -> String {
       let basename = sessionID ?? "DEFAULT"
-      return config.tempDir + "/" + basename
+      return Config.tempDir + "/" + basename
    }
 
    public static func ensureTempDirExists() throws {
-      if !File.pathExists(config.tempDir) {
-         guard File.createDir(config.tempDir) else {
-            throw AppError.createTempDirFailed(config.tempDir)
+      if !File.pathExists(Config.tempDir) {
+         guard File.createDir(Config.tempDir) else {
+            throw AppError.createTempDirFailed(Config.tempDir)
          }
       }
    }

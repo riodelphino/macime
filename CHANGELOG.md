@@ -2,8 +2,15 @@
 
 ## [3.0.2](https://github.com/riodelphino/macime/compare/v3.0.1...v3.0.2) (2026-01-20)
 
+* **chore:** Common versioning
+* **chore:** Remove unnecessary excutables
 * **docs:** Refine / Add log and err path for `macimed`
-* **fix:** Swap log and err output on `macimed`
+* **chore:** `processCommand()` func returns response.content without `\n` or `OK\n`
+* **chore:** Update the version info
+* **fix:** set sub-command returns Response
+* **fix:** log() shows `OK` when status.ok in `macimed`
+* **revert:** Swap log and err output in `macimed`
+* **fix:** Swap log and err output in `macimed`
 * **refactor:** processCommand() comments
 
 ## [3.0.1](https://github.com/riodelphino/macime/compare/v3.0.0...v3.0.1) (2026-01-20)

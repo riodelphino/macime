@@ -2,6 +2,7 @@
 
 ## [3.0.4](https://github.com/riodelphino/macime/compare/v3.0.3...v3.0.4) (2026-01-21)
 
+* **docs:** Fix upgradingx and launchd code examples
 * **perf:** Use lazy loadings for struct properties
 
 ## [3.0.3](https://github.com/riodelphino/macime/compare/v3.0.2...v3.0.3) (2026-01-21)

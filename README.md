@@ -54,15 +54,15 @@ brew uninstall macime
 ## Upgrade
 
 ```bash
-brew upgrade macime # or
-brew reinstall macime
+brew update
+brew upgrade macime
 ```
 If launchd service is enabled, ensure to restart it:
 ```bash
 brew services restart macime
 ```
 
-## Start/Stop Service
+## Register as a launchd Service
 
 Optional. Maybe slightly faster.
 
@@ -73,7 +73,7 @@ brew services start macime
 # Stop macimed service
 brew services stop macime
 
-# Manually start (for test, to see the log)
+# Manually start (for test, can see the log)
 macimed
 ```
 

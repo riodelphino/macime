@@ -5,7 +5,7 @@ public struct Sock {
       let timestamp = ISO8601DateFormatter().string(from: Date())
       let logMsg = "[\(timestamp)] \(msg)\n"
       if let data = logMsg.data(using: .utf8) {
-         FileHandle.standardError.write(data)
+         FileHandle.standardOutput.write(data)
       }
    }
 

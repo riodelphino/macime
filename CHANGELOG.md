@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [3.0.2](https://github.com/riodelphino/macime/compare/v3.0.1...v3.0.2) (2026-01-20)
+
+* **docs:** Refine / Add log and err path for `macimed`
+* **fix:** Swap log and err output on `macimed`
+* **refactor:** processCommand() comments
+
 ## [3.0.1](https://github.com/riodelphino/macime/compare/v3.0.0...v3.0.1) (2026-01-20)
 
 * **fix:** Use full path for calling `macime` from `macimed`

@@ -1,23 +1,25 @@
 # macime
 
-Alternative to [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) on macOS.
-
-On older Macs, these tools require `waiting for a moment` each time until switching IME mode.
-
-`macime` is a faster Swift-based IME auto-switching tool, which reduces this latency and also provides additional convenient features.
-
-Thanks for the original swift code:  
-[Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
+A noticiably faster IME switching tool for macOS. (written in Swift)
 
 
-## Why macime?
+## Story
 
-1. Written in swift (faster)
-2. Reduces time lag than similar tools:
-   - Reduces 50% (with using `set` and `--save` together)
-   - Reduces 75% (with launchd service)
-3. Easy setup with nvim (using [macime.nvim](https://github.com/riodelphino/macime.nvim) or adding simple code)
-4. Shows IMEs list (style: list|detailed|json and combined with them)
+I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
+But on my older Macs, these tools always required `a short wait` to switch IME modes.
+
+`macime` noticiably reduces this latency.
+
+Though it still has a slight delay, but I’m very satisfied with the switching speed since v3.0.1.
+
+If you’re a Mac user frustrated by slow IME switching, give it a try. 
+
+
+## Why it’s fast
+
+1. Sets and gets the IME in a single operation
+2. Uses a launchd daemon service
+3. Written in native Swift
 
 
 ## Feature
@@ -29,6 +31,7 @@ Thanks for the original swift code:
 * Switch IME while saving the previous one (in single step)
 * List all IMEs
 * Output results in plain text or JSON
+
 
 ## Requirements
 
@@ -168,7 +171,19 @@ macime list --select-capable # show only selectable IME methods
 `macimed` command is bundled with `macime`.  
 This command is used by `launchd` if you enabled it by `brew services start macime`.
 
-You can manually start it by `macimed` to see log.
+You can manually start it by `macimed` to monitor log.
+
+#### macimed Log
+
+`macimed` leaves log and err in:
+
+Log:
+* /usr/local/var/log/macimed.log
+* /opt/homebrew/var/log/macimed.log (Apple Silicon)
+
+Error:
+* /usr/local/var/log/macimed.err
+* /opt/homebrew/var/log//macimed.err (Apple Silicon)
 
 
 ## Integration

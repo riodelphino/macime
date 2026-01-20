@@ -1,6 +1,6 @@
 # macime
 
-A noticiably faster IME switching tool for macOS. (written in Swift)
+A blazing faster IME switching tool for macOS. (written in Swift)
 
 
 ## Story
@@ -20,6 +20,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 1. Sets and gets the IME in a single operation
 2. Uses a launchd daemon service
 3. Written in native Swift
+4. Optimized code
 
 
 ## Feature

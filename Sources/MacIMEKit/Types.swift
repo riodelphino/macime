@@ -42,6 +42,12 @@ public struct CmdState {
    public init() {}
 }
 
+public enum OutFormat {
+   case value
+   case keyValue
+   case json
+}
+
 public enum ResponseStatus {
    case ok, err
 }

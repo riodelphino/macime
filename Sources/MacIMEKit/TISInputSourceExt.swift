@@ -22,23 +22,38 @@ extension TISInputSource {
       getProperty(kTISPropertyInputSourceLanguages) as? [String] ?? []
    }
 
-   // Return IME info as specific data type
-   public var getInfo: (str: String, json: [String: Any]) {  // TODO: Convert jsonToSTring
-      var _str = ""
-      var _json: [String: Any] = [:]
-      _json = [
-         "id": id,
-         "localizedName": localizedName,
-         "isSelectCapable": isSelectCapable,
-         "isSelected": isSelected,
-         "sourceLanguages": sourceLanguages,
-      ]
-      _str =
-         "id: \(id)\n"
-         + "localizedName: \(localizedName)\n"
-         + "isSelectCapable: \(isSelectCapable)\n"
-         + "isSelected: \(isSelected)\n"
-         + "sourceLanguages: \(sourceLanguages)\n"
-      return (_str, _json)
+   private func value(of field: String) -> String {
+      switch field {
+      case "id": return id
+      case "localizedName": return localizedName
+      case "isSelectCapable": return "\(isSelectCapable)"
+      case "isSelected": return "\(isSelected)"
+      case "sourceLanguages": return "\(sourceLanguages)"  // FIX: Cause issue on .json ? / How does it convert to String?
+      default: return ""
+      }
    }
+   // Return IME fields as specific format
+   public func describe(format: OutFormat, fields: [String]) -> Any {
+      switch format {
+      case .value:
+         var lines: [String] = []
+         for field in fields {
+            lines.append(value(of: field))
+         }
+         return lines.joined(separator: "\n")
+      case .keyValue:
+         var lines: [String] = []
+         for field in fields {
+            lines.append("\(field): \(value(of: field))")
+         }
+         return lines.joined(separator: "\n")
+      case .json:
+         var json: [String: Any] = [:]
+         for field in fields {
+            json[field] = value(of: field)
+         }
+         return json
+      }
+   }
+
 }

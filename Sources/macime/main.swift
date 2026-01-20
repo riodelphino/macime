@@ -6,7 +6,7 @@ public let cmdSpec = CmdSpec(name: "macime", version: Config.version, help: Help
 public let args = CmdArgs.getCmdArgs()
 public let state = CmdArgs.parse(args)
 
-let response = IMECore.execute(state)
+let response: Response = IMECore.execute(state)
 
 switch response.status {
 case .ok:

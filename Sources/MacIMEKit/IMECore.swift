@@ -55,6 +55,9 @@ public struct IMECore {
 
    public static func execute(_ state: CmdState) -> Response {
       do {
+         let detail: [String] = [
+            "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
+         ]
 
          switch state.subcmd {
          case "save":
@@ -84,13 +87,13 @@ public struct IMECore {
                if state.json {
                   // list detail as json
                   for source in sources {
-                     outJson.append(source.getInfo.json)
+                     outJson.append(source.describe(format: .json, fields: detail))
                   }
                   return Response(status: .ok, content: try Util.jsonToString(outJson))
                } else {
                   // list detail as str
                   for source in sources {
-                     outStr.append(source.getInfo.str)
+                     outStr.append("\(source.describe(format: .keyValue, fields: detail))")
                   }
                   return Response(status: .ok, content: outStr.joined(separator: "\n"))
                }
@@ -131,10 +134,12 @@ public struct IMECore {
                if state.detail {
                   if state.json {
                      // curr IME detail as JSON
-                     return Response(status: .ok, content: try Util.jsonToString(curr.getInfo.json))
+                     let outJson: Any = curr.describe(format: .json, fields: detail)
+                     return Response(status: .ok, content: try Util.jsonToString(outJson))
                   } else {
                      // curr IME detail as string
-                     return Response(status: .ok, content: curr.getInfo.str)
+                     let outStr: String = "\(curr.describe(format: .keyValue, fields: detail))"
+                     return Response(status: .ok, content: outStr)
                   }
                } else {
                   if state.json {

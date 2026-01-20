@@ -122,6 +122,7 @@ public struct IMECore {
                      guard success else {
                         throw AppError.saveFailed(path)  // FIX: Shold handle this internally instead of propagating it to the outside?
                      }
+                     return Response(status: .ok, content: "")
                   }
                }
             }

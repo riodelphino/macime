@@ -51,6 +51,17 @@ brew install macime
 brew uninstall macime
 ```
 
+## Upgrade
+
+```bash
+brew upgrade macime # or
+brew reinstall macime
+```
+If launchd service is enabled, ensure to restart it:
+```bash
+brew services restart macime
+```
+
 ## Start/Stop Service
 
 Optional. Maybe slightly faster.

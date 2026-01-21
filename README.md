@@ -1,16 +1,16 @@
 # macime
 
-A blazing faster IME switching tool for macOS. (written in Swift)
+A **blazing faster** IME switching tool for macOS. (Swift / launchd service)
 
 
 ## Story
 
 I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
-But on my older Macs, these tools always required `a short wait` to switch IME modes.
+But on my older Macs, these tools always required `a short wait` to switch IME modes. It was an unacceptable delay for daily use.
 
-`macime` noticiably reduces this latency.
+`macime` significantly reduces this delay by **30% to 70%**. (Depends on usage.)
 
-Though it still has a slight delay, but I’m very satisfied with the switching speed since v3.0.1.
+Though it still has a slight delay, but I’m very satisfied with the switching speed since v3.x.
 
 If you’re a Mac user frustrated by slow IME switching, give it a try. 
 
@@ -18,7 +18,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 ## Why it’s fast
 
 1. Sets and gets the IME in a single operation
-2. Uses a launchd daemon service
+2. Uses a launchd service
 3. Written in native Swift
 4. Optimized code
 
@@ -31,7 +31,8 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * Load(Restore) the previous IME
 * Switch IME while saving the previous one (in single step)
 * List all IMEs
-* Output results in plain text or JSON
+* Output results in plain text or JSON string
+* Faster switching by `macimed` launchd service
 
 
 ## Requirements
@@ -65,7 +66,8 @@ brew services restart macime
 
 ## Register as a launchd Service
 
-Optional. Maybe slightly faster.
+Optional, but **STRONGLY RECOMMENDED !!**.  
+**30% faster** than running `macimed` directly. (e.g. 128ms -> 89ms)
 
 ```bash
 # Start macimed service
@@ -147,6 +149,12 @@ macime set com.apple.keylayout.ABC --save
 macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 # The IME ID is saved at `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
+
+> [!Note]
+> Using `set` and `--save` together reduces elapsed time **50%**.
+> While other tools need two excution like `<command_name>` -> `<command_name> set com.apple.keylayout.ABC`
+
+
 #### Save IME
 ```bash
 # Save current IME to `DEFAULT`
@@ -180,14 +188,20 @@ macime list --select-capable # show only selectable IME methods
 
 ### macimed
 
-`macimed` command is bundled with `macime`.  
-This command is used by `launchd` if you enabled it by `brew services start macime`.
+`macimed` is bundled with `macime` and can be managed by `launchd` via:
+```bash
+brew services start macime
+# Although the service name is `macime`, `macimed` is executed internally.
+```
+When run as a launchd service, execution time is reduced by about **30%** compared to running `macimed` directly.
 
-You can manually start it by `macimed` to monitor log.
+You can also start `macimed` manually to monitor logs and observe its behavior, though this is slower.
+
 
 #### macimed Log
 
-`macimed` leaves log and err in:
+`macimed` leaves log.  
+The log location depends on whether it is run directly or via launchd, and on the environment.
 
 Log:
 * /usr/local/var/log/macimed.log

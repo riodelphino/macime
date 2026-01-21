@@ -204,14 +204,14 @@ You can also start `macimed` manually to monitor logs and observe its behavior, 
 The log location depends on whether it is run directly or via launchd, and on the environment.
 
 Log:
-* /usr/local/var/log/macimed.log
-* /private/tmp/riodelphino.macimed.log
-* /opt/homebrew/var/log/macimed.log (Apple Silicon)
+* /tmp/riodelphino.macimed.log
+* /usr/local/var/log/riodelphino.macimed.log
+* /opt/homebrew/var/log/riodelphino.macimed.log (Apple Silicon)
 
 Error:
-* /usr/local/var/log/macimed.err
-* /private/tmp/riodelphino.macimed.err
-* /opt/homebrew/var/log//macimed.err (Apple Silicon)
+* /tmp/riodelphino.macimed.err
+* /usr/local/var/log/riodelphino.macimed.err
+* /opt/homebrew/var/log/riodelphino.macimed.err (Apple Silicon)
 
 
 ## Integration

@@ -2,6 +2,7 @@
 
 ## [3.0.5](https://github.com/riodelphino/macime/compare/v3.0.4...v3.0.5) (2026-01-21)
 
+* **chore:** Correct log/err path
 * **chore:** Remove plist
 * **docs:** Refine
 * **docs:** macime is blazing faster!

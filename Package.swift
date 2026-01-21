@@ -34,9 +34,6 @@ let package = Package(
          name: "macimed",
          dependencies: ["MacIMEKit"],
          path: "Sources/macimed",
-         resources: [
-            .copy("Resources/com.riodelphino.macimed.plist")
-         ]
       ),
    ]
 )

@@ -12,15 +12,4 @@ public enum IO {
          FileHandle.standardError.write(data)
       }
    }
-
-   // outputJSON
-   public static func outputJSON(_ value: Any) throws {
-      do {
-         let data = try JSONSerialization.data(withJSONObject: value)
-         FileHandle.standardOutput.write(data)
-         FileHandle.standardOutput.write("\n".data(using: .utf8)!)
-      } catch {
-         throw AppError.jsonSerializationFailed("Invalid JSON Object")
-      }
-   }
 }

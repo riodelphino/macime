@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [3.0.6](https://github.com/riodelphino/macime/compare/v3.0.5...v3.0.6) (2026-01-23)
+
+* **docs:** Add sock path
+
 ## [3.0.5](https://github.com/riodelphino/macime/compare/v3.0.4...v3.0.5) (2026-01-21)
 
 * **docs:** Remove `doc/integration.md`

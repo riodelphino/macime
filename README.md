@@ -214,6 +214,12 @@ Error:
 * /opt/homebrew/var/log/riodelphino.macimed.err (Apple Silicon)
 
 
+#### sock path
+
+The `macimed` listens to:
+* /tmp/riodelphino.macime.sock
+
+
 ## Integration
 
 ### Neovim

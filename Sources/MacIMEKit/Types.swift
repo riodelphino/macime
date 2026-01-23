@@ -9,14 +9,103 @@ public struct Config {
 }
 
 public enum AppError: Error {
+   case cmd(CmdError)
+   case util(UtilError)
+   case ime(IMEError)
+   case sock(SockError)
+
+   public var message: String {
+      switch self {
+      case .cmd(let e):
+         return e.message
+      case .util(let e):
+         return e.message
+      case .ime(let e):
+         return e.message
+      case .sock(let e):
+         return e.message
+      }
+   }
+}
+
+public enum CmdError: Error {
+   case setMissingID
+   case invalidSubCommand(String)
+   case missingSessionID
+   case invalidOption(String)
+
+   public var message: String {
+      switch self {
+      case .setMissingID:
+         return "`set` sub command missing IME ID:"
+      case .invalidSubCommand(let subcmd):
+         return "Invalid sub command: \(subcmd)"
+      case .missingSessionID:
+         return "`--session-id` option missing session ID:"
+      case .invalidOption(let option):
+         return "Unknown option: \(option)"
+      }
+   }
+}
+
+public enum UtilError: Error {
+   case invalidJsonFormat
+
+   public var message: String {
+      switch self {
+      case .invalidJsonFormat:
+         return "Invalid JSON format:"
+      }
+   }
+}
+
+public enum SockError: Error {
+   case dataNotRecieved
+
+   public var message: String {
+      switch self {
+      case .dataNotRecieved:
+         return "Data was not recieved."
+      }
+   }
+}
+
+public enum IMEError: Error {
    case notFound(String)
    case selectFailed(String, OSStatus)
    case getCurrentFailed
-   case getPreviousFailed(String?)
-   case createTempDirFailed(String)
+   case getPreviousFailed(String)  // unused ?
+   case previousIDNotFound
+   case createDirFailed(String)
    case saveFailed(String)
    case loadFailed(String)
    case jsonSerializationFailed(String)
+   case invalidSubCommand(String)
+
+   public var message: String {
+      switch self {
+      case .notFound(let id):
+         return "IME not found: \(id)"
+      case .selectFailed(let id, let osstatus):
+         return "Select failed: \(id) / \(osstatus)"
+      case .getCurrentFailed:
+         return "Get current failed:"
+      case .getPreviousFailed(let id):
+         return "Get previous failed: \(id)"
+      case .previousIDNotFound:
+         return "Previous ID not found:"
+      case .createDirFailed(let dir):
+         return "Create dir failed: \(dir)"
+      case .saveFailed(let path):
+         return "Save failed to: \(path)"
+      case .loadFailed(let path):
+         return "Load failed from: \(path)"
+      case .jsonSerializationFailed(let msg):
+         return "Json serializention failed: \(msg)"
+      case .invalidSubCommand(let subcmd):
+         return "Invalid sub command: \(subcmd)"
+      }
+   }
 }
 
 public struct CmdSpec {

@@ -16,7 +16,7 @@ public enum CmdArgs {
    }
 
    // Parse args array into CmdState
-   public static func parse(_ args: [String]) -> CmdState {
+   public static func parse(_ args: [String]) throws -> CmdState {
       var state = CmdState()
 
       // Parse args
@@ -31,8 +31,7 @@ public enum CmdArgs {
                   state.newID = args[i + 1]
                   i += 1
                } else {
-                  IO.err("Usage: 'macime set <IME_ID> [options]'")
-                  exit(1)
+                  throw CmdError.setMissingID
                }
                i += 1
                continue
@@ -40,15 +39,14 @@ public enum CmdArgs {
                state.subcmd = arg
                i += 1
                continue
-            case "--version", "-v":
+            case "--version", "-v":  // TODO: It's too special. Only return CmdState, so can't return `version` with String...
                IO.out(Config.version)
                exit(0)
-            case "--help", "-h":
-               IO.out(Help.macime)
+            case "--help", "-h":  // TODO: Same above
+               IO.out(Help.macime)  // TODO: Is it fixed to macime? -> Also supports macimed!
                exit(0)
             default:
-               IO.err("Usage: 'macime set|get|list|save|load [options]'")
-               exit(1)
+               throw CmdError.invalidSubCommand(arg)
             }
          }
 
@@ -67,12 +65,11 @@ public enum CmdArgs {
                   state.sessionID = args[i + 1]
                   i += 1
                } else {
-                  IO.err("Usage: 'macime set|load --session-id <session_id>'")
-                  exit(1)
+                  throw CmdError.missingSessionID
                }
             default:
-               IO.err("Invalid option: \(arg)")
-               exit(1)
+               throw CmdError.invalidOption(arg)
+
             }
          } else {
             state.newID = arg  // IME method ID

@@ -20,7 +20,7 @@ public struct Sock {
    // │                    Command Processing                         │
    // ╰───────────────────────────────────────────────────────────────╯
 
-   public static func processCommand(_ cmd: String) -> Response {  // TODO: This should be replaced with `import MacIMECore`
+   public static func processCommand(_ cmd: String) throws -> String {
 
       // NOT WORKS
       // let args = ArgParser.splitArgs(cmd)
@@ -44,18 +44,14 @@ public struct Sock {
       process.standardOutput = pipe
       process.standardError = pipe
 
-      do {
-         try process.run()
-         process.waitUntilExit()
+      try process.run()
+      process.waitUntilExit()
 
-         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-         if let output = String(data: data, encoding: .utf8) {
-            return Response(status: .ok, content: output)
-         }
-         return Response(status: .err, content: "ERROR: No output")
-      } catch {
-         return Response(status: .err, content: "ERROR: \(error.localizedDescription)")
+      let data = pipe.fileHandleForReading.readDataToEndOfFile()
+      guard let output = String(data: data, encoding: .utf8) else {
+         throw SockError.dataNotRecieved
       }
+      return output
    }
 
    // ╭───────────────────────────────────────────────────────────────╮
@@ -81,24 +77,33 @@ public struct Sock {
 
       log("Received command: \(command)")
 
-      var response: Response = Response(status: .err, content: "")
-      let ms = Util.elapsed {  // FIX: error is not caught
-         response = processCommand(command)
-      }
-      log("Elapsed time    : \(ms)ms")
+      var ret: String = ""
 
-      switch response.status {
-      case .ok:
-         var msg = response.content.trimmingCharacters(in: .newlines)
+      do {
+         let ms = try Util.elapsed {
+            ret = try processCommand(command)
+         }
+         log("Elapsed time    : \(ms)ms")
+
+         var msg = ret.trimmingCharacters(in: .newlines)
          msg = msg.isEmpty ? "OK" : msg
          log("Sending response: \(msg)")
-         let _ = write(client, response.content, response.content.count)
-      case .err:
-         var msg = response.content.trimmingCharacters(in: .newlines)
-         msg = msg.isEmpty ? "ERROR" : msg
-         log("Sending error   : \(msg)")
-         let _ = write(client, response.content, response.content.count)
+         let _ = write(client, ret, ret.count)
+         shutdown(client, SHUT_WR)
+         return
+      } catch let e as AppError {
+         log("Sending error   : \(e.message)")
+      } catch let e as IMEError {
+         log("Sending error   : \(e.message)")
+      } catch let e as CmdError {
+         log("Sending error   : \(e.message)")
+      } catch {
+         log("Unexpected error: ")
       }
+      // NOTE: original log format:
+      // msg = ret.trimmingCharacters(in: .newlines)
+      // msg = msg.isEmpty ? "ERROR" : msg
+      // log("Sending error   : \(msg)")
    }
 
    // ╭───────────────────────────────────────────────────────────────╮

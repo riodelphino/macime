@@ -155,6 +155,7 @@ macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 > While other tools need two excution like `<command_name>` -> `<command_name> set com.apple.keylayout.ABC`
 
 
+
 #### Save IME
 ```bash
 # Save current IME to `DEFAULT`
@@ -185,6 +186,20 @@ macime list --json # json list
 macime list --select-capable # show only selectable IME methods
 # --detail, --json and --select-capable can be mixtured
 ```
+
+### Options
+
+| Option                    | Available for | Description                                                 |
+| ------------------------- | ------------- | ----------------------------------------------------------- |
+| --detail                  | get, list     | Show detailed IME info                                      |
+| --select-capable          | get, list     | Show only selectable IME                                    |
+| --json                    | get, list     | Output as json text                                         |
+| --save                    | set           | Save current IME (with `macime set` only)                   |
+| --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir) |
+| --launchd                 | (any)         | Indicate the command is called via launchd                  |
+
+Some unavailable options for each sub command will be simply ignored.
+
 
 ### macimed
 

@@ -107,9 +107,9 @@ public struct Sock {
    // ╰───────────────────────────────────────────────────────────────╯
 
    public static func startDaemon() throws {
-      // guard File.pathExists(Config.macimePath) else {
-      //    throw AppError.sock(.macimeNotFound(Config.macimePath))
-      // }
+      guard File.pathExists(Config.macimePath) else {
+         throw AppError.sock(.macimeNotFound(Config.macimePath))
+      }
 
       let _ = cleanupSocket()
 

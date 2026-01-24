@@ -1,8 +1,6 @@
 import Foundation
 import MacIMEKit
 
-public let cmdSpec = CmdSpec(name: "macime", version: Config.version, help: Help.macime)
-
 public let args: [String] = ArgsCommon.getCmdArgs()
 public var state: CmdState = CmdState()
 

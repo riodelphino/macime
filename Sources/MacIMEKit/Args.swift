@@ -16,27 +16,6 @@ public enum ArgsCommon {
    }
 }
 
-// macimed (daemon)
-public enum ArgsIMED {
-   // Check args
-   public static func parse(_ args: [String]) throws {
-      // macimed accepts only 1 arg
-      guard let arg = args.first else {
-         return  // Start as daemon normally
-      }
-      switch arg {
-      case "--version", "-v":
-         IO.out(Config.version)
-         exit(0)
-      case "--help", "-h":
-         IO.out(Help.macimed)
-         exit(0)
-      default:
-         throw AppError.cmd(.invalidSubCommand(arg))
-      }
-   }
-}
-
 // macime
 public enum ArgsIME {
    // Parse args array into CmdState
@@ -120,5 +99,26 @@ public enum ArgsIME {
       // dump(opts, name: "opts")  // for debug
 
       return state
+   }
+}
+
+// macimed (daemon)
+public enum ArgsIMED {
+   // Check args
+   public static func parse(_ args: [String]) throws {
+      // macimed accepts only 1 arg
+      guard let arg = args.first else {
+         return  // Start as daemon normally
+      }
+      switch arg {
+      case "--version", "-v":
+         IO.out(Config.version)
+         exit(0)
+      case "--help", "-h":
+         IO.out(Help.macimed)
+         exit(0)
+      default:
+         throw AppError.cmd(.invalidSubCommand(arg))
+      }
    }
 }

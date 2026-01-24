@@ -2,6 +2,7 @@
 
 ## [3.1.3](https://github.com/riodelphino/macime/compare/v3.1.2...v3.1.3) (2026-01-25)
 
+* **refactor:** Swap the positions of ArgsIME and ArgsIMED 
 * **refactor:** Rename functions / Refine comments in `IMED` / Others
 
 ## [3.1.2](https://github.com/riodelphino/macime/compare/v3.1.1...v3.1.2) (2026-01-24)

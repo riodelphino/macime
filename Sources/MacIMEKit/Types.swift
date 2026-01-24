@@ -138,22 +138,6 @@ public enum OutFormat {
    case json
 }
 
-// public enum ResponseStatus {
-//    case ok, err
-// }
-// public struct Response {
-//    public var status: ResponseStatus
-//    public var content: String
-// }
-
-// public struct Colors {
-//    public let red = "\u{001B}[31m"
-//    public let blue = "\u{001B}[31m"
-//    public let green = "\u{001B}[31m"
-//    public let yellow = "\u{001B}[31m"
-//    public let reset = "\u{001B}[0m"
-// }
-
 public enum Colors {
    case red
    case blue

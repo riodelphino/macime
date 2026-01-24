@@ -136,7 +136,7 @@ public struct IMECore {
                   }
                }
                return ""
-            }  // TODO: set なのに ID が与えられてないエラー: たぶん Args 側で処理してる？
+            }
          }
       case "get":
          if let curr = try current() {

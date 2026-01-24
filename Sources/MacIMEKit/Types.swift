@@ -61,11 +61,14 @@ public enum UtilError: Error {
 
 public enum SockError: Error {
    case dataNotRecieved
+   case macimeNotFound(String)
 
    public var message: String {
       switch self {
+      case .macimeNotFound(let path):
+         return "macime executable not found: \(path)"
       case .dataNotRecieved:
-         return "Data was not recieved."
+         return "Data not recieved."
       }
    }
 }

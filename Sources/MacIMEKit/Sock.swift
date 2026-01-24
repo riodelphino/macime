@@ -107,6 +107,10 @@ public struct Sock {
    // ╰───────────────────────────────────────────────────────────────╯
 
    public static func startDaemon() throws {
+      // guard File.pathExists(Config.macimePath) else {
+      //    throw AppError.sock(.macimeNotFound(Config.macimePath))
+      // }
+
       let _ = cleanupSocket()
 
       let fd = socket(AF_UNIX, SOCK_STREAM, 0)

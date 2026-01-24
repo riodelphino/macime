@@ -2,13 +2,13 @@ import Foundation
 import MacIMEKit
 
 let args: [String] = ArgsCommon.getCmdArgs()
-try ArgsDaemon.parse(args)
+try ArgsIMED.parse(args)
 
 do {
-   Sock.log("macimed \(Config.version) starting...")
-   try Sock.startDaemon()
+   IMED.log("macimed \(Config.version) starting...")
+   try IMED.startDaemon()
 } catch let e as AppError {
-   Sock.log(e.message)
+   IMED.log(e.message)
 } catch {
-   Sock.log("Unexpected error\n")
+   IMED.log("Unexpected error\n")
 }

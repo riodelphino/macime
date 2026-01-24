@@ -1,7 +1,7 @@
 import Foundation
 import InputMethodKit
 
-public struct IMECore {
+public struct IME {
    // Lazy load
    private static var _sources: [TISInputSource]?
 

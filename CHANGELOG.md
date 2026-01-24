@@ -2,6 +2,7 @@
 
 ## [3.1.2](https://github.com/riodelphino/macime/compare/v3.1.1...v3.1.2) (2026-01-24)
 
+* **refactor:** Rename struct & file for `macime` and `macimed` for better visibility
 * **refactor:** Clean up comments
 * **chore:** Remove/Refine comments and trash code
 * **chore:** (Commented out -> Again) Add an error for `macime` not found

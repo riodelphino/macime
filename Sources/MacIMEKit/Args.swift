@@ -17,7 +17,7 @@ public enum ArgsCommon {
 }
 
 // macimed (daemon)
-public enum ArgsDaemon {
+public enum ArgsIMED {
    // Check args
    public static func parse(_ args: [String]) throws {
       // macimed accepts only 1 arg
@@ -38,7 +38,7 @@ public enum ArgsDaemon {
 }
 
 // macime
-public enum ArgsMacIME {
+public enum ArgsIME {
    // Parse args array into CmdState
    public static func parse(_ args: [String]) throws -> CmdState {
       var state = CmdState()

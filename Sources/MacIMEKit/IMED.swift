@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Sock {
+public struct IMED {
 
    // Leave log (to stderr)
    public static func log(_ msg: String) {

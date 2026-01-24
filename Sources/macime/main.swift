@@ -5,8 +5,8 @@ public let args: [String] = ArgsCommon.getCmdArgs()
 public var state: CmdState = CmdState()
 
 do {
-   state = try ArgsMacIME.parse(args)
-   let ret: String = try IMECore.execute(state)
+   state = try ArgsIME.parse(args)
+   let ret: String = try IME.execute(state)
    IO.out(ret)
    exit(0)
 } catch let e as AppError {

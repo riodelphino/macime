@@ -2,6 +2,7 @@
 
 ## [3.1.2](https://github.com/riodelphino/macime/compare/v3.1.1...v3.1.2) (2026-01-24)
 
+* **refactor:** Switch indent size from 4 to 3 again
 * **refactor:** Migrate `log()` to `Log.swift`
 * **refactor:** Rename struct & file for `macime` and `macimed` for better visibility
 * **refactor:** Clean up comments

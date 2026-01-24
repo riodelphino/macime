@@ -13,10 +13,6 @@ do {
    exit(0)
 } catch let e as AppError {
    IO.err(e.message)
-} catch let e as IMEError {
-   IO.err(e.message)
-} catch let e as CmdError {
-   IO.err(e.message)
 } catch {
    IO.err("Unexpected error\n")
    exit(1)

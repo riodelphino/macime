@@ -93,10 +93,6 @@ public struct Sock {
          return
       } catch let e as AppError {
          log("Sending error   : \(e.message)")
-      } catch let e as IMEError {
-         log("Sending error   : \(e.message)")
-      } catch let e as CmdError {
-         log("Sending error   : \(e.message)")
       } catch {
          log("Unexpected error: ")
       }

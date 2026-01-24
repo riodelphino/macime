@@ -19,19 +19,19 @@ public struct IMECore {
 
    public static func select(id: String) throws -> TISInputSource {
       guard let source = sources.first(where: { $0.id == id }) else {
-         throw IMEError.notFound(id)
+         throw AppError.ime(.notFound(id))
       }
       let ret = TISSelectInputSource(source)
 
       if ret != 0 {
-         throw IMEError.selectFailed(id, ret)
+         throw AppError.ime(.selectFailed(id, ret))
       }
       return source
    }
 
    public static func current() throws -> TISInputSource? {
       guard let source = TISCopyCurrentKeyboardInputSource()?.takeRetainedValue() else {
-         throw IMEError.getCurrentFailed
+         throw AppError.ime(.getCurrentFailed)
       }
       return source
    }
@@ -47,7 +47,7 @@ public struct IMECore {
    public static func previous(session_id: String?) throws -> String {
       let path = getStoredPath(session_id)
       guard let prev_id = File.read(path) else {
-         throw IMEError.previousIDNotFound
+         throw AppError.ime(.previousIDNotFound)
       }
       return prev_id  // return IME ID as String for performance
    }
@@ -60,7 +60,7 @@ public struct IMECore {
    public static func createTempDir() throws {
       if !File.pathExists(Config.tempDir) {
          guard File.createDir(Config.tempDir) else {
-            throw IMEError.createDirFailed(Config.tempDir)
+            throw AppError.ime(.createDirFailed(Config.tempDir))
          }
       }
    }
@@ -78,7 +78,7 @@ public struct IMECore {
             let path = getStoredPath(state.sessionID)
             let success = File.write(path, curr.id)
             guard success else {
-               throw IMEError.saveFailed(path)
+               throw AppError.ime(.saveFailed(path))
             }
             return ""
          }
@@ -132,7 +132,7 @@ public struct IMECore {
                   let path = getStoredPath(state.sessionID)
                   let success = File.write(path, currID)
                   guard success else {
-                     throw IMEError.saveFailed(path)
+                     throw AppError.ime(.saveFailed(path))
                   }
                }
                return ""
@@ -162,8 +162,8 @@ public struct IMECore {
             }
          }
       default:
-         throw IMEError.invalidSubCommand(state.subcmd ?? "Unknown")
+         throw AppError.ime(.invalidSubCommand(state.subcmd ?? "Unknown"))
       }
-      throw IMEError.invalidSubCommand("Unknown")
+      throw AppError.ime(.invalidSubCommand("Unknown"))
    }
 }

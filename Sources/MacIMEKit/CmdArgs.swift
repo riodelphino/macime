@@ -31,7 +31,7 @@ public enum CmdArgs {
                   state.newID = args[i + 1]
                   i += 1
                } else {
-                  throw CmdError.setMissingID
+                  throw AppError.cmd(.setMissingID)
                }
                i += 1
                continue
@@ -46,7 +46,7 @@ public enum CmdArgs {
                IO.out(Help.macime)  // TODO: Is it fixed to macime? -> Also supports macimed!
                exit(0)
             default:
-               throw CmdError.invalidSubCommand(arg)
+               throw AppError.cmd(.invalidSubCommand(arg))
             }
          }
 
@@ -65,10 +65,10 @@ public enum CmdArgs {
                   state.sessionID = args[i + 1]
                   i += 1
                } else {
-                  throw CmdError.missingSessionID
+                  throw AppError.cmd(.missingSessionID)
                }
             default:
-               throw CmdError.invalidOption(arg)
+               throw AppError.cmd(.invalidOption(arg))
 
             }
          } else {

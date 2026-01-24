@@ -9,7 +9,7 @@ public enum Util {
          options: .prettyPrinted
       )
       guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-         throw UtilError.invalidJsonFormat
+         throw AppError.util(.invalidJsonFormat)
       }
       return jsonString
    }
@@ -18,7 +18,6 @@ public enum Util {
    public static func elapsed(_ block: () throws -> Void) rethrows -> Int {
       let start = DispatchTime.now()
       try block()  // `block()` is the swift code block set by the caller
-      // TODO: How to catch errors in block()???
       let end = DispatchTime.now()
       let ms = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000
       return Int(ms.rounded())

@@ -2,6 +2,7 @@
 
 ## [3.1.1](https://github.com/riodelphino/macime/compare/v3.1.0...v3.1.1) (2026-01-24)
 
+* **refactor:** Bundle `*Error` to `AppError`
 * **docs:** Refine `macimed` description
 
 ## [3.1.0](https://github.com/riodelphino/macime/compare/v3.0.5...v3.1.0) (2026-01-24)

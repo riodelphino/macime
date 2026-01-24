@@ -2,13 +2,13 @@ import Foundation
 
 public struct IMED {
 
-   // Clean up socket
+   // Clean up the socket
    public static func cleanupSocket() -> Bool {
       return File.removePath(Config.sockPath)
    }
 
-   // Command Processing
-   public static func processCommand(_ cmd: String) throws -> String {
+   // Executes a macime command and returns its output
+   public static func execute(_ cmd: String) throws -> String {
 
       // -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
       //
@@ -27,10 +27,10 @@ public struct IMED {
       let args = ArgsCommon.splitArgs(cmd)
 
       let process = Process()
+      let pipe = Pipe()
+
       process.executableURL = URL(fileURLWithPath: Config.macimePath)
       process.arguments = args
-
-      let pipe = Pipe()
       process.standardOutput = pipe
       process.standardError = pipe
 
@@ -39,12 +39,12 @@ public struct IMED {
 
       let data = pipe.fileHandleForReading.readDataToEndOfFile()
       guard let output = String(data: data, encoding: .utf8) else {
-         throw SockError.dataNotRecieved
+         throw AppError.sock(.dataNotRecieved)
       }
       return output
    }
 
-   // Client Handler
+   // Handles a single connected client socket
    public static func handleClient(_ client: Int32) {
       defer { close(client) }
 
@@ -68,7 +68,7 @@ public struct IMED {
 
       do {
          let ms = try Util.elapsed {
-            ret = try processCommand(command)
+            ret = try self.execute(command)
          }
          Log.log("Elapsed time    : \(ms)ms")
 
@@ -85,13 +85,13 @@ public struct IMED {
       }
    }
 
-   // Daemon main
-   public static func startDaemon() throws {
+   // Starts the IMED daemon and begins accepting client connections.
+   public static func serve() throws {
       guard File.pathExists(Config.macimePath) else {
          throw AppError.sock(.macimeNotFound(Config.macimePath))
       }
 
-      let _ = cleanupSocket()
+      let _ = self.cleanupSocket()
 
       let fd = socket(AF_UNIX, SOCK_STREAM, 0)
       guard fd >= 0 else {
@@ -136,7 +136,7 @@ public struct IMED {
          }
 
          DispatchQueue.global().async {
-            handleClient(client)
+            self.handleClient(client)
          }
       }
    }

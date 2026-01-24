@@ -37,11 +37,11 @@ public enum CmdError: Error {
    public var message: String {
       switch self {
       case .setMissingID:
-         return "`set` sub command missing IME ID:"
+         return "`set` sub command requires IME ID."
       case .invalidSubCommand(let subcmd):
          return "Invalid sub command: \(subcmd)"
       case .missingSessionID:
-         return "`--session-id` option missing session ID:"
+         return "`--session-id` option requires session ID."
       case .invalidOption(let option):
          return "Unknown option: \(option)"
       }
@@ -54,7 +54,7 @@ public enum UtilError: Error {
    public var message: String {
       switch self {
       case .invalidJsonFormat:
-         return "Invalid JSON format:"
+         return "Invalid JSON format."
       }
    }
 }
@@ -89,11 +89,11 @@ public enum IMEError: Error {
       case .selectFailed(let id, let osstatus):
          return "Select failed: \(id) / \(osstatus)"
       case .getCurrentFailed:
-         return "Get current failed:"
+         return "Get current failed."
       case .getPreviousFailed(let id):
          return "Get previous failed: \(id)"
       case .previousIDNotFound:
-         return "Previous ID not found:"
+         return "Previous ID not found."
       case .createDirFailed(let dir):
          return "Create dir failed: \(dir)"
       case .saveFailed(let path):

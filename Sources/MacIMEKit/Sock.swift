@@ -1,39 +1,39 @@
 import Foundation
 
 public struct Sock {
+
+   // Leave log (to stderr)
    public static func log(_ msg: String) {
       let formatter = ISO8601DateFormatter()
       formatter.timeZone = .current
       let timestamp = formatter.string(from: Date())
-
       let logMsg = "[\(timestamp)] \(msg)\n"
       if let data = logMsg.data(using: .utf8) {
          FileHandle.standardError.write(data)  // standardOutput is not appropriate here
       }
    }
 
+   // Clean up socket
    public static func cleanupSocket() -> Bool {
       return File.removePath(Config.sockPath)
    }
 
-   // ╭───────────────────────────────────────────────────────────────╮
-   // │                    Command Processing                         │
-   // ╰───────────────────────────────────────────────────────────────╯
-
+   // Command Processing
    public static func processCommand(_ cmd: String) throws -> String {
 
-      // NOT WORKS
-      // let args = ArgsCommon.splitArgs(cmd)
-      // let state: CmdState = ArgsDaemon.parse(args)
-      // let response: Response = IMECore.execute(state)
-      // return response
-      //
       // -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
       //
       // It always returns the default `com.apple.keylayout.ABC`.
       // See:
       //   - https://stackoverflow.com/questions/26612735/os-x-how-to-get-tisinputsourceref-keyboard-layout-of-current-active-window-of
       //   - https://leopard-adc.pepas.com/documentation/TextFonts/Reference/TextInputSourcesReference/TextInputSourcesReference.pdf?utm_source=chatgpt.com
+      //
+      // -- SO, THE FOLLOWING CODE NOT WORKS --
+      // let args = ArgsCommon.splitArgs(cmd)
+      // let state: CmdState = ArgsDaemon.parse(args)
+      // let response: Response = IMECore.execute(state)
+      // return response
+      //
 
       let args = ArgsCommon.splitArgs(cmd)
 
@@ -55,10 +55,7 @@ public struct Sock {
       return output
    }
 
-   // ╭───────────────────────────────────────────────────────────────╮
-   // │                   Client Handler                              │
-   // ╰───────────────────────────────────────────────────────────────╯
-
+   // Client Handler
    public static func handleClient(_ client: Int32) {
       defer { close(client) }
 
@@ -99,10 +96,7 @@ public struct Sock {
       }
    }
 
-   // ╭───────────────────────────────────────────────────────────────╮
-   // │                    Daemon Main                                │
-   // ╰───────────────────────────────────────────────────────────────╯
-
+   // Daemon main
    public static func startDaemon() throws {
       guard File.pathExists(Config.macimePath) else {
          throw AppError.sock(.macimeNotFound(Config.macimePath))

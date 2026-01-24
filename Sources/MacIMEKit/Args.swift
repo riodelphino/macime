@@ -20,7 +20,10 @@ public enum ArgsCommon {
 public enum ArgsDaemon {
    // Check args
    public static func parse(_ args: [String]) throws {
-      let arg = args[0]  // macimed accepts only 1 arg
+      // macimed accepts only 1 arg
+      guard let arg = args.first else {
+         return  // Start as daemon normally
+      }
       switch arg {
       case "--version", "-v":
          IO.out(Config.version)

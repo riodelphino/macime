@@ -2,6 +2,7 @@
 
 ## [3.1.1](https://github.com/riodelphino/macime/compare/v3.1.0...v3.1.1) (2026-01-24)
 
+* **fix:** `illegal hardware instruction` error on `ArgsDaemon` (`args[0]` cause error)
 * **chore:** Add an error for `macime` not found
 * **chore:** Remove unused `CmdSpec` struct
 * **chore:** Remove unused `Response` struct

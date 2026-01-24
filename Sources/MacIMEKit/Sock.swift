@@ -34,7 +34,7 @@ public struct Sock {
       //   - https://stackoverflow.com/questions/26612735/os-x-how-to-get-tisinputsourceref-keyboard-layout-of-current-active-window-of
       //   - https://leopard-adc.pepas.com/documentation/TextFonts/Reference/TextInputSourcesReference/TextInputSourcesReference.pdf?utm_source=chatgpt.com
 
-      let args = CmdArgs.splitArgs(cmd)
+      let args = ArgsCommon.splitArgs(cmd)
 
       let process = Process()
       process.executableURL = URL(fileURLWithPath: Config.macimePath)

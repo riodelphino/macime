@@ -225,6 +225,11 @@ public enum Help {
 
 
       OPTIONS:
+         --help, -h
+            Show help
+
+         --version, -v
+            Show version
 
          --detail
             Show detailed IME info
@@ -245,14 +250,24 @@ public enum Help {
             Indicate the command is called via launchd
       """
    public static let macimed = """
-      Usage: macimed
+      Usage: macimed [options]
 
-      This is a daemon tool that wraps `macime` command for launchd service.
+      A daemon tool that wraps `macime` command for launchd service.
 
-      Start service with brew
-        brew services start macime 
+      To start service via Homebrew (Faster):
+         brew services start macime 
 
-      Start service manually
-         launchctl load ~/Library/LaunchAgents/com.riodelphino.macimed.plist
+      To start service manually for debugging (Slower):
+         macimed
+
+      OPTIONS:
+
+         --help, -h
+            Show help
+
+         --version, -v
+            Show version
+
+
       """
 }

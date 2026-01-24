@@ -3,11 +3,11 @@ import MacIMEKit
 
 public let cmdSpec = CmdSpec(name: "macime", version: Config.version, help: Help.macime)
 
-public let args: [String] = CmdArgs.getCmdArgs()
+public let args: [String] = ArgsCommon.getCmdArgs()
 public var state: CmdState = CmdState()
 
 do {
-   state = try CmdArgs.parse(args)
+   state = try ArgsMacIME.parse(args)
    let ret: String = try IMECore.execute(state)
    IO.out(ret)
    exit(0)

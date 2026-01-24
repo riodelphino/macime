@@ -1,7 +1,7 @@
 import Foundation
 
 // Arguments
-public enum CmdArgs {
+public enum ArgsCommon {
 
    // Get command-line args as String array
    public static func getCmdArgs() -> [String] {
@@ -14,7 +14,28 @@ public enum CmdArgs {
       let parts = trimmed.split(separator: " ").map(String.init)
       return parts
    }
+}
 
+// macimed (daemon)
+public enum ArgsDaemon {
+   // Check args
+   public static func parse(_ args: [String]) throws {
+      let arg = args[0]  // macimed accepts only 1 arg
+      switch arg {
+      case "--version", "-v":
+         IO.out(Config.version)
+         exit(0)
+      case "--help", "-h":
+         IO.out(Help.macimed)
+         exit(0)
+      default:
+         throw AppError.cmd(.invalidSubCommand(arg))
+      }
+   }
+}
+
+// macime
+public enum ArgsMacIME {
    // Parse args array into CmdState
    public static func parse(_ args: [String]) throws -> CmdState {
       var state = CmdState()
@@ -39,11 +60,11 @@ public enum CmdArgs {
                state.subcmd = arg
                i += 1
                continue
-            case "--version", "-v":  // TODO: It's too special. Only return CmdState, so can't return `version` with String...
+            case "--version", "-v":
                IO.out(Config.version)
                exit(0)
-            case "--help", "-h":  // TODO: Same above
-               IO.out(Help.macime)  // TODO: Is it fixed to macime? -> Also supports macimed!
+            case "--help", "-h":
+               IO.out(Help.macime)
                exit(0)
             default:
                throw AppError.cmd(.invalidSubCommand(arg))

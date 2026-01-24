@@ -87,11 +87,13 @@ macimed
 Show `macime` version:
 ```bash
 macime --version
+macime -v
 ```
 
 Show `macime` help:
 ```bash
 macime --help
+macime -h
 ```
 
 Sub commands:
@@ -204,6 +206,18 @@ Some unavailable options for each sub command will be simply ignored.
 ### macimed
 
 `macimed` is bundled with `macime`.
+
+Show `macimed` version:
+```bash
+macimed --version
+macimed -v
+```
+
+Show `macimed` help:
+```bash
+macimed --help
+macimed -h
+```
 
 #### Start macimed
 

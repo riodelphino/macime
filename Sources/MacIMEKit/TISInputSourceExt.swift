@@ -28,7 +28,7 @@ extension TISInputSource {
       case "localizedName": return localizedName
       case "isSelectCapable": return "\(isSelectCapable)"
       case "isSelected": return "\(isSelected)"
-      case "sourceLanguages": return "\(sourceLanguages)"  // FIX: Cause issue on .json ? / How does it convert to String?
+      case "sourceLanguages": return "\(sourceLanguages)"  // FIX: May causes issue on .json
       default: return ""
       }
    }

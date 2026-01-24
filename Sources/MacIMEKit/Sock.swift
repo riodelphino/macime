@@ -23,12 +23,13 @@ public struct Sock {
    public static func processCommand(_ cmd: String) throws -> String {
 
       // NOT WORKS
-      // let args = ArgParser.splitArgs(cmd)
-      // let state: CmdState = ArgParser.parse(args)
+      // let args = ArgsCommon.splitArgs(cmd)
+      // let state: CmdState = ArgsDaemon.parse(args)
       // let response: Response = IMECore.execute(state)
       // return response
       //
-      // NOTE: -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
+      // -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
+      //
       // It always returns the default `com.apple.keylayout.ABC`.
       // See:
       //   - https://stackoverflow.com/questions/26612735/os-x-how-to-get-tisinputsourceref-keyboard-layout-of-current-active-window-of
@@ -96,10 +97,6 @@ public struct Sock {
       } catch {
          log("Unexpected error: ")
       }
-      // NOTE: original log format:
-      // msg = ret.trimmingCharacters(in: .newlines)
-      // msg = msg.isEmpty ? "ERROR" : msg
-      // log("Sending error   : \(msg)")
    }
 
    // ╭───────────────────────────────────────────────────────────────╮

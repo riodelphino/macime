@@ -61,12 +61,18 @@ public enum CmdArgs {
             case "--save":
                state.save = true
             case "--session-id":
-               if i + 1 < args.count {
-                  state.sessionID = args[i + 1]
-                  i += 1
-               } else {
+               guard i + 1 < args.count else {
                   throw AppError.cmd(.missingSessionID)
                }
+               let sessionID = args[i + 1]
+               let isID = !sessionID.hasPrefix("--")
+               guard isID else {
+                  throw AppError.cmd(.missingSessionID)
+               }
+               state.sessionID = sessionID
+               i += 1
+            case "--launchd":
+               state.launchd = true
             default:
                throw AppError.cmd(.invalidOption(arg))
 

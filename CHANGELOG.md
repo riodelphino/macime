@@ -2,6 +2,7 @@
 
 ## [3.1.1](https://github.com/riodelphino/macime/compare/v3.1.0...v3.1.1) (2026-01-24)
 
+* **chore:** Add `--launchd` option / Refine `--session-id` arg operation / Colorize output
 * **chore:** Refine some error messages
 * **refactor:** Bundle `*Error` to `AppError`
 * **docs:** Refine `macimed` description

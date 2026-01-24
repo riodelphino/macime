@@ -128,6 +128,7 @@ public struct CmdState {
    public var detail: Bool = false
    public var json = false
    public var sessionID: String? = nil
+   public var launchd: Bool = false
    public init() {}
 }
 
@@ -137,12 +138,42 @@ public enum OutFormat {
    case json
 }
 
-public enum ResponseStatus {
-   case ok, err
-}
-public struct Response {
-   public var status: ResponseStatus
-   public var content: String
+// public enum ResponseStatus {
+//    case ok, err
+// }
+// public struct Response {
+//    public var status: ResponseStatus
+//    public var content: String
+// }
+
+// public struct Colors {
+//    public let red = "\u{001B}[31m"
+//    public let blue = "\u{001B}[31m"
+//    public let green = "\u{001B}[31m"
+//    public let yellow = "\u{001B}[31m"
+//    public let reset = "\u{001B}[0m"
+// }
+
+public enum Colors {
+   case red
+   case blue
+   case green
+   case yellow
+   case reset
+   public var color: String {
+      switch self {
+      case .red:
+         return "\u{001B}[31m"
+      case .green:
+         return "\u{001B}[32m"
+      case .yellow:
+         return "\u{001B}[33m"
+      case .blue:
+         return "\u{001B}[34m"
+      case .reset:
+         return "\u{001B}[0m"
+      }
+   }
 }
 
 public enum Help {
@@ -157,10 +188,10 @@ public enum Help {
          list    List IMEs
 
       Get current IME
-         macime get [--detail] [--json]
+         macime get [--detail] [--json] [--launchd]
 
       Set IME 
-         macime set <IME_id> [--save] [--session-id <session_id>]
+         macime set <IME_id> [--save] [--session-id <session_id>] [--launchd]
 
          Set IME only (no save)
             macime set <IME_id>
@@ -172,7 +203,7 @@ public enum Help {
             macime set <IME_id> --save --session-id <session_id>
 
       Save IME
-         macime save [--session-id <session_id>]
+         macime save [--session-id <session_id>] [--launchd]
 
          Save current IME to `DEFAULT` file in temp dir
             macime save
@@ -181,7 +212,7 @@ public enum Help {
             macime save --session-id <session_id>
 
       Load (restore) IME
-         macime load [--session-id <session_id>]
+         macime load [--session-id <session_id>] [--launchd]
 
          Load previouse IME from `DEFAULT` file in temp dir
             macime load
@@ -190,7 +221,7 @@ public enum Help {
             macime load --session-id <session_id>
 
       List IMEs
-         macime list [--detail] [--select-capable] [--json]
+         macime list [--detail] [--select-capable] [--json] [--launchd]
 
 
       OPTIONS:
@@ -210,6 +241,8 @@ public enum Help {
          --session-id <session_id>
             Specify the save filename
 
+         --launchd
+            Indicate the command is called via launchd
       """
    public static let macimed = """
       Usage: macimed

@@ -22,4 +22,8 @@ public enum Util {
       let ms = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000
       return Int(ms.rounded())
    }
+
+   public static func colored(_ color: Colors, _ text: String) -> String {
+      return color.color + text + Colors.reset.color
+   }
 }

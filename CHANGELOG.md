@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [3.1.1](https://github.com/riodelphino/macime/compare/v3.1.0...v3.1.1) (2026-01-24)
+
+* **docs:** Refine `macimed` description
+
 ## [3.1.0](https://github.com/riodelphino/macime/compare/v3.0.5...v3.1.0) (2026-01-24)
 
 * **fix:** Rebuild error handling (Replace `Reasponse` to `throw`)

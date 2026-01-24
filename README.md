@@ -188,36 +188,45 @@ macime list --select-capable # show only selectable IME methods
 
 ### macimed
 
-`macimed` is bundled with `macime` and can be managed by `launchd` via:
+`macimed` is bundled with `macime`.
+
+#### Start macimed
+
+**Recommended (Faster)**
+`macimed` can be managed by `launchd` via Homebrew:
 ```bash
 brew services start macime
-# Although the service name is `macime`, `macimed` is executed internally.
+# Although the service name is `macime`, it runs `macimed` internally.
 ```
-When run as a launchd service, execution time is reduced by about **30%** compared to running `macimed` directly.
+When launched this way, execution is typically about **30%** faster than running it manually.
 
-You can also start `macimed` manually to monitor logs and observe its behavior, though this is slower.
-
-
-#### macimed Log
-
-`macimed` leaves log.  
-The log location depends on whether it is run directly or via launchd, and on the environment.
-
-Log:
-* /tmp/riodelphino.macimed.log
-* /usr/local/var/log/riodelphino.macimed.log
-* /opt/homebrew/var/log/riodelphino.macimed.log (Apple Silicon)
-
-Error:
-* /tmp/riodelphino.macimed.err
-* /usr/local/var/log/riodelphino.macimed.err
-* /opt/homebrew/var/log/riodelphino.macimed.err (Apple Silicon)
-
+**For Debugging (Slower)**
+You can also start `macimed` manually to monitor logs and observe its behavior:
+```bash
+macimed
+```
+Useful for debuging, but performance will be slower.
 
 #### sock path
 
-The `macimed` listens to:
+`macimed` listens to:
 * /tmp/riodelphino.macime.sock
+
+#### macimed Log
+
+`macimed` leaves log and err.  
+
+Directly running `macimed`:
+* /tmp/riodelphino.macimed.log
+* /tmp/riodelphino.macimed.err
+
+Via `brew services` (Apple Intel):
+* /usr/local/var/log/riodelphino.macimed.log
+* /usr/local/var/log/riodelphino.macimed.err
+
+Via `brew services` (Apple Silicon):
+* /opt/homebrew/var/log/riodelphino.macimed.log
+* /opt/homebrew/var/log/riodelphino.macimed.err
 
 
 ## Integration

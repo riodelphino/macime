@@ -5,10 +5,10 @@ let args: [String] = ArgsCommon.getCmdArgs()
 try ArgsIMED.parse(args)
 
 do {
-   IMED.log("macimed \(Config.version) starting...")
+   Log.log("macimed \(Config.version) starting...")
    try IMED.startDaemon()
 } catch let e as AppError {
-   IMED.log(e.message)
+   Log.log(e.message)
 } catch {
-   IMED.log("Unexpected error\n")
+   Log.log("Unexpected error\n")
 }

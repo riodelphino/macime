@@ -80,7 +80,7 @@ public struct IME {
             guard success else {
                throw AppError.ime(.saveFailed(path))
             }
-            return ""
+            return curr.id
          }
       case "load":
          try createTempDir()

@@ -270,6 +270,10 @@ Via `brew services` (Apple Silicon):
 * /opt/homebrew/var/log/riodelphino.macimed.log
 * /opt/homebrew/var/log/riodelphino.macimed.err
 
+#### plist path via homebrew
+
+path: ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
+
 
 ## Integration
 

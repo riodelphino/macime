@@ -67,8 +67,8 @@ public enum ArgsIME {
             }
             let second = args[1]
             guard
-               !capableSubcmd.contains(second),  // IME ID should except valid subcmd
-               !isOption(second)  // IME ID should except option like values
+               !capableSubcmd.contains(second),  // IME ID must not be a valid subcmd
+               !isOption(second)  // IME ID must not start with `-` (option-like value)
             else {
                throw AppError.cmd(.setMissingID)
             }

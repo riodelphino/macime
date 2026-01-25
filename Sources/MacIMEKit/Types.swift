@@ -68,6 +68,7 @@ public enum UtilError: Error {
 public enum IMEDError: Error {
    case dataNotRecieved
    case macimeNotFound(String)
+   case macimeReturnsError(String)
 
    public var message: String {
       switch self {
@@ -75,6 +76,8 @@ public enum IMEDError: Error {
          return "macime executable not found: \(path)"
       case .dataNotRecieved:
          return "Data not recieved."
+      case .macimeReturnsError(let err):
+         return "`macime` returns Error: \(err)"
       }
    }
 }

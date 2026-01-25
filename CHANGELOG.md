@@ -2,6 +2,7 @@
 
 ## [3.1.3](https://github.com/riodelphino/macime/compare/v3.1.2...v3.1.3) (2026-01-25)
 
+* **fix:** Split response from `macime` into stdout/stderr in `macimed`
 * **fix:** Prevent some subcommands from returning blank lines in `macime`
 * **chore:** Change `SockError` to `IMEDError`
 * **feat:** Supports fallback to `im-select-style` command usage (and refactoring)

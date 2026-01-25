@@ -8,7 +8,7 @@ public struct IMED {
    }
 
    // Executes a macime command and returns its output
-   public static func execute(_ cmd: String) throws -> String {
+   public static func execute(_ cmd: String) throws -> (String, String) {
 
       // -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
       //
@@ -27,21 +27,26 @@ public struct IMED {
       let args = ArgsCommon.splitArgs(cmd)
 
       let process = Process()
-      let pipe = Pipe()
+      let outPipe = Pipe()
+      let errPipe = Pipe()
 
       process.executableURL = URL(fileURLWithPath: Config.macimePath)
       process.arguments = args
-      process.standardOutput = pipe
-      process.standardError = pipe
+      process.standardOutput = outPipe
+      process.standardError = errPipe
 
       try process.run()
       process.waitUntilExit()
 
-      let data = pipe.fileHandleForReading.readDataToEndOfFile()
-      guard let output = String(data: data, encoding: .utf8) else {
+      let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
+      let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
+      guard let stdout = String(data: outData, encoding: .utf8) else {
          throw AppError.imed(.dataNotRecieved)
       }
-      return output
+      guard let stderr = String(data: errData, encoding: .utf8) else {
+         throw AppError.imed(.dataNotRecieved)
+      }
+      return (stdout: stdout, stderr: stderr)
    }
 
    // Handles a single connected client socket
@@ -64,22 +69,30 @@ public struct IMED {
 
       Log.log("Received command: \(command)")
 
-      var ret: String = ""
+      var stdout: String = ""
+      var stderr: String = ""
 
       do {
          let ms = try Util.elapsed {
-            ret = try self.execute(command)
+            (stdout, stderr) = try self.execute(command)
          }
          Log.log("Elapsed time    : \(ms)ms")
 
-         var msg = ret.trimmingCharacters(in: .newlines)
-         msg = msg.isEmpty ? "OK" : msg
-         Log.log("Sending response: \(msg)")
-         let _ = write(client, ret, ret.count)
+         stdout = stdout.trimmingCharacters(in: .newlines)
+         stderr = stderr.trimmingCharacters(in: .newlines)
+
+         stdout = (stderr.isEmpty && stdout.isEmpty) ? "OK" : stdout
+         Log.log("Client response : \(stdout)")
+
+         if !stderr.isEmpty {
+            Log.log("Client error    : \(stderr)")
+         }
+
+         // let _ = write(client, stdout, stdout.count)  // Meaningless: The client(macime) are not listening any socket.
          shutdown(client, SHUT_WR)
          return
       } catch let e as AppError {
-         Log.log("Sending error   : \(e.message)")
+         Log.log("Executing error : \(e.message)")
       } catch {
          Log.log("Unexpected error: ")
       }

@@ -7,7 +7,9 @@ public var state: CmdState = CmdState()
 do {
    state = try ArgsIME.parse(args)
    let ret: String = try IME.execute(state)
-   IO.out(ret)
+   if ret != "" {
+      IO.out(ret)
+   }
    exit(0)
 } catch let e as AppError {
    let prefix = state.launchd == true ? "" : Util.colored(.red, "[ERROR] ")

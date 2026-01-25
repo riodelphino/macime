@@ -322,6 +322,32 @@ I guess it's because they are still alpha version.
 Solutions for now:
    - Uninstal `azookey`
 
+### Fix errors on install or upgrade
+
+> [!Note]
+> This error was caused by a merge conflict in the tap repository. Sorry for my git mistake.
+
+If you encounter a syntax error during `install`/`reinstall`/`upgrade` macime:
+```txt
+Error: riodelphino/tap/macime: /usr/local/Homebrew/Library/Taps/riodelphino/homebrew-tap/Formula/macime.rb:2: syntax errors found
+...
+<<<<<<< HEAD
+...
+~~~~~~
+...
+=======
+```
+Resolve it with the follwing steps:
+```bash
+# Remove macime and the tap
+brew uninstall macime
+brew untap riodelphino/tap
+# Reinstall the tap and macime
+brew tap riodelphino/tap
+brew install macime
+```
+This cleans up the corrupted tap cache and performs a fresh installation.
+
 
 ## Contribution
 

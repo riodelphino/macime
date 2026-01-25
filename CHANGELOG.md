@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.2.2](https://github.com/riodelphino/macime/compare/v3.2.1...v3.2.2) (2026-01-26)
 
+* **docs:** Add an issue shows how to fix git conflict on tap repo
 * **docs:** Refine `--launchd` option description and options table
 * **docs:** Refine `Register as a launchd Service`
 

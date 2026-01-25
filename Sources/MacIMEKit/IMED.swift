@@ -76,7 +76,6 @@ public struct IMED {
          let ms = try Util.elapsed {
             (stdout, stderr) = try self.execute(command)
          }
-         Log.log("Elapsed time    : \(ms)ms")
 
          stdout = stdout.trimmingCharacters(in: .newlines)
          stderr = stderr.trimmingCharacters(in: .newlines)
@@ -87,6 +86,8 @@ public struct IMED {
          if !stderr.isEmpty {
             Log.log("Client error    : \(stderr)")
          }
+
+         Log.log("Elapsed time    : \(ms)ms")
 
          // let _ = write(client, stdout, stdout.count)  // Meaningless: The client(macime) are not listening any socket.
          shutdown(client, SHUT_WR)

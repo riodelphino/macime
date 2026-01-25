@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [3.2.1](https://github.com/riodelphino/macime/compare/v3.2.0...v3.2.1) (2026-01-25)
+
+* **fix:** Move elapsed time to the end of the log in `macimed`
+
 ## [3.2.0](https://github.com/riodelphino/macime/compare/v3.1.3...v3.2.0) (2026-01-25)
 
 * **docs:** Add fallback command usage / Add macOS version requirements / Add issue about malformed json output / Refine

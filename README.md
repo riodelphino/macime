@@ -71,13 +71,13 @@ Optional, but **STRONGLY RECOMMENDED !!**.
 **30% faster** than running `macimed` directly. (e.g. 128ms -> 89ms)
 
 ```bash
-# Start macimed service
+# Start `macimed` service (Faster)
 brew services start macime
 
-# Stop macimed service
+# Stop `macimed` service
 brew services stop macime
 
-# Manually start (for test, can see the log)
+# Manually start `macimed` for debugging to see the log (Slower)
 macimed
 ```
 
@@ -204,14 +204,14 @@ macime list --select-capable # show only selectable IME methods
 
 ### Options
 
-| Option                    | Available for | Description                                                 |
-| ------------------------- | ------------- | ----------------------------------------------------------- |
-| --detail                  | get, list     | Show detailed IME info                                      |
-| --select-capable          | get, list     | Show only selectable IME                                    |
-| --json                    | get, list     | Output as json text                                         |
-| --save                    | set           | Save current IME (with `macime set` only)                   |
-| --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir) |
-| --launchd                 | (any)         | Indicate the command is called via launchd                  |
+| Option                    | Available for | Description                                                         |
+| ------------------------- | ------------- | ------------------------------------------------------------------- |
+| --detail                  | get, list     | Show detailed IME info                                              |
+| --select-capable          | get, list     | Show only selectable IME                                            |
+| --json                    | get, list     | Output as json text                                                 |
+| --save                    | set           | Save current IME (with `macime set` only)                           |
+| --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir)         |
+| --launchd                 | (any)         | Indicate `called via launchd` (Ommit `[ERROR] ` prefix from stderr) |
 
 Some unavailable options for each sub command will be simply ignored.
 

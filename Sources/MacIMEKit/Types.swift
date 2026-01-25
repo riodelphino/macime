@@ -33,6 +33,8 @@ public enum CmdError: Error {
    case invalidSubCommand(String)
    case missingSessionID
    case invalidOption(String)
+   case subcmdNotFound
+   case unknownOptionForSubcmd(String, String)
 
    public var message: String {
       switch self {
@@ -44,6 +46,10 @@ public enum CmdError: Error {
          return "`--session-id` option requires session ID."
       case .invalidOption(let option):
          return "Unknown option: \(option)"
+      case .subcmdNotFound:
+         return "Sub command not found."
+      case .unknownOptionForSubcmd(let subcmd, let option):
+         return "Unknown option for `\(subcmd)`: \(option)"
       }
    }
 }

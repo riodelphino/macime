@@ -2,6 +2,7 @@
 
 ## [3.1.3](https://github.com/riodelphino/macime/compare/v3.1.2...v3.1.3) (2026-01-25)
 
+* **feat:** Supports fallback to `im-select-style` command usage (and refactoring)
 * **refactor:** Swap the positions of ArgsIME and ArgsIMED 
 * **refactor:** Rename functions / Refine comments in `IMED` / Others
 

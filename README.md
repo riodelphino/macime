@@ -122,6 +122,18 @@ Save current IME.
 Restore the previous IME.
 
 
+#### Fallback behavior (im-select compatible)
+
+`macime` supports im-select–style shortcuts.
+
+```bash
+# Falls back to `macime get`
+macime
+
+# Falls back to `macime set`
+macime com.apple.keylayout.ABC
+```
+
 #### Get current IME
 ```bash
 macime get

@@ -18,86 +18,117 @@ public enum ArgsCommon {
 
 // macime
 public enum ArgsIME {
+   static let capableSubcmd = ["get", "set", "load", "save", "list"]
+   static let capableOpts = [
+      "get": ["--detail", "--json"],
+      "set": ["--save", "--session-id"],
+      "load": ["--session-id"],
+      "save": ["--session-id"],
+      "list": ["--select-capable", "--detail", "--json"],
+   ]
+   static let globalOpts = ["--launchd"]
+
+   public static func isOption(_ value: String) -> Bool {
+      return value.hasPrefix("-")
+   }
+
+   public static func isCapableOption(_ subcmd: String, _ value: String) -> Bool {
+      return globalOpts.contains(value) || (capableOpts[subcmd]?.contains(value) ?? false)
+   }
+
    // Parse args array into CmdState
    public static func parse(_ args: [String]) throws -> CmdState {
+      var args: [String] = args
       var state = CmdState()
 
-      // Parse args
-      var i = 0
-      while i < args.count {
-         let arg = args[i]
-         if i == 0 {
-            switch arg {
-            case "set":
-               state.subcmd = "set"
-               if i + 1 < args.count {
-                  state.newID = args[i + 1]
-                  i += 1
-               } else {
-                  throw AppError.cmd(.setMissingID)
-               }
-               i += 1
-               continue
-            case "get", "list", "save", "load":
-               state.subcmd = arg
-               i += 1
-               continue
-            case "--version", "-v":
-               IO.out(Config.version)
-               exit(0)
-            case "--help", "-h":
-               IO.out(Help.macime)
-               exit(0)
-            default:
-               throw AppError.cmd(.invalidSubCommand(arg))
+      // Fallbacks to `get` or `set`
+      if let first = args.first {
+         let isSubcmd = capableSubcmd.contains(first)
+         if !isSubcmd {  // If not sub command
+            if isCapableOption("get", first) {
+               args.insert("get", at: 0)  // Fallback to `get`
+            } else if !isOption(first) {
+               args.insert("set", at: 0)  // Fallback to `set`
             }
          }
+      } else {
+         // Fallback to `get` if zero args
+         args.insert("get", at: 0)
+      }
 
-         if arg.hasPrefix("--") {
-            switch arg {
-            case "--detail":
-               state.detail = true
-            case "--select-capable":
-               state.selectCapable = true
-            case "--json":
-               state.json = true
-            case "--save":
-               state.save = true
-            case "--session-id":
-               guard i + 1 < args.count else {
-                  throw AppError.cmd(.missingSessionID)
-               }
-               let sessionID = args[i + 1]
-               let isID = !sessionID.hasPrefix("--")
-               guard isID else {
-                  throw AppError.cmd(.missingSessionID)
-               }
-               state.sessionID = sessionID
-               i += 1
-            case "--launchd":
-               state.launchd = true
-            default:
-               throw AppError.cmd(.invalidOption(arg))
-
+      // Parse the first arg
+      var index = 0
+      if let first = args.first {
+         switch first {
+         case "set":
+            state.subcmd = "set"
+            guard args.count >= 2 else {
+               throw AppError.cmd(.setMissingID)
             }
-         } else {
-            state.newID = arg  // IME method ID
+            let second = args[1]
+            guard
+               !capableSubcmd.contains(second),  // IME ID should except valid subcmd
+               !isOption(second)  // IME ID should except option like values
+            else {
+               throw AppError.cmd(.setMissingID)
+            }
+            state.newID = second
+            index += 2
+         case "get", "list", "save", "load":
+            state.subcmd = first
+            index += 1
+         case "--version", "-v":
+            IO.out(Config.version)
+            exit(0)
+         case "--help", "-h":
+            IO.out(Help.macime)
+            exit(0)
+         default:
+            throw AppError.cmd(.invalidSubCommand(first))
+         }
+      }
+
+      guard let subcmd = state.subcmd else {
+         throw AppError.cmd(.subcmdNotFound)
+      }
+
+      // Parse other args
+      var i = index
+      while i < args.count {
+         let arg = args[i]
+         guard isOption(arg) else {
+            throw AppError.cmd(.invalidOption(arg))
+         }
+         guard isCapableOption(subcmd, arg) else {
+            throw AppError.cmd(.unknownOptionForSubcmd(subcmd, arg))
+         }
+         switch arg {
+         case "--detail":
+            state.detail = true
+         case "--select-capable":
+            state.selectCapable = true
+         case "--json":
+            state.json = true
+         case "--save":
+            state.save = true
+         case "--session-id":
+            // TODO: Should check `set xxx --session-id xxx` has `--save` option togerther
+            guard i + 1 < args.count else {
+               throw AppError.cmd(.missingSessionID)
+            }
+            let next = args[i + 1]
+            guard !isOption(next) else {
+               throw AppError.cmd(.missingSessionID)
+            }
+            state.sessionID = next
+            i += 1
+         case "--launchd":
+            state.launchd = true
+         default:
+            throw AppError.cmd(.invalidOption(arg))
          }
          i += 1
       }
-
-      // Prioritize `list` sub command
-      if state.subcmd == "list" {
-         state.newID = nil
-      }
-
-      // Ommit `--save` option in `save` sub command
-      if state.subcmd == "save" {
-         state.save = false
-      }
-
-      // dump(opts, name: "opts")  // for debug
-
       return state
    }
 }

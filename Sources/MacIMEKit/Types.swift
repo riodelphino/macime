@@ -12,7 +12,7 @@ public enum AppError: Error {
    case cmd(CmdError)
    case util(UtilError)
    case ime(IMEError)
-   case sock(SockError)
+   case imed(IMEDError)
 
    public var message: String {
       switch self {
@@ -22,7 +22,7 @@ public enum AppError: Error {
          return e.message
       case .ime(let e):
          return e.message
-      case .sock(let e):
+      case .imed(let e):
          return e.message
       }
    }
@@ -65,7 +65,7 @@ public enum UtilError: Error {
    }
 }
 
-public enum SockError: Error {
+public enum IMEDError: Error {
    case dataNotRecieved
    case macimeNotFound(String)
 

@@ -39,7 +39,7 @@ public struct IMED {
 
       let data = pipe.fileHandleForReading.readDataToEndOfFile()
       guard let output = String(data: data, encoding: .utf8) else {
-         throw AppError.sock(.dataNotRecieved)
+         throw AppError.imed(.dataNotRecieved)
       }
       return output
    }
@@ -88,7 +88,7 @@ public struct IMED {
    // Starts the IMED daemon and begins accepting client connections.
    public static func serve() throws {
       guard File.pathExists(Config.macimePath) else {
-         throw AppError.sock(.macimeNotFound(Config.macimePath))
+         throw AppError.imed(.macimeNotFound(Config.macimePath))
       }
 
       let _ = self.cleanupSocket()

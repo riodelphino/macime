@@ -1,6 +1,6 @@
 # macime
 
-A **blazing faster** IME switching tool for macOS. (Swift / launchd service)
+A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 
 ## Story
@@ -29,15 +29,16 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * Set a specified IME
 * Save current IME
 * Load(Restore) the previous IME
-* Switch IME while saving the previous one (in single step)
 * List all IMEs
+* Switch IME while saving the previous one (in single step)
 * Output results in plain text or JSON string
 * Faster switching by `macimed` launchd service
+* Fallback to `im-select` style command usage
 
 
 ## Requirements
 
-* macOS
+* macOS (>=10.13)
 
 
 ## Install
@@ -306,6 +307,13 @@ vim.o.timeoutlen = 0 -- 0 ~ 50
 
 ## Issues
 
+### Malformed array output with `--detail --json`
+
+When using `--detail` together with `--json`, `macime` outputs array values as malformed JSON strings.
+
+- Subcommands: `get`, `list`
+- Options: `--detail --json`
+
 ### azookey prevents macime to change IME
 
 `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
@@ -331,7 +339,7 @@ swift build -c release
 
 ## Others
 
-**Deprecated**: `$MACIME_TEMP_DIR` environmental value
+**Deprecated**: `$MACIME_TEMP_DIR` environmental value in v3.0.0
 
 
 ## Changelog

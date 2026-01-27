@@ -1,6 +1,7 @@
 # CHANGELOG
-## [3.2.3](https://github.com/riodelphino/macime/compare/v3.2.2...v3.2.3) (2026-01-26)
+## [3.2.3](https://github.com/riodelphino/macime/compare/v3.2.2...v3.2.3) (2026-01-28)
 
+* **fix:** Change the err/out log path via Homebrew
 * **docs:** Add plist path
 
 ## [3.2.2](https://github.com/riodelphino/macime/compare/v3.2.1...v3.2.2) (2026-01-26)

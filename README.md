@@ -258,17 +258,13 @@ Useful for debuging, but performance will be slower.
 
 `macimed` leaves log and err.  
 
-Directly running `macimed`:
-* /tmp/riodelphino.macimed.log
-* /tmp/riodelphino.macimed.err
-
 Via `brew services` (Apple Intel):
-* /usr/local/var/log/riodelphino.macimed.log
-* /usr/local/var/log/riodelphino.macimed.err
+* /usr/local/var/log/riodelphino/macimed.out.log
+* /usr/local/var/log/riodelphino/macimed.err.log
 
 Via `brew services` (Apple Silicon):
-* /opt/homebrew/var/log/riodelphino.macimed.log
-* /opt/homebrew/var/log/riodelphino.macimed.err
+* /opt/homebrew/var/log/riodelphino/macimed.out.log
+* /opt/homebrew/var/log/riodelphino.macimed.err.log
 
 #### plist path via homebrew
 

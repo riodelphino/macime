@@ -331,17 +331,6 @@ With `brew services start`:
 These files are deleted when you shutdown macOS.
 
 
-## Tips
-
-For faster switching with low latency, set this config in `init.lua`:
-```lua
-vim.o.timeoutlen = 0 -- 0 ~ 50
-```
-
-> [!Warning]
-> This config affects other keybinds in `nvim`.
-
-
 ## Issues
 
 ### Malformed array output with `--detail --json`

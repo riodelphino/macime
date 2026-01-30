@@ -252,9 +252,9 @@ macimed -i
 ```
 Output:
 ```txt
-sock: /path/to/sock
-status: running
-macime: /path/to/macime
+sockPath   : /path/to/sock
+status     : running
+macimePath : /path/to/macime
 ```
 > [!Note]
 > `tmp` path and `err`/`log` paths are controled by Homebrew, not by `macimed` itself.

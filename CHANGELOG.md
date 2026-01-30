@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.0](https://github.com/riodelphino/macime/compare/v3.2.2...v3.3.0) (2026-01-30)
 
+* **docs:** Add Status badges
 * **chore:** Change versions in `Package.swift`
 * **fix:** Adapt to Apple Silicon's Homebrew bin directory (refer `MACIME_PATH` env)
 * **fix:** Change the err/out log path via `brew services`

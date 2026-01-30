@@ -1,14 +1,12 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
-// TODO: 5.5 ??
 
 import PackageDescription
 
 let package = Package(
    name: "macime",
    platforms: [
-      .macOS(.v13)
-      // TODO: .macOS(.v10_15) ?
+      .macOS(.v10_13)
    ],
    products: [
       .executable(name: "macime", targets: ["macime"]),

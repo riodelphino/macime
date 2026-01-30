@@ -2,7 +2,7 @@ import Foundation
 import MacIMEKit
 
 public let args: [String] = ArgsCommon.getCmdArgs()
-public var state: CmdState = CmdState()
+public var state = IMECmdState()
 
 do {
    state = try ArgsIME.parse(args)

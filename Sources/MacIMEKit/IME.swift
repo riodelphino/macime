@@ -65,7 +65,7 @@ public struct IME {
       }
    }
 
-   public static func execute(_ state: CmdState) throws -> String {
+   public static func execute(_ state: IMECmdState) throws -> String {
       let detail: [String] = [
          "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
       ]

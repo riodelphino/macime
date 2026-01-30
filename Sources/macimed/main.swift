@@ -1,14 +1,14 @@
 import Foundation
 import MacIMEKit
 
-let args: [String] = ArgsCommon.getCmdArgs()
-try ArgsIMED.parse(args)
+public var args: [String] = ArgsCommon.getCmdArgs()
 
 do {
-    Log.log("macimed \(Config.version) starting...")
-    try IMED.serve()
+   state = try ArgsIMED.parse(args)
+   Log.log("macimed \(Config.version) starting...")
+   try IMED.serve()
 } catch let e as AppError {
-    Log.log(e.message)
+   Log.log(e.message)
 } catch {
-    Log.log("Unexpected error\n")
+   Log.log("Unexpected error\n")
 }

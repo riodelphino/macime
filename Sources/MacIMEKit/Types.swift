@@ -4,7 +4,19 @@ public struct Config {
    public static var version: String = "3.2.3"
    public static var tempDir: String = "/tmp/riodelphino.macime"
    public static var sockPath: String = "/tmp/riodelphino.macimed.sock"
-   public static var macimePath: String = "/usr/local/bin/macime"
+   public static var macimePath: String {
+      let env = ProcessInfo.processInfo.environment
+      if let path = env["MACIME_PATH"], !path.isEmpty, File.pathExists(path) {
+         return path
+      }
+      if File.pathExists("/usr/local/bin/macime") {  // Intel
+         return "/usr/local/bin/macime"
+      }
+      if File.pathExists("/opt/homebrew/bin/macime") {  // Apple silicon
+         return "/opt/homebrew/bin/macime"
+      }
+      return ""
+   }
    public init() {}
 }
 
@@ -38,6 +50,7 @@ public enum CmdError: Error {
 
    public var message: String {
       switch self {
+      // macime
       case .setMissingID:
          return "`set` sub command requires IME ID."
       case .invalidSubCommand(let subcmd):
@@ -50,6 +63,7 @@ public enum CmdError: Error {
          return "Sub command not found."
       case .unknownOptionForSubcmd(let subcmd, let option):
          return "Unknown option for `\(subcmd)`: \(option)"
+
       }
    }
 }
@@ -121,7 +135,7 @@ public enum IMEError: Error {
 }
 
 // Keeps commmand line args
-public struct CmdState {
+public struct IMECmdState {
    public var subcmd: String? = nil
    public var save: Bool = false
    public var newID: String? = nil
@@ -130,6 +144,14 @@ public struct CmdState {
    public var json = false
    public var sessionID: String? = nil
    public var launchd: Bool = false
+   public init() {}
+}
+
+public struct IMEDCmdState {
+   public var macimePath: String? = Config.macimePath
+   public var sockPath: String? = Config.sockPath
+   public var logPath: String? = nil
+   public var errPath: String? = nil
    public init() {}
 }
 

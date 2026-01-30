@@ -1,5 +1,7 @@
 import Foundation
 
+public var state = IMEDCmdState()
+
 public struct IMED {
 
    // Clean up the socket
@@ -30,7 +32,9 @@ public struct IMED {
       let outPipe = Pipe()
       let errPipe = Pipe()
 
-      process.executableURL = URL(fileURLWithPath: Config.macimePath)
+      if let macimePath = state.macimePath {
+         process.executableURL = URL(fileURLWithPath: macimePath)
+      }
       process.arguments = args
       process.standardOutput = outPipe
       process.standardError = errPipe
@@ -101,8 +105,8 @@ public struct IMED {
 
    // Starts the IMED daemon and begins accepting client connections.
    public static func serve() throws {
-      guard File.pathExists(Config.macimePath) else {
-         throw AppError.imed(.macimeNotFound(Config.macimePath))
+      guard File.pathExists(state.macimePath ?? "") else {
+         throw AppError.imed(.macimeNotFound(state.macimePath ?? ""))
       }
 
       let _ = self.cleanupSocket()

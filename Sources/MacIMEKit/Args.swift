@@ -37,9 +37,9 @@ public enum ArgsIME {
    }
 
    // Parse args array into CmdState
-   public static func parse(_ args: [String]) throws -> CmdState {
+   public static func parse(_ args: [String]) throws -> IMECmdState {
       var args: [String] = args
-      var state = CmdState()
+      var state = IMECmdState()
 
       // Fallbacks to `get` or `set`
       if let first = args.first {
@@ -136,20 +136,21 @@ public enum ArgsIME {
 // macimed (daemon)
 public enum ArgsIMED {
    // Check args
-   public static func parse(_ args: [String]) throws {
-      // macimed accepts only 1 arg
-      guard let arg = args.first else {
-         return  // Start as daemon normally
+   public static func parse(_ args: [String]) throws -> IMEDCmdState {
+      let state = IMEDCmdState()
+      // Check the first arg
+      if let arg = args.first {
+         switch arg {
+         case "--version", "-v":
+            IO.out(Config.version)
+            exit(0)
+         case "--help", "-h":
+            IO.out(Help.macimed)
+            exit(0)
+         default:
+            break
+         }
       }
-      switch arg {
-      case "--version", "-v":
-         IO.out(Config.version)
-         exit(0)
-      case "--help", "-h":
-         IO.out(Help.macimed)
-         exit(0)
-      default:
-         throw AppError.cmd(.invalidSubCommand(arg))
-      }
+      return state
    }
 }

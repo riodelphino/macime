@@ -225,16 +225,48 @@ Some unavailable options for each sub command will be simply ignored.
 
 `macimed` is bundled with `macime`.
 
-Show `macimed` version:
+Show the `macimed` version:
 ```bash
 macimed --version
 macimed -v
 ```
 
-Show `macimed` help:
+Show the `macimed` help:
 ```bash
 macimed --help
 macimed -h
+```
+
+Show the `macimed` runtime info:
+```bash
+macimed --info
+macimed -i
+```
+Output:
+```txt
+sock: /path/to/sock
+macime: /path/to/macime
+```
+> [!Note]
+> `tmp` path and `err`/`log` paths are controled by Homebrew, not by `macimed` itself.
+
+
+#### macime Executable Path
+
+`macimed` automatically detects the `macime` path from one of the following paths:
+- `MACIME_PATH` (Environment variable)
+- /usr/local/bin/macime (Homebrew on Intel Mac)
+- /opt/homebrew/bin/macime (Homebrew on Apple Silicon)
+
+The `MACIME_PATH` is set at `brew install` time via `macime.rb` in `riodelphino/homebrew-tap`:
+```ruby
+service do
+  ...
+  environment_variables(
+    MACIME_PATH: opt_bin/"macime"
+  )
+  ...
+end
 ```
 
 #### Start macimed
@@ -366,6 +398,11 @@ cd macime
 swift build
 # Build for release
 swift build -c release
+```
+
+For debugging, temporary force the built `macimed` use the built `macime`:
+```bash
+MACIME_PATH=/path/to/macime/.build/release/macime macimed
 ```
 
 ## Others

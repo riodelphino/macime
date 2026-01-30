@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.0](https://github.com/riodelphino/macime/compare/v3.2.2...v3.3.0) (2026-01-30)
 
+* **docs:** Update `README.md`
 * **chore:** Change `File` to `FS` (To avoid duprecation with Foundation's `FILE`)
 * **feat:** Add `--info` option to `macimed`
 * **docs:** Add Status badges

@@ -1,18 +1,18 @@
 import Foundation
 
 public struct Config {
-   public static var version: String = "3.2.3"
+   public static var version: String = "3.3.0"
    public static var tempDir: String = "/tmp/riodelphino.macime"
    public static var sockPath: String = "/tmp/riodelphino.macimed.sock"
    public static var macimePath: String {
       let env = ProcessInfo.processInfo.environment
-      if let path = env["MACIME_PATH"], !path.isEmpty, File.pathExists(path) {
+      if let path = env["MACIME_PATH"], !path.isEmpty, FS.pathExists(path) {
          return path
       }
-      if File.pathExists("/usr/local/bin/macime") {  // Intel
+      if FS.pathExists("/usr/local/bin/macime") {  // Intel
          return "/usr/local/bin/macime"
       }
-      if File.pathExists("/opt/homebrew/bin/macime") {  // Apple silicon
+      if FS.pathExists("/opt/homebrew/bin/macime") {  // Apple silicon
          return "/opt/homebrew/bin/macime"
       }
       return ""

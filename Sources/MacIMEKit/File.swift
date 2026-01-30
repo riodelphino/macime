@@ -1,7 +1,7 @@
 import Foundation
 
 // File system operations
-public enum File {
+public enum FS {
    public static func createDir(_ dirPath: String) -> Bool {
       do {
          try FileManager.default.createDirectory(

@@ -46,7 +46,7 @@ public struct IME {
 
    public static func previous(session_id: String?) throws -> String {
       let path = getStoredPath(session_id)
-      guard let prev_id = File.read(path) else {
+      guard let prev_id = FS.read(path) else {
          throw AppError.ime(.previousIDNotFound)
       }
       return prev_id  // return IME ID as String for performance
@@ -58,8 +58,8 @@ public struct IME {
    }
 
    public static func createTempDir() throws {
-      if !File.pathExists(Config.tempDir) {
-         guard File.createDir(Config.tempDir) else {
+      if !FS.pathExists(Config.tempDir) {
+         guard FS.createDir(Config.tempDir) else {
             throw AppError.ime(.createDirFailed(Config.tempDir))
          }
       }
@@ -76,7 +76,7 @@ public struct IME {
          try createTempDir()
          if let curr = try current() {
             let path = getStoredPath(state.sessionID)
-            let success = File.write(path, curr.id)
+            let success = FS.write(path, curr.id)
             guard success else {
                throw AppError.ime(.saveFailed(path))
             }
@@ -130,7 +130,7 @@ public struct IME {
                // Save to /tmp
                if state.save {
                   let path = getStoredPath(state.sessionID)
-                  let success = File.write(path, currID)
+                  let success = FS.write(path, currID)
                   guard success else {
                      throw AppError.ime(.saveFailed(path))
                   }

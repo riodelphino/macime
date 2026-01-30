@@ -6,7 +6,7 @@ public struct IMED {
 
    // Clean up the socket
    public static func cleanupSocket() -> Bool {
-      return File.removePath(Config.sockPath)
+      return FS.removePath(Config.sockPath)
    }
 
    // Executes a macime command and returns its output
@@ -105,7 +105,7 @@ public struct IMED {
 
    // Starts the IMED daemon and begins accepting client connections.
    public static func serve() throws {
-      guard File.pathExists(state.macimePath ?? "") else {
+      guard FS.pathExists(state.macimePath ?? "") else {
          throw AppError.imed(.macimeNotFound(state.macimePath ?? ""))
       }
 

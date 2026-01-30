@@ -6,7 +6,7 @@ public struct IMED {
 
    // Clean up the socket
    public static func cleanupSocket() -> Bool {
-      return FS.removePath(Config.sockPath)
+      return FS.removePath(Defaults.sockPath)
    }
 
    // Executes a macime command and returns its output
@@ -123,7 +123,7 @@ public struct IMED {
       var addr = sockaddr_un()
       addr.sun_family = sa_family_t(AF_UNIX)
 
-      let pathCStr = (Config.sockPath as NSString).utf8String!
+      let pathCStr = (Defaults.sockPath as NSString).utf8String!
       strncpy(
          &addr.sun_path.0, pathCStr,
          MemoryLayout.size(ofValue: addr.sun_path) - 1)
@@ -138,7 +138,7 @@ public struct IMED {
          throw NSError(domain: "bind", code: -1, userInfo: ["msg": "bind() failed"])
       }
 
-      Log.log("Socket bound to \(Config.sockPath)")
+      Log.log("Socket bound to \(Defaults.sockPath)")
 
       guard listen(fd, 5) == 0 else {
          throw NSError(domain: "listen", code: -1, userInfo: ["msg": "listen() failed"])

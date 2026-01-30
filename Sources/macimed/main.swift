@@ -5,7 +5,7 @@ public var args: [String] = ArgsCommon.getCmdArgs()
 
 do {
    state = try ArgsIMED.parse(args)
-   Log.log("macimed \(Config.version) starting...")
+   Log.log("macimed \(Defaults.version) starting...")
    try IMED.serve()
 } catch let e as AppError {
    Log.log(e.message)

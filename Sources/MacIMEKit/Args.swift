@@ -78,7 +78,7 @@ public enum ArgsIME {
             state.subcmd = first
             index += 1
          case "--version", "-v":
-            IO.out(Config.version)
+            IO.out(Defaults.version)
             exit(0)
          case "--help", "-h":
             IO.out(Help.macime)
@@ -142,7 +142,7 @@ public enum ArgsIMED {
       if let arg = args.first {
          switch arg {
          case "--version", "-v":
-            IO.out(Config.version)
+            IO.out(Defaults.version)
             exit(0)
          case "--help", "-h":
             IO.out(Help.macimed)

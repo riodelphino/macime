@@ -1,9 +1,9 @@
 import Foundation
 
-public struct Config {
-   public static var version: String = "3.3.0"
-   public static var tempDir: String = "/tmp/riodelphino.macime"
-   public static var sockPath: String = "/tmp/riodelphino.macimed.sock"
+public enum Defaults {
+   public static let version: String = "3.3.1"
+   public static let tempDir: String = "/tmp/riodelphino.macime"
+   public static let sockPath: String = "/tmp/riodelphino.macimed.sock"
    public static var macimePath: String {
       let env = ProcessInfo.processInfo.environment
       if let path = env["MACIME_PATH"], !path.isEmpty, FS.pathExists(path) {
@@ -17,7 +17,6 @@ public struct Config {
       }
       return ""
    }
-   public init() {}
 }
 
 public enum AppError: Error {
@@ -148,8 +147,8 @@ public struct IMECmdState {
 }
 
 public struct IMEDCmdState {
-   public var macimePath: String? = Config.macimePath
-   public var sockPath: String? = Config.sockPath
+   public var macimePath: String? = Defaults.macimePath
+   public var sockPath: String? = Defaults.sockPath
    public var logPath: String? = nil
    public var errPath: String? = nil
    public init() {}

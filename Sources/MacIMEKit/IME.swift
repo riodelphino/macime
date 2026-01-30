@@ -54,13 +54,13 @@ public struct IME {
 
    public static func getStoredPath(_ sessionID: String?) -> String {
       let basename = sessionID ?? "DEFAULT"
-      return Config.tempDir + "/" + basename
+      return Defaults.tempDir + "/" + basename
    }
 
    public static func createTempDir() throws {
-      if !FS.pathExists(Config.tempDir) {
-         guard FS.createDir(Config.tempDir) else {
-            throw AppError.ime(.createDirFailed(Config.tempDir))
+      if !FS.pathExists(Defaults.tempDir) {
+         guard FS.createDir(Defaults.tempDir) else {
+            throw AppError.ime(.createDirFailed(Defaults.tempDir))
          }
       }
    }

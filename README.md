@@ -236,6 +236,14 @@ Show the `macimed` help:
 macimed --help
 macimed -h
 ```
+Show the `macimed` status (running or stopped):
+```bash
+macimed --status
+macimed -s
+```
+Output:
+- `running` (exitcode=0)
+- `stopped` (exitcode=1)
 
 Show the `macimed` runtime info:
 ```bash
@@ -245,6 +253,7 @@ macimed -i
 Output:
 ```txt
 sock: /path/to/sock
+status: running
 macime: /path/to/macime
 ```
 > [!Note]

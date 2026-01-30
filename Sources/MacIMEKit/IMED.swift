@@ -131,10 +131,6 @@ public struct IMED {
 
     // Starts the IMED daemon and begins accepting client connections.
     public static func serve() throws {
-        guard FS.pathExists(state.macimePath ?? "") else {
-            throw AppError.imed(.macimeNotFound(state.macimePath ?? ""))
-        }
-
         let _ = self.cleanupSocket()
 
         let fd = socket(AF_UNIX, SOCK_STREAM, 0)

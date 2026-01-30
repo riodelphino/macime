@@ -157,9 +157,9 @@ public enum ArgsIMED {
             }
          case "--info", "-i":
             var info: [String] = []
-            info.append("sock: \(state.sockPath ?? "")")
-            info.append("status: \(state.status ?? "")")
-            info.append("macime: \(state.macimePath ?? "")")  // Does not reflect running macimed's macimePath when executed by `MACIME_PATH=xxx macimed`
+            info.append("sockPath   : \(state.sockPath ?? "")")
+            info.append("status     : \(state.status ?? "")")
+            info.append("macimePath : \(state.macimePath ?? "")")  // Does not reflect running macimed's macimePath when executed by `MACIME_PATH=xxx macimed`
             IO.out(info.joined(separator: "\n"))
             exit(0)
          default:
@@ -167,6 +167,10 @@ public enum ArgsIMED {
             exit(1)
          }
       }
+      guard FS.pathExists(state.macimePath ?? "") else {
+         throw AppError.imed(.macimeNotFound(state.macimePath ?? ""))
+      }
+
       return state
    }
 }

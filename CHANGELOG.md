@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.1](https://github.com/riodelphino/macime/compare/v3.3.0...v3.3.1) (2026-01-31)
 
+* **fix:** Adjust output by `macimed --info` 
 * **chore:** Remove unused `Resources` dir
 * **feat:** Add `--status` option (`macimed`)
 * **docs:** Remove `Tips`

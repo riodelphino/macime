@@ -154,7 +154,8 @@ public enum ArgsIMED {
             IO.out(info.joined(separator: "\n"))
             exit(0)
          default:
-            break
+            IO.err("Unknown Option: \(arg)")
+            exit(1)
          }
       }
       return state

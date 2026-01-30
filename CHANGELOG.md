@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.1](https://github.com/riodelphino/macime/compare/v3.3.0...v3.3.1) (2026-01-30)
 
+* **fix:** Reapply `.invalidOption` for `macimed`
 * **refactor:** Change struct `Config` to enum `Defaults`
 
 ## [3.3.0](https://github.com/riodelphino/macime/compare/v3.2.2...v3.3.0) (2026-01-30)

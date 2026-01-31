@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Defaults {
-    public static let version: String = "3.3.1"
+    public static let version: String = "3.3.2"
     public static let tempDir: String = "/tmp/riodelphino.macime"
     public static let sockPath: String = "/tmp/riodelphino.macimed.sock"
     public static var macimePath: String {

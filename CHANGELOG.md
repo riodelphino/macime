@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.2](https://github.com/riodelphino/macime/compare/v3.3.1...v3.3.2) (2026-01-31)
 
+* **docs:** Update version to 3.3.2
 * **docs:** Refine totaly
 * **docs:** Correct output key names in `macimed --info`
 

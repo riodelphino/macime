@@ -223,7 +223,14 @@ Some unavailable options for each sub command will be simply ignored.
 
 ### macimed
 
-`macimed` is bundled with `macime`.
+`macimed` is a daemon bundled with `macime`. It enables blazing faster IME switching.  
+It runs in the background and controls `macime` by receiving commands over a Unix domain socket.
+
+Run `macimed` manually (for debugging):
+```bash
+macimed
+# It shows useful err/log
+```
 
 Show the `macimed` version:
 ```bash
@@ -257,28 +264,44 @@ status     : running
 macimePath : /path/to/macime
 ```
 > [!Note]
-> `tmp` path and `err`/`log` paths are controled by Homebrew, not by `macimed` itself.
+> `macimePath` is usually different from the `MACIME_PATH` in Homebrew service.
 
+#### Socket Path
 
-#### macime Executable Path
+`macimed` listens to:
+* /tmp/riodelphino.macime.sock
 
-`macimed` automatically detects the `macime` path from one of the following paths:
-- `MACIME_PATH` (Environment variable)
-- /usr/local/bin/macime (Homebrew on Intel Mac)
-- /opt/homebrew/bin/macime (Homebrew on Apple Silicon)
+#### Send Commands
 
-The `MACIME_PATH` is set at `brew install` time via `macime.rb` in `riodelphino/homebrew-tap`:
-```ruby
-service do
-  ...
-  environment_variables(
-    MACIME_PATH: opt_bin/"macime"
-  )
-  ...
-end
+`macimed` recieves commands via socket as plain text.
+
+(e.g.)
+```bash
+set com.apple.keylayout.ABC
+set com.apple.keylayout.ABC --save
+set com.apple.keylayout.ABC --save --session-id <session-id>
+load
+load --session-id <session-id>
 ```
+When `macimed` recieves a command like above, it executes `macime` command with these args immediately.
 
-#### Start macimed
+
+#### Temporary directory used by macimed to stores IME IDs
+
+Previous IME IDs are stored in the following paths.
+
+When running `macimed` manually (socket):
+* /tmp/riodelphino.macime/DEFAULT
+* /tmp/riodelphino.macime/<session_id>
+
+When running via `Homebrew service`:
+* /private/tmp/riodelphino.macime/DEFAULT
+* /private/tmp/riodelphino.macime/<session_id>
+
+These files are deleted when you shutdown macOS.
+
+
+## Start macimed as a Homebrew service
 
 **Recommended (Faster)**
 `macimed` can be managed by `launchd` via Homebrew:
@@ -295,27 +318,42 @@ macimed
 ```
 Useful for debuging, but performance will be slower.
 
-#### sock path
+### Logs
 
-`macimed` listens to:
-* /tmp/riodelphino.macime.sock
+`macimed` leaves `stdout` and `stderr` logs when it is running via `Homebrew service`.
 
-#### macimed Log
-
-`macimed` leaves log and err.  
-
-Via `brew services` (Apple Intel):
+With `Apple Intel`:
 * /usr/local/var/log/riodelphino/macimed.out.log
 * /usr/local/var/log/riodelphino/macimed.err.log
 
-Via `brew services` (Apple Silicon):
+With `Apple Silicon`:
 * /opt/homebrew/var/log/riodelphino/macimed.out.log
 * /opt/homebrew/var/log/riodelphino.macimed.err.log
 
-#### plist path via homebrew
+### plist path via Homebrew
 
-path: ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
+plist path:
+* ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
 
+### macime Executable Path
+
+`macimed` requires the full-path of `macime`, and it is automatically determined from one of the following paths:
+- `MACIME_PATH` (Environment variable)
+- /usr/local/bin/macime (Homebrew on Intel Mac)
+- /opt/homebrew/bin/macime (Homebrew on Apple Silicon)
+
+### MACIME_PATH Enviroment Variable
+
+The `MACIME_PATH` is set at `brew install` time via `riodelphino/homebrew-tap/Fomula/macime.rb`:
+```ruby
+service do
+  ...
+  environment_variables(
+    MACIME_PATH: opt_bin/"macime"
+  )
+  ...
+end
+```
 
 ## Integration
 
@@ -324,20 +362,7 @@ path: ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
 (Recommended) Install wrapper plugin:
 [riodelphino/macime.nvim](https://github.com/riodelphino/macime.nvim)
 
-For more details, see [doc/integration.md](doc/integration.md).
-
-
-## Stored in Temporary dir
-
-The previous IME ID is stored in:
-
-When directly executing `macimed`:
-* `/tmp/riodelphino.macime/<session_id>`
-
-With `brew services start`:
-* `/private/tmp/riodelphino.macime/<session_id>`
-
-These files are deleted when you shutdown macOS.
+It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 
 ## Issues

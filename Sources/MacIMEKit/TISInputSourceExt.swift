@@ -35,7 +35,7 @@ extension TISInputSource {
    // Return IME fields as specific format
    public func describe(format: OutFormat, fields: [String]) throws -> Any {
       switch format {
-      case .value:
+      case .text:
          var lines: [String] = []
          for field in fields {
             lines.append(try String(describing: value(of: field)))

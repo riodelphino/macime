@@ -99,11 +99,11 @@ public struct IME {
             return try Util.jsonToString(outJson)
          } else {
             // list IDs as string
-            var outStr: [String] = []
+            var ids: [String] = []
             for source in sources {
-               outStr.append(source.id)
+               ids.append(source.id)
             }
-            return outStr.joined(separator: "\n")
+            return ids.joined(separator: "\n")
          }
       case "set":
          // Switch to new ID

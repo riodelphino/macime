@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Defaults {
-    public static let version: String = "3.3.2"
+    public static let version: String = "3.3.3"
     public static let tempDir: String = "/tmp/riodelphino.macime"
     public static let sockPath: String = "/tmp/riodelphino.macimed.sock"
     public static var macimePath: String {
@@ -140,7 +140,6 @@ public struct IMECmdState {
     public var newID: String? = nil
     public var selectCapable: Bool = false
     public var detail: Bool = false
-    public var json = false
     public var sessionID: String? = nil
     public var launchd: Bool = false
     public init() {}
@@ -159,7 +158,6 @@ public struct IMEDCmdState {
 
 public enum OutFormat {
     case value
-    case keyValue
     case json
 }
 

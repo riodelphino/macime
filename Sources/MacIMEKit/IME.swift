@@ -89,37 +89,21 @@ public struct IME {
          return src.id
       case "list":
          var sources: [TISInputSource]
-         var outJson: [Any] = []
-         var outStr: [String] = []
          sources = list(selectCapable: state.selectCapable)
          if state.detail {
-            if state.json {
-               // list detail as json
-               for source in sources {
-                  outJson.append(source.describe(format: .json, fields: detail))
-               }
-               return try Util.jsonToString(outJson)
-            } else {
-               // list detail as str
-               for source in sources {
-                  outStr.append("\(source.describe(format: .keyValue, fields: detail))")
-               }
-               return outStr.joined(separator: "\n")
+            // list detail as json
+            var outJson: [Any] = []
+            for source in sources {
+               outJson.append(try source.describe(format: .json, fields: detail))
             }
+            return try Util.jsonToString(outJson)
          } else {
-            if state.json {
-               // list id as json
-               for source in sources {
-                  outJson.append(source.id)
-               }
-               return try Util.jsonToString(outJson)
-            } else {
-               // list id as str
-               for source in sources {
-                  outStr.append(source.id)
-               }
-               return outStr.joined(separator: "\n")
+            // list IDs as string
+            var outStr: [String] = []
+            for source in sources {
+               outStr.append(source.id)
             }
+            return outStr.joined(separator: "\n")
          }
       case "set":
          // Switch to new ID
@@ -141,24 +125,12 @@ public struct IME {
       case "get":
          if let curr = try current() {
             if state.detail {
-               if state.json {
-                  // curr IME detail as JSON
-                  let outJson: Any = curr.describe(format: .json, fields: detail)
-                  return try Util.jsonToString(outJson)
-               } else {
-                  // curr IME detail as string
-                  let outStr: String =
-                     "\(curr.describe(format: .keyValue, fields: detail))"
-                  return outStr
-               }
+               // curr IME detail as JSON
+               let outJson: Any = try curr.describe(format: .json, fields: detail)
+               return try Util.jsonToString(outJson)
             } else {
-               if state.json {
-                  // curr IME id as JSON
-                  return try Util.jsonToString([curr.id])
-               } else {
-                  // curr IME id as string
-                  return curr.id
-               }
+               // curr IME id as string
+               return curr.id
             }
          }
       default:

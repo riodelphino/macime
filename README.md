@@ -8,6 +8,11 @@
 A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 
+## Breaking Changes
+
+* [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
+
+
 ## Story
 
 I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
@@ -36,7 +41,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * Load(Restore) the previous IME
 * List all IMEs
 * Switch IME while saving the previous one (in single step)
-* Output results in plain text or JSON string
+* Output detailed get|list results as JSON
 * Faster switching by `macimed` launchd service
 * Fallback to `im-select` style command usage
 
@@ -142,18 +147,25 @@ macime com.apple.keylayout.ABC
 
 #### Get current IME
 ```bash
+# Get current IME ID
 macime get
 # com.apple.keylayout.ABC
 
+# Get current IME detailed info as JSON
 macime get --detail
-# id: com.apple.keylayout.ABC
-# localizedName: ABC
-# isSelectCapable: true
-# isSelected: true
-# sourceLanguages: ["en", "af", ... "zu"]
+# {
+#   "isSelectCapable" : true,
+#   "isSelected" : true,
+#   "localizedName" : "ABC",
+#   "id" : "com.apple.keylayout.ABC",
+#   "sourceLanguages" : [
+#     "en",
+#     ...
+#     "zu"
+#   ]
+# }
 
-macime get --detail --json
-# {"isSelectCapable":true,"isSelected":true,"sourceLanguages":["en","af", ... ,"zu"],"localizedName":"ABC","id":"com.apple.keylayout.ABC"}
+
 ```
 
 #### Set IME
@@ -200,20 +212,24 @@ macime load --session-id nvim-1001
 
 #### List IME
 ```bash
-macime list # id list
-macime list --detail # detailed list
-macime list --json # json list
-macime list --select-capable # show only selectable IME methods
-# --detail, --json and --select-capable can be mixtured
+# Show IME ID list
+macime list
+
+# Show IME detailed list as JSON
+macime list --detail
+
+# Show only selectable IME
+macime list --select-capable
 ```
+> [!Note]
+> `--detail` and `--select-capable` can be mixtured
 
 ### Options
 
 | Option                    | Available for | Description                                                         |
 | ------------------------- | ------------- | ------------------------------------------------------------------- |
-| --detail                  | get, list     | Show detailed IME info                                              |
+| --detail                  | get, list     | Show detailed IME info as JSON                                      |
 | --select-capable          | get, list     | Show only selectable IME                                            |
-| --json                    | get, list     | Output as json text                                                 |
 | --save                    | set           | Save current IME (with `macime set` only)                           |
 | --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir)         |
 | --launchd                 | (any)         | Indicate `called via launchd` (Ommit `[ERROR] ` prefix from stderr) |
@@ -366,13 +382,6 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 
 ## Issues
-
-### Malformed array output with `--detail --json`
-
-When using `--detail` together with `--json`, `macime` outputs array values as malformed JSON strings.
-
-- Subcommands: `get`, `list`
-- Options: `--detail --json`
 
 ### azookey prevents macime to change IME
 

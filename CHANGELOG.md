@@ -2,6 +2,7 @@
 
 ## [3.3.3](https://github.com/riodelphino/macime/compare/v3.3.2...v3.3.3) (2026-02-02)
 
+* **fix!:** BREAKING CHANGE: Deprecate `--json` option (Integrated into `--detail` option)
 * **fix:** Aboid JSON serialization error:`Invalid top-level type` in `get --json`
 
 ## [3.3.2](https://github.com/riodelphino/macime/compare/v3.3.1...v3.3.2) (2026-01-31)

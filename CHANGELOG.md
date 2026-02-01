@@ -2,6 +2,7 @@
 
 ## [3.3.3](https://github.com/riodelphino/macime/compare/v3.3.2...v3.3.3) (2026-02-02)
 
+* **refactor** Replace `detail` variable to `enum fieldList`.detail
 * **chore:** Rename variable `outStr` to `ids`
 * **refactor:** Rename `.value` to `.text` in `OutFormat`
 * **chore:** Remove `--json` option from `capableOpts`

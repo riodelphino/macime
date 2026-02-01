@@ -66,10 +66,12 @@ public struct IME {
    }
 
    public static func execute(_ state: IMECmdState) throws -> String {
-      let detail: [String] = [
-         "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
-      ]
-      // IO.out(state.subcmd ?? "?")  // DEBUG:
+      enum fieldList {
+         static let id: [String] = ["id"]
+         static let detail: [String] = [
+            "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
+         ]
+      }
 
       switch state.subcmd {
       case "save":
@@ -94,7 +96,7 @@ public struct IME {
             // list detail as json
             var outJson: [Any] = []
             for source in sources {
-               outJson.append(try source.describe(format: .json, fields: detail))
+               outJson.append(try source.describe(format: .json, fields: fieldList.detail))
             }
             return try Util.jsonToString(outJson)
          } else {
@@ -126,7 +128,7 @@ public struct IME {
          if let curr = try current() {
             if state.detail {
                // curr IME detail as JSON
-               let outJson: Any = try curr.describe(format: .json, fields: detail)
+               let outJson: Any = try curr.describe(format: .json, fields: fieldList.detail)
                return try Util.jsonToString(outJson)
             } else {
                // curr IME id as string

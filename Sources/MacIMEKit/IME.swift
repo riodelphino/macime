@@ -154,7 +154,7 @@ public struct IME {
             } else {
                if state.json {
                   // curr IME id as JSON
-                  return try Util.jsonToString(curr.id)
+                  return try Util.jsonToString([curr.id])
                } else {
                   // curr IME id as string
                   return curr.id

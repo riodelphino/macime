@@ -76,21 +76,29 @@ If launchd service is enabled, ensure to restart it:
 brew services restart macime
 ```
 
-## Register as a launchd Service
+## Run as a launchd Service
 
-Optional, but **STRONGLY RECOMMENDED !!**.  
-**30% faster** than running `macimed` directly. (e.g. 128ms -> 89ms)
+`macimed` can be managed by `launchd` via Homebrew.
 
+It's optional, but STRONGLY RECOMMENDED!!  
+**30% faster** than running `macimed` manually. (e.g. 128ms -> 89ms)
 ```bash
-# Start `macimed` service (Faster)
+# Start `macimed` service
 brew services start macime
 
 # Stop `macimed` service
 brew services stop macime
+```
+> [!Note]
+> Although the service name is `macime`, it runs `macimed` internally.
 
-# Manually start `macimed` for debugging to see the log (Slower)
+
+Or, you can also start `macimed` manually to monitor logs and observe its behavior:
+```bash
 macimed
 ```
+Useful for debuging, but performance will be slower.
+
 
 ## Usage
 
@@ -318,22 +326,7 @@ When running via `Homebrew service`:
 These files are deleted when you shutdown macOS.
 
 
-## Start macimed as a Homebrew service
-
-**Recommended (Faster)**
-`macimed` can be managed by `launchd` via Homebrew:
-```bash
-brew services start macime
-# Although the service name is `macime`, it runs `macimed` internally.
-```
-When launched this way, execution is typically about **30%** faster than running it manually.
-
-**For Debugging (Slower)**
-You can also start `macimed` manually to monitor logs and observe its behavior:
-```bash
-macimed
-```
-Useful for debuging, but performance will be slower.
+## Technical Information
 
 ### Logs
 

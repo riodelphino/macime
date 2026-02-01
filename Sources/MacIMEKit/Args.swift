@@ -20,11 +20,11 @@ public enum ArgsCommon {
 public enum ArgsIME {
     static let capableSubcmd = ["get", "set", "load", "save", "list"]
     static let capableOpts = [
-        "get": ["--detail", "--json"],
+        "get": ["--detail"],
         "set": ["--save", "--session-id"],
         "load": ["--session-id"],
         "save": ["--session-id"],
-        "list": ["--select-capable", "--detail", "--json"],
+        "list": ["--select-capable", "--detail"],
     ]
     static let globalOpts = ["--launchd"]
 

@@ -2,6 +2,7 @@
 
 ## [3.3.3](https://github.com/riodelphino/macime/compare/v3.3.2...v3.3.3) (2026-02-02)
 
+* **chore:** Remove `--json` option from `capableOpts`
 * **docs:** Move all `Breaking Changes` to top
 * **fix!:** BREAKING CHANGE: Deprecate `--json` option (Integrated into `--detail` option)
 * **fix:** Aboid JSON serialization error:`Invalid top-level type` in `get --json`

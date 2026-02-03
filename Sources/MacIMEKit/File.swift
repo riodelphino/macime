@@ -5,7 +5,8 @@ public enum FS {
    public static func createDir(_ dirPath: String) -> Bool {
       do {
          try FileManager.default.createDirectory(
-            atPath: dirPath, withIntermediateDirectories: true, attributes: nil)
+            atPath: dirPath, withIntermediateDirectories: true, attributes: nil
+         )
       } catch {
          return false
       }
@@ -21,14 +22,15 @@ public enum FS {
       return true
    }
 
-   public static func pathExists(_ path: String) -> Bool {
+   public static func pathExists(_ path: String?) -> Bool {
+      guard let path else { return false }
+      guard path != "" else { return false }
       return FileManager.default.fileExists(atPath: path)
    }
 
    public static func read(_ path: String) -> String? {
       do {
-         let content = try String(contentsOfFile: path, encoding: .utf8)
-         return content
+         return try String(contentsOfFile: path, encoding: .utf8)
       } catch {
          return nil
       }

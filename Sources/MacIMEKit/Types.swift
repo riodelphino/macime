@@ -1,11 +1,12 @@
 import Foundation
 
 public enum Defaults {
-   public static let version: String = "3.3.4"
+   public static let version: String = "3.4.0"
 
    public static var macimePath: String {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_PATH"], "/usr/local/bin/macime", "/opt/homebrew/bin/macime"]
+
       let path = Util.fallbackPaths(checkPathExists: true, paths: checkPaths)
       guard let path else { return "" } // TODO: Should throw an Error
       return path

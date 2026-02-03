@@ -1,6 +1,7 @@
 # CHANGELOG
-## [3.3.4](https://github.com/riodelphino/macime/compare/v3.3.3...v3.3.4) (2026-02-04)
+## [3.4.0](https://github.com/riodelphino/macime/compare/v3.3.3...v3.4.0) (2026-02-04)
 
+* **docs:** Update minor version
 * **refactor:** Reorder `Defaults.*` property
 * **feat:** `Defaults.*` refers `MACIME_SOCK_PATH` `MACIME_TEMP_DIR` env first
 * **chore:** Modify comments

@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.4](https://github.com/riodelphino/macime/compare/v3.3.3...v3.3.4) (2026-02-03)
 
+* **chore:** Add `ConfigError` (but unused now)
 * **refactor:** Split error enums to `Errors.swift`
 * **refactor:** Change indent 4 to 3 again...
 * **refactor:** Add `fallbackPaths()` func to chech & get from paths list

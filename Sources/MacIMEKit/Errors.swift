@@ -1,6 +1,7 @@
 import Foundation
 
 public enum AppError: Error {
+   case config(ConfigError)
    case cmd(CmdError)
    case util(UtilError)
    case ime(IMEError)
@@ -8,6 +9,8 @@ public enum AppError: Error {
 
    public var message: String {
       switch self {
+      case .config(let e):
+         return e.message
       case .cmd(let e):
          return e.message
       case .util(let e):
@@ -16,6 +19,23 @@ public enum AppError: Error {
          return e.message
       case .imed(let e):
          return e.message
+      }
+   }
+}
+
+public enum ConfigError: Error {  // TODO: Remove if unused
+   case invalidMacimePath
+   case invalidSockPath
+   case invalidTempDir
+
+   public var message: String {
+      switch self {
+      case .invalidMacimePath:
+         return "Invalid macime path."
+      case .invalidSockPath:
+         return "Invalid sock path."
+      case .invalidTempDir:
+         return "Invalid temp dir."
       }
    }
 }

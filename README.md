@@ -377,6 +377,11 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 ## Issues
 
+### Not work with Chinese input methods
+
+Same with this [issue](https://github.com/daipeihust/im-select/issues/79) in `im-select`.
+The solution is in [ims-mac](https://github.com/LuSrackhall/ims-mac)
+
 ### azookey prevents macime to change IME
 
 `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
@@ -430,6 +435,10 @@ For debugging, temporary force the built `macimed` use the built `macime`:
 ```bash
 MACIME_PATH=/path/to/macime/.build/release/macime macimed
 ```
+
+## TODO
+
+- Adapt to this [issue](https://github.com/daipeihust/im-select/issues/79) and inspect the solution in [ims-mac](https://github.com/LuSrackhall/ims-mac) (Need your help or PR!)
 
 
 ## Changelog

@@ -10,7 +10,7 @@ A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 ## Breaking Changes
 
-* [v3.3.4](https://github.com/riodelphino/macime/releases/tag/v3.3.4): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
+* [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
 * [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
 * [v3.0.0](https://github.com/riodelphino/macime/releases/tag/v3.0.0): Deprecate `$MACIME_TEMP_DIR` environmental value
 

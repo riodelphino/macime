@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.4](https://github.com/riodelphino/macime/compare/v3.3.3...v3.3.4) (2026-02-03)
 
+* **refactor:** Add `fallbackPaths()` func to chech & get from paths list
 * **ci:** Add CI to build and test
 
 ## [3.3.3](https://github.com/riodelphino/macime/compare/v3.3.2...v3.3.3) (2026-02-02)

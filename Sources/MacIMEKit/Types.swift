@@ -2,20 +2,18 @@ import Foundation
 
 public enum Defaults {
    public static let version: String = "3.3.4"
-   public static let tempDir: String = "/tmp/riodelphino.macime"
-   public static let sockPath: String = "/tmp/riodelphino.macimed.sock"
+   public static var tempDir: String {
+      let env = ProcessInfo.processInfo.environment
+      return Util.fallbackPaths(env["MACIME_TEMP_DIR"] ?? "", "/tmp/riodelphino.macime")
+   }
+   public static var sockPath: String {
+      let env = ProcessInfo.processInfo.environment
+      return Util.fallbackPaths(env["MACIME_SOCK_PATH"] ?? "", "/tmp/riodelphino.macimed.sock")
+   }
    public static var macimePath: String {
       let env = ProcessInfo.processInfo.environment
-      if let path = env["MACIME_PATH"], !path.isEmpty, FS.pathExists(path) {
-         return path
-      }
-      if FS.pathExists("/usr/local/bin/macime") {  // Intel
-         return "/usr/local/bin/macime"
-      }
-      if FS.pathExists("/opt/homebrew/bin/macime") {  // Apple silicon
-         return "/opt/homebrew/bin/macime"
-      }
-      return ""
+      return Util.fallbackPaths(
+         env["MACIME_PATH"] ?? "", "/usr/local/bin/macime", "/opt/homebrew/bin/macime")
    }
 }
 
@@ -146,14 +144,17 @@ public struct IMECmdState {
 }
 
 public struct IMEDCmdState {
-   public var macimePath: String? = Defaults.macimePath
-   public var sockPath: String? = Defaults.sockPath
-   public var status: String? {
-      return IMED.isMacimedRunning(sockPath: Defaults.sockPath) ? "running" : "stopped"
+   public var macimePath: String?
+   public var sockPath: String?
+   public var status: String?
+   public var logPath: String?
+   public var errPath: String?
+   public init() {
+      self.macimePath = Defaults.macimePath
+      self.sockPath = Defaults.sockPath
+      self.status = IMED.isMacimedRunning(sockPath: Defaults.sockPath) ? "running" : "stopped"
+
    }
-   public var logPath: String? = nil
-   public var errPath: String? = nil
-   public init() {}
 }
 
 public enum OutFormat {

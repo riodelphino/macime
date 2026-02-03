@@ -26,4 +26,15 @@ public enum Util {
    public static func colored(_ color: Colors, _ text: String) -> String {
       return color.color + text + Colors.reset.color
    }
+
+   // Return the first existing path in paths
+   public static func fallbackPaths(_ paths: String...) -> String {
+      for path in paths {
+         if FS.pathExists(path) {
+            return path
+         }
+      }
+      return ""
+   }
+
 }

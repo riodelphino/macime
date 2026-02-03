@@ -6,7 +6,7 @@ public enum Defaults {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_TEMP_DIR"], "/tmp/riodelphino.macime"]
       let path = Util.fallbackPaths(checkPathExists: false, paths: checkPaths)
-      guard let path else { return "" } // TODO: Should be an Error
+      guard let path else { return "" } // TODO: Should throw an Error
       return path
    }
 
@@ -14,7 +14,7 @@ public enum Defaults {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_SOCK_PATH"], "/tmp/riodelphino.macimed.sock"]
       let path = Util.fallbackPaths(checkPathExists: false, paths: checkPaths)
-      guard let path else { return "" } // TODO: Should be an Error
+      guard let path else { return "" } // TODO: Should throw an Error
       return path
    }
 
@@ -22,7 +22,7 @@ public enum Defaults {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_PATH"], "/usr/local/bin/macime", "/opt/homebrew/bin/macime"]
       let path = Util.fallbackPaths(checkPathExists: true, paths: checkPaths)
-      guard let path else { return "" } // TODO: Should be an Error
+      guard let path else { return "" } // TODO: Should throw an Error
       return path
    }
 }

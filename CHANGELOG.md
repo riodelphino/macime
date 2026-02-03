@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.3.4](https://github.com/riodelphino/macime/compare/v3.3.3...v3.3.4) (2026-02-04)
 
+* **chore:** Modify comments
 * **refactor:** Rename `File.swift` to `FS.swift`
 * **docs:** Add todo and issue for Chinese input method
 * **style:** Reformat all files via `swiftformat`

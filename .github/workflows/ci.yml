@@ -1,0 +1,42 @@
+name: macime CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build (release)
+        run: swift build -c release
+
+      - name: Run macime get (direct)
+        run: |
+          .build/release/macime get
+
+      - name: Start macimed
+        run: |
+          export MACIME_PATH="$PWD/.build/release/macime"
+          .build/release/macimed &
+          echo $! > macimed.pid
+          sleep 1
+
+      - name: Check macimed status
+        run: |
+          export MACIME_PATH="$PWD/.build/release/macime"
+          .build/release/macimed --status
+
+      - name: Stop macimed
+        if: always()
+        run: |
+          if [ -f macimed.pid ]; then
+            kill "$(cat macimed.pid)" || true
+          fi

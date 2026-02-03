@@ -88,6 +88,7 @@ public enum IME {
          try createTempDir()
          let prev_id = try previous(session_id: state.sessionID)
          let src = try select(id: prev_id)
+         if state.cjkRefresh { CJK.refresh() } // CJK
          return src.id
       case "list":
          var sources: [TISInputSource]
@@ -113,6 +114,7 @@ public enum IME {
             let currID = curr.id // Need to save here
             if let _newID = state.newID {
                let _ = try select(id: _newID)
+               if state.cjkRefresh { CJK.refresh() } // CJK
                // Save to /tmp
                if state.save {
                   let path = getStoredPath(state.sessionID)

@@ -10,6 +10,7 @@ A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 ## Breaking Changes
 
+* [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (testing)
 * [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
 * [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
 * [v3.0.0](https://github.com/riodelphino/macime/releases/tag/v3.0.0): Deprecate `$MACIME_TEMP_DIR` environmental value
@@ -46,6 +47,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * Output detailed get|list results as JSON
 * Faster switching by `macimed` launchd service
 * Fallback to `im-select` style command usage
+* Refresh IME for CJK input methods (Not tested)
 
 
 ## Requirements
@@ -243,9 +245,24 @@ macime list --select-capable
 | --save                    | set           | Save current IME (with `macime set` only)                           |
 | --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir)         |
 | --launchd                 | (any)         | Indicate `called via launchd` (Ommit `[ERROR] ` prefix from stderr) |
+| --cjk-refresh             | set, load     | Refresh IME for CJK input methods                                   |
 
-Some unavailable options for each sub command will be simply ignored.
+### CJK
 
+> [!Warning]
+> Sorry, not tested yet. Please test with your environment, then create an issue(reporting) or PR.
+
+`macime` can refresh IME for CJK input methods (e.g. `百度拼音`, `搜狗拼音`).
+
+via `--cjk-refresh` option:
+```bash
+# Set
+macime set com.baidu.inputmethod.BaiduPinyin --cjk-refresh
+macime set com.sogou.inputmethod.sogou --cjk-refresh
+
+# load
+macime load --cjk-refresh
+```
 
 ### macimed
 
@@ -391,11 +408,6 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 ## Issues
 
-### Not work with Chinese input methods
-
-Same with this [issue](https://github.com/daipeihust/im-select/issues/79) in `im-select`.
-The solution is in [ims-mac](https://github.com/LuSrackhall/ims-mac)
-
 ### azookey prevents macime to change IME
 
 `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
@@ -450,9 +462,12 @@ For debugging, temporary force the built `macimed` use the built `macime`:
 MACIME_PATH=/path/to/macime/.build/release/macime macimed
 ```
 
-## TODO
+## Thanks To
 
-- Adapt to this [issue](https://github.com/daipeihust/im-select/issues/79) and inspect the solution in [ims-mac](https://github.com/LuSrackhall/ims-mac) (Need your help or PR!)
+- The IME switching concept is inspired by [im-select](https://github.com/daipeihust/im-select) and [macism](https://github.com/laishulu/macism)
+- The CJK IME workaround is inspired by [ims-mac](https://github.com/LuSrackhall/ims-mac)
+- The idea that Swift can manipulate IME states was inspired by
+  [Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
 
 
 ## Changelog
@@ -465,14 +480,10 @@ See [CHANGELOG](CHANGELOG.md)
 MIT License. See [LICENSE](LICENSE)
 
 
-## Refers
-
-- [Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
-
-
 ## Related
 
 - [im-select](https://github.com/daipeihust/im-select)
 - [macism](https://github.com/laishulu/macism)
+- [ims-mac](https://github.com/LuSrackhall/ims-mac)
 - [macime.nvim](https://github.com/riodelphino/macime.nvim)
 

@@ -19,8 +19,8 @@ public enum ArgsIME {
    static let capableSubcmd = ["get", "set", "load", "save", "list"]
    static let capableOpts = [
       "get": ["--detail"],
-      "set": ["--save", "--session-id"],
-      "load": ["--session-id"],
+      "set": ["--save", "--session-id", "--cjk-refresh"],
+      "load": ["--session-id", "--cjk-refresh"],
       "save": ["--session-id"],
       "list": ["--select-capable", "--detail"],
    ]
@@ -120,6 +120,8 @@ public enum ArgsIME {
             i += 1
          case "--launchd":
             state.launchd = true
+         case "--cjk-refresh":
+            state.cjkRefresh = true
          default:
             throw AppError.cmd(.invalidOption(arg))
          }

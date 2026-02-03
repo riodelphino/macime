@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Defaults {
-   public static let version: String = "3.4.0"
+   public static let version: String = "3.5.0"
 
    public static var macimePath: String {
       let env = ProcessInfo.processInfo.environment
@@ -38,6 +38,7 @@ public struct IMECmdState {
    public var detail: Bool = false
    public var sessionID: String?
    public var launchd: Bool = false
+   public var cjkRefresh: Bool = false
    public init() {}
 }
 

@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Util {
-   // Convert JSON to String
+   /// Convert JSON to String
    public static func jsonToString(_ data: Any) throws -> String {
       let jsonData = try JSONSerialization.data(
          withJSONObject: data,
@@ -13,7 +13,7 @@ public enum Util {
       return jsonString
    }
 
-   // Measure elapsed time
+   /// Measure elapsed time
    public static func elapsed(_ block: () throws -> Void) rethrows -> Int {
       let start = DispatchTime.now()
       try block() // `block()` is the swift code block set by the caller
@@ -26,7 +26,7 @@ public enum Util {
       return color.color + text + Colors.reset.color
    }
 
-   // Return the first existing path in paths
+   /// Return the first existing path in paths
    public static func fallbackPaths(checkPathExists: Bool, paths: [String?]) -> String? {
       for path in paths {
          if checkPathExists {

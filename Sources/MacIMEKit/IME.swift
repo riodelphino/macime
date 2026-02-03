@@ -1,8 +1,8 @@
 import Foundation
 import InputMethodKit
 
-public struct IME {
-   // Lazy load
+public enum IME {
+   /// Lazy load
    private static var _sources: [TISInputSource]?
 
    public static var sources: [TISInputSource] {
@@ -11,7 +11,7 @@ public struct IME {
       }
       let arr =
          TISCreateInputSourceList(nil, false)
-         .takeRetainedValue() as NSArray
+            .takeRetainedValue() as NSArray
       let list = arr as! [TISInputSource]
       _sources = list
       return list
@@ -49,7 +49,7 @@ public struct IME {
       guard let prev_id = FS.read(path) else {
          throw AppError.ime(.previousIDNotFound)
       }
-      return prev_id  // return IME ID as String for performance
+      return prev_id // return IME ID as String for performance
    }
 
    public static func getStoredPath(_ sessionID: String?) -> String {
@@ -96,7 +96,7 @@ public struct IME {
             // list detail as json
             var outJson: [Any] = []
             for source in sources {
-               outJson.append(try source.describe(format: .json, fields: fieldList.detail))
+               try outJson.append(source.describe(format: .json, fields: fieldList.detail))
             }
             return try Util.jsonToString(outJson)
          } else {
@@ -110,7 +110,7 @@ public struct IME {
       case "set":
          // Switch to new ID
          if let curr = try current() {
-            let currID = curr.id  // Need to save here
+            let currID = curr.id // Need to save here
             if let _newID = state.newID {
                let _ = try select(id: _newID)
                // Save to /tmp

@@ -2,14 +2,13 @@ import Foundation
 
 public var state = IMEDCmdState()
 
-public struct IMED {
-
-   // Clean up the socket
+public enum IMED {
+   /// Clean up the socket
    public static func cleanupSocket() -> Bool {
       return FS.removePath(Defaults.sockPath)
    }
 
-   // Check whether macime already running
+   /// Check whether macime already running
    public static func isMacimedRunning(sockPath: String) -> Bool {
       let fd = socket(AF_UNIX, SOCK_STREAM, 0)
       guard fd >= 0 else { return false }
@@ -20,7 +19,7 @@ public struct IMED {
 
       let pathBytes = sockPath.utf8CString
       withUnsafeMutableBytes(of: &addr.sun_path) { buffer in
-         for i in 0..<min(buffer.count, pathBytes.count) {
+         for i in 0 ..< min(buffer.count, pathBytes.count) {
             buffer[i] = UInt8(pathBytes[i])
          }
       }
@@ -35,9 +34,8 @@ public struct IMED {
       return result == 0
    }
 
-   // Executes a macime command and returns its output
+   /// Executes a macime command and returns its output
    public static func execute(_ cmd: String) throws -> (String, String) {
-
       // -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
       //
       // It always returns the default `com.apple.keylayout.ABC`.
@@ -79,7 +77,7 @@ public struct IMED {
       return (stdout: stdout, stderr: stderr)
    }
 
-   // Handles a single connected client socket
+   /// Handles a single connected client socket
    public static func handleClient(_ client: Int32) {
       defer { close(client) }
 
@@ -94,13 +92,14 @@ public struct IMED {
       }
 
       let command =
-         String(bytes: buffer[0..<bytesRead], encoding: .utf8)?.trimmingCharacters(
-            in: .whitespacesAndNewlines) ?? ""
+         String(bytes: buffer[0 ..< bytesRead], encoding: .utf8)?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+         ) ?? ""
 
       Log.log("Received command: \(command)")
 
-      var stdout: String = ""
-      var stderr: String = ""
+      var stdout = ""
+      var stderr = ""
 
       do {
          let ms = try Util.elapsed {
@@ -129,9 +128,9 @@ public struct IMED {
       }
    }
 
-   // Starts the IMED daemon and begins accepting client connections.
+   /// Starts the IMED daemon and begins accepting client connections.
    public static func serve() throws {
-      let _ = self.cleanupSocket()
+      _ = cleanupSocket()
 
       let fd = socket(AF_UNIX, SOCK_STREAM, 0)
       guard fd >= 0 else {
@@ -148,7 +147,8 @@ public struct IMED {
       let pathCStr = (Defaults.sockPath as NSString).utf8String!
       strncpy(
          &addr.sun_path.0, pathCStr,
-         MemoryLayout.size(ofValue: addr.sun_path) - 1)
+         MemoryLayout.size(ofValue: addr.sun_path) - 1
+      )
 
       let bindResult = withUnsafePointer(to: &addr) { ptr in
          ptr.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockPtr in
@@ -180,5 +180,4 @@ public struct IMED {
          }
       }
    }
-
 }

@@ -1,22 +1,20 @@
 import Foundation
 
-// Arguments
+/// Arguments
 public enum ArgsCommon {
-
-   // Get command-line args as String array
+   /// Get command-line args as String array
    public static func getCmdArgs() -> [String] {
       return Array(CommandLine.arguments.dropFirst())
    }
 
-   // Split command with args to String array
+   /// Split command with args to String array
    public static func splitArgs(_ cmd: String) -> [String] {
       let trimmed = cmd.trimmingCharacters(in: .whitespacesAndNewlines)
-      let parts = trimmed.split(separator: " ").map(String.init)
-      return parts
+      return trimmed.split(separator: " ").map(String.init)
    }
 }
 
-// macime
+/// macime
 public enum ArgsIME {
    static let capableSubcmd = ["get", "set", "load", "save", "list"]
    static let capableOpts = [
@@ -36,7 +34,7 @@ public enum ArgsIME {
       return globalOpts.contains(value) || (capableOpts[subcmd]?.contains(value) ?? false)
    }
 
-   // Parse args array into CmdState
+   /// Parse args array into CmdState
    public static func parse(_ args: [String]) throws -> IMECmdState {
       var args: [String] = args
       var state = IMECmdState()
@@ -44,11 +42,11 @@ public enum ArgsIME {
       // Fallbacks to `get` or `set`
       if let first = args.first {
          let isSubcmd = capableSubcmd.contains(first)
-         if !isSubcmd {  // If not sub command
+         if !isSubcmd { // If not sub command
             if isCapableOption("get", first) {
-               args.insert("get", at: 0)  // Fallback to `get`
+               args.insert("get", at: 0) // Fallback to `get`
             } else if !isOption(first) {
-               args.insert("set", at: 0)  // Fallback to `set`
+               args.insert("set", at: 0) // Fallback to `set`
             }
          }
       } else {
@@ -67,8 +65,8 @@ public enum ArgsIME {
             }
             let second = args[1]
             guard
-               !capableSubcmd.contains(second),  // IME ID must not be a valid subcmd
-               !isOption(second)  // IME ID must not start with `-` (option-like value)
+               !capableSubcmd.contains(second), // IME ID must not be a valid subcmd
+               !isOption(second) // IME ID must not start with `-` (option-like value)
             else {
                throw AppError.cmd(.setMissingID)
             }
@@ -131,9 +129,9 @@ public enum ArgsIME {
    }
 }
 
-// macimed (daemon)
+/// macimed (daemon)
 public enum ArgsIMED {
-   // Check args
+   /// Check args
    public static func parse(_ args: [String]) throws -> IMEDCmdState {
       let state = IMEDCmdState()
       // Check the first arg
@@ -157,7 +155,7 @@ public enum ArgsIMED {
             var info: [String] = []
             info.append("sockPath   : \(state.sockPath ?? "")")
             info.append("status     : \(state.status ?? "")")
-            info.append("macimePath : \(state.macimePath ?? "")")  // Does not reflect running macimed's macimePath when executed by `MACIME_PATH=xxx macimed`
+            info.append("macimePath : \(state.macimePath ?? "")") // Does not reflect running macimed's macimePath when executed by `MACIME_PATH=xxx macimed`
             IO.out(info.joined(separator: "\n"))
             exit(0)
          default:

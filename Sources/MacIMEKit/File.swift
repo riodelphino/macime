@@ -1,6 +1,6 @@
 import Foundation
 
-// File system operations
+/// File system operations
 public enum FS {
    public static func createDir(_ dirPath: String) -> Bool {
       do {

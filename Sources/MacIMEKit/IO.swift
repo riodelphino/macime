@@ -1,12 +1,13 @@
 import Foundation
 
-// Input/Output
+/// Input/Output
 public enum IO {
-   // stdout
+   /// stdout
    public static func out(_ msg: String) {
       Swift.print(msg)
    }
-   // stderr
+
+   /// stderr
    public static func err(_ msg: String) {
       if let data = (msg + "\n").data(using: .utf8) {
          FileHandle.standardError.write(data)

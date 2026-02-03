@@ -27,7 +27,7 @@ public enum Defaults {
    }
 }
 
-// Keeps commmand line args
+/// Keeps commmand line args
 public struct IMECmdState {
    public var subcmd: String?
    public var save: Bool = false

@@ -1,24 +1,29 @@
 import InputMethodKit
 
-// Extend TISInputSource for easy access to the properties
-extension TISInputSource {
-   public func getProperty(_ key: CFString) -> AnyObject? {
+/// Extend TISInputSource for easy access to the properties
+public extension TISInputSource {
+   func getProperty(_ key: CFString) -> AnyObject? {
       guard let cfType = TISGetInputSourceProperty(self, key) else { return nil }
       return Unmanaged<AnyObject>.fromOpaque(cfType).takeUnretainedValue()
    }
-   public var id: String {
+
+   var id: String {
       getProperty(kTISPropertyInputSourceID) as! String
    }
-   public var localizedName: String {
+
+   var localizedName: String {
       getProperty(kTISPropertyLocalizedName) as! String
    }
-   public var isSelectCapable: Bool {
+
+   var isSelectCapable: Bool {
       getProperty(kTISPropertyInputSourceIsSelectCapable) as! Bool
    }
-   public var isSelected: Bool {
+
+   var isSelected: Bool {
       getProperty(kTISPropertyInputSourceIsSelected) as! Bool
    }
-   public var sourceLanguages: [String] {
+
+   var sourceLanguages: [String] {
       getProperty(kTISPropertyInputSourceLanguages) as? [String] ?? []
    }
 
@@ -32,13 +37,14 @@ extension TISInputSource {
       default: return ""
       }
    }
-   // Return IME fields as specific format
-   public func describe(format: OutFormat, fields: [String]) throws -> Any {
+
+   /// Return IME fields as specific format
+   func describe(format: OutFormat, fields: [String]) throws -> Any {
       switch format {
       case .text:
          var lines: [String] = []
          for field in fields {
-            lines.append(try String(describing: value(of: field)))
+            try lines.append(String(describing: value(of: field)))
          }
          return lines.joined(separator: "\n")
       case .json:
@@ -49,5 +55,4 @@ extension TISInputSource {
          return json
       }
    }
-
 }

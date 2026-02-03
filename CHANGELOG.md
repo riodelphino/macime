@@ -1,6 +1,7 @@
 # CHANGELOG
-## [3.3.4](https://github.com/riodelphino/macime/compare/v3.3.3...v3.3.4) (2026-02-03)
+## [3.3.4](https://github.com/riodelphino/macime/compare/v3.3.3...v3.3.4) (2026-02-04)
 
+* **style:** Reformat all files via `swiftformat`
 * **style:** Add `.swiftformat`
 * **fix:** Avoid `fallbackPaths()` error in `macimed`
 * **chore:** Add `ConfigError` (but unused now)

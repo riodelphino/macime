@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
    name: "macime",
    platforms: [
-      .macOS(.v10_13)
+      .macOS(.v10_13),
    ],
    products: [
       .executable(name: "macime", targets: ["macime"]),
@@ -31,7 +31,7 @@ let package = Package(
       .executableTarget(
          name: "macimed",
          dependencies: ["MacIMEKit"],
-         path: "Sources/macimed",
+         path: "Sources/macimed"
       ),
    ]
 )

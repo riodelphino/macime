@@ -10,7 +10,7 @@ A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 ## Breaking Changes
 
-* [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (testing)
+* [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (Experimental and untested)
 * [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
 * [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
 * [v3.0.0](https://github.com/riodelphino/macime/releases/tag/v3.0.0): Deprecate `$MACIME_TEMP_DIR` environmental value
@@ -47,7 +47,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * Output detailed get|list results as JSON
 * Faster switching by `macimed` launchd service
 * Fallback to `im-select` style command usage
-* Refresh IME for CJK input methods (Not tested)
+* Refresh IME for CJK input methods (Experimental and untested)
 
 
 ## Requirements
@@ -244,13 +244,13 @@ macime list --select-capable
 | --select-capable          | get, list     | Show only selectable IME                                            |
 | --save                    | set           | Save current IME (with `macime set` only)                           |
 | --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir)         |
+| --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental and untested)       |
 | --launchd                 | (any)         | Indicate `called via launchd` (Ommit `[ERROR] ` prefix from stderr) |
-| --cjk-refresh             | set, load     | Refresh IME for CJK input methods                                   |
 
-### CJK
+### CJK refreshing
 
 > [!Warning]
-> Sorry, not tested yet. Please test with your environment, then create an issue(reporting) or PR.
+> Experimental and untested. Please test in your environment, then report any issues or submit a PR.
 
 `macime` can refresh IME for CJK input methods (e.g. `百度拼音`, `搜狗拼音`).
 

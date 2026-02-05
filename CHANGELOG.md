@@ -1,6 +1,7 @@
 # CHANGELOG
-## [3.5.1](https://github.com/riodelphino/macime/compare/v3.5.0...v3.5.1) (2026-02-05)
+## [3.6.0](https://github.com/riodelphino/macime/compare/v3.5.0...v3.6.0) (2026-02-06)
 
+* **build** Upgrade macOS version (10.13 -> 10.15) to enable `.withoutEscapingSlashes`
 * **docs:** Update help messages (Add `macimed` Options and CJK option)
 * **refactor:** Split help message to `Help.swift`
 * **docs:** Refine `--cjk-refresh` feature description

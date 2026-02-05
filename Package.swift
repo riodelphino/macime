@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
    name: "macime",
    platforms: [
-      .macOS(.v10_13),
+      .macOS(.v10_15),
    ],
    products: [
       .executable(name: "macime", targets: ["macime"]),

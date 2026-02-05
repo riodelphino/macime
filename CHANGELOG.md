@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.5.1](https://github.com/riodelphino/macime/compare/v3.5.0...v3.5.1) (2026-02-05)
 
+* **docs:** Update help messages (Add `macimed` Options and CJK option)
 * **refactor:** Split help message to `Help.swift`
 * **docs:** Refine `--cjk-refresh` feature description
 

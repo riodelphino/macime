@@ -65,6 +65,9 @@ public enum Help {
       --session-id <session_id>
          Specify the save filename
 
+      --cjk-refresh 
+         Refresh IME for CJK input methods
+
       --launchd
          Indicate the command is called via launchd
    """
@@ -87,6 +90,10 @@ public enum Help {
       --version, -v
          Show version
 
+      --info, -i
+         Show info
 
+      --status, -s
+         Show status
    """
 }

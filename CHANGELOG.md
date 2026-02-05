@@ -1,6 +1,7 @@
 # CHANGELOG
-## [3.5.1](https://github.com/riodelphino/macime/compare/v3.5.0...v3.5.1) (2026-02-04)
+## [3.5.1](https://github.com/riodelphino/macime/compare/v3.5.0...v3.5.1) (2026-02-05)
 
+* **refactor:** Split help message to `Help.swift`
 * **docs:** Refine `--cjk-refresh` feature description
 
 ## [3.5.0](https://github.com/riodelphino/macime/compare/v3.4.0...v3.5.0) (2026-02-04)

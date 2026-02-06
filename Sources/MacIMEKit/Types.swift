@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Defaults {
-   public static let version: String = "3.5.0"
+   public static let version: String = "3.6.0"
 
    public static var macimePath: String {
       let env = ProcessInfo.processInfo.environment
@@ -29,7 +29,7 @@ public enum Defaults {
    }
 }
 
-/// Keeps commmand line args
+/// [macime] Keep commmand line args
 public struct IMECmdState {
    public var subcmd: String?
    public var save: Bool = false
@@ -42,6 +42,7 @@ public struct IMECmdState {
    public init() {}
 }
 
+/// [macimed] Keep command line args
 public struct IMEDCmdState {
    public var macimePath: String?
    public var sockPath: String?
@@ -53,6 +54,11 @@ public struct IMEDCmdState {
       sockPath = Defaults.sockPath
       status = IMED.isMacimedRunning(sockPath: Defaults.sockPath) ? "running" : "stopped"
    }
+}
+
+public struct IMEDCommand {
+   public let method: String?
+   public let args: [String]?
 }
 
 public enum OutFormat {

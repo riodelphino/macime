@@ -10,6 +10,10 @@ A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 ## Breaking Changes
 
+* [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):
+    * Deprecate `--status` `--sock-path` `--macime-path` options from `macimed` (They don't reflect environmental variable)
+    * Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon sockpath`)
+    * Upgrade macOS version (10.13 -> 10.15)
 * [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (Experimental and untested)
 * [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
 * [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
@@ -52,7 +56,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 
 ## Requirements
 
-* macOS (>=10.13)
+* macOS (>=10.15)
 
 
 ## Install
@@ -286,30 +290,8 @@ Show the `macimed` help:
 macimed --help
 macimed -h
 ```
-Show the `macimed` status (running or stopped):
-```bash
-macimed --status
-macimed -s
-```
-Output:
-- `running` (exitcode=0)
-- `stopped` (exitcode=1)
 
-Show the `macimed` runtime info:
-```bash
-macimed --info
-macimed -i
-```
-Output:
-```txt
-sockPath   : /path/to/sock
-status     : running
-macimePath : /path/to/macime
-```
-> [!Note]
-> `macimePath` is usually different from the `MACIME_PATH` in Homebrew service.
-
-#### Socket Path
+#### Default Socket Path
 
 `macimed` listens to:
 * /tmp/riodelphino.macime.sock
@@ -318,15 +300,40 @@ macimePath : /path/to/macime
 
 `macimed` recieves commands via socket as plain text.
 
-(e.g.)
+Commands compliant to `macime`:
 ```bash
-set com.apple.keylayout.ABC
-set com.apple.keylayout.ABC --save
-set com.apple.keylayout.ABC --save --session-id <session-id>
-load
-load --session-id <session-id>
+ime set com.apple.keylayout.ABC
+ime set com.apple.keylayout.ABC --save
+ime set com.apple.keylayout.ABC --save --session-id <session-id>
+ime load
+ime load --session-id <session-id>
 ```
-When `macimed` recieves a command like above, it executes `macime` command with these args immediately.
+
+When the socket recieves a command like above, `macimed` executes `macime` command with these args immediately.
+
+Commands for `macimed`:
+```bash
+# Get all informations of `macimed`
+daemon info
+
+# Get
+daemon sockpath # Get sock path
+daemon macimepath # Get macime path
+
+# Set
+daemon sockpath /tmp/riodelphino.macime.sock # Set sock path
+daemon macimepath /Users/yourname/project/macime/.build/release/macime # Set macime path
+```
+
+To test these commands via `macime.nvim` (Ensure `macimed` is running):
+(e.g.)
+```lua
+require("macime").send("ime set com.apple.keylayout.ABC")
+require("macime").send("ime get", function(ok, data) if ok then print(data) end end)
+require("macime").send("daemon sockPath /tmp/path/to/another.sock")
+require("macime").send("daemon info", function(ok, data) if ok then print(data) end end)
+require("macime").send("daemon sockPath", function(ok, data) if ok then print(data) end end)
+```
 
 
 #### Temporary directory used by macimed to stores IME IDs

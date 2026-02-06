@@ -2,10 +2,10 @@ import Foundation
 
 public enum Util {
    /// Convert JSON to String
-   public static func jsonToString(_ data: Any) throws -> String {
+   public static func jsonToString(_ data: Any, options: JSONSerialization.WritingOptions) throws -> String {
       let jsonData = try JSONSerialization.data(
          withJSONObject: data,
-         options: .prettyPrinted
+         options: options
       )
       guard let jsonString = String(data: jsonData, encoding: .utf8) else {
          throw AppError.util(.invalidJsonFormat)
@@ -40,5 +40,20 @@ public enum Util {
          }
       }
       return nil
+   }
+
+   /// Check if executable or not
+   public static func isExecutable(_ path: String, args: [String]?) -> Bool {
+      let proc = Process()
+      proc.executableURL = URL(fileURLWithPath: path)
+      proc.arguments = args ?? []
+
+      do {
+         try proc.run()
+         proc.waitUntilExit()
+         return proc.terminationStatus == 0
+      } catch {
+         return false
+      }
    }
 }

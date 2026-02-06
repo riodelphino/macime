@@ -89,11 +89,5 @@ public enum Help {
 
       --version, -v
          Show version
-
-      --info, -i
-         Show info
-
-      --status, -s
-         Show status
    """
 }

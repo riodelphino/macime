@@ -99,7 +99,7 @@ public enum IME {
             for source in sources {
                try outJson.append(source.describe(format: .json, fields: fieldList.detail))
             }
-            return try Util.jsonToString(outJson)
+            return try Util.jsonToString(outJson, options: [.prettyPrinted])
          } else {
             // list IDs as string
             var ids: [String] = []
@@ -131,7 +131,7 @@ public enum IME {
             if state.detail {
                // curr IME detail as JSON
                let outJson: Any = try curr.describe(format: .json, fields: fieldList.detail)
-               return try Util.jsonToString(outJson)
+               return try Util.jsonToString(outJson, options: [.prettyPrinted])
             } else {
                // curr IME id as string
                return curr.id

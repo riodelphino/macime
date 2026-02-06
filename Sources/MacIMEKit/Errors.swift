@@ -81,16 +81,37 @@ public enum UtilError: Error {
 public enum IMEDError: Error {
    case dataNotRecieved
    case macimeNotFound(String)
+   case sockPathNotFound(String)
    case macimeReturnsError(String)
+   case invalidDaemonMethod(String)
+   case invalidDaemonSubcmd(String)
+   case invalidGetTarget(String)
+   case invalidSetTarget(String)
+   case invalidPath(String)
+   case notExecutable(String)
 
    public var message: String {
       switch self {
-      case let .macimeNotFound(path):
-         return "macime executable not found: \(path)"
       case .dataNotRecieved:
          return "Data not recieved."
+      case let .macimeNotFound(path):
+         return "macime executable not found: \(path)"
+      case let .sockPathNotFound(path):
+         return "sock-path not found: \(path)"
       case let .macimeReturnsError(err):
          return "`macime` returns Error: \(err)"
+      case let .invalidDaemonMethod(method):
+         return "Invalid daemon method: \(method)"
+      case let .invalidDaemonSubcmd(subcmd):
+         return "Invalid daemon sub command: \(subcmd)"
+      case let .invalidGetTarget(target):
+         return "Invalid `get` target: \(target)"
+      case let .invalidSetTarget(target):
+         return "Invalid `set` target: \(target)"
+      case let .invalidPath(path):
+         return "Invalid path: \(path)"
+      case let .notExecutable(path):
+         return "Not executable: \(path)"
       }
    }
 }

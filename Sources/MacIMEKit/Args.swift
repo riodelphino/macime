@@ -145,21 +145,6 @@ public enum ArgsIMED {
          case "--help", "-h":
             IO.out(Help.macimed)
             exit(0)
-         case "--status", "-s":
-            if state.status == "running" {
-               IO.out("running")
-               exit(0)
-            } else {
-               IO.out("stopped")
-               exit(1)
-            }
-         case "--info", "-i":
-            var info: [String] = []
-            info.append("sockPath   : \(state.sockPath ?? "")")
-            info.append("status     : \(state.status ?? "")")
-            info.append("macimePath : \(state.macimePath ?? "")") // Does not reflect running macimed's macimePath when executed by `MACIME_PATH=xxx macimed`
-            IO.out(info.joined(separator: "\n"))
-            exit(0)
          default:
             IO.err("Unknown Option: \(arg)")
             exit(1)

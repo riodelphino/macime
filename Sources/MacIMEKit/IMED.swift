@@ -50,30 +50,108 @@ public enum IMED {
       // return response
       //
 
-      let args = ArgsCommon.splitArgs(cmd)
+      var args = ArgsCommon.splitArgs(cmd)
+      guard args.count > 0 else {
+         throw AppError.imed(.invalidDaemonMethod("nil"))
+      }
+      var method = args.removeFirst()
 
       let process = Process()
       let outPipe = Pipe()
       let errPipe = Pipe()
 
-      if let macimePath = state.macimePath {
-         process.executableURL = URL(fileURLWithPath: macimePath)
-      }
-      process.arguments = args
-      process.standardOutput = outPipe
-      process.standardError = errPipe
+      var stdout = ""
+      var stderr = "" // if stderr != "" -> error
 
-      try process.run()
-      process.waitUntilExit()
+      // Backward compatibility (`macime.nvim` < v3.0.0) // TODO: Remove this in later version
+      switch method {
+      case "ime", "daemon":
+         break
+      default: // set, get, load, e.t.c. -> Fallback to `ime` method
+         let subcmd = method
+         method = "ime"
+         args.insert(subcmd, at: 0)
+      }
 
-      let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
-      let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
-      guard let stdout = String(data: outData, encoding: .utf8) else {
-         throw AppError.imed(.dataNotRecieved)
+      switch method {
+      case "ime":
+         if let macimePath = state.macimePath {
+            process.executableURL = URL(fileURLWithPath: macimePath)
+         }
+         process.arguments = args
+         process.standardOutput = outPipe
+         process.standardError = errPipe
+
+         try process.run()
+         process.waitUntilExit()
+
+         let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
+         let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
+         guard
+            let out = String(data: outData, encoding: .utf8),
+            let err = String(data: errData, encoding: .utf8)
+         else {
+            throw AppError.imed(.dataNotRecieved)
+         }
+         stdout = out
+         stderr = err
+
+      case "daemon":
+         let subcmd = args.removeFirst()
+         switch subcmd {
+         case "info":
+            let json: [String: Any] = ["status": state.status ?? "", "sock-path": state.sockPath ?? "", "macime-path": state.macimePath ?? ""]
+            stdout = try Util.jsonToString(json, options: [.withoutEscapingSlashes])
+         case "get":
+            guard args.count > 0 else {
+               throw AppError.imed(.invalidGetTarget("nil"))
+            }
+            let target = args.removeFirst()
+            switch target {
+            case "sock-path":
+               stdout = state.sockPath ?? ""
+            case "macime-path":
+               stdout = state.macimePath ?? ""
+            default:
+               throw AppError.imed(.invalidGetTarget(target))
+            }
+         case "set":
+            guard args.count > 0 else {
+               throw AppError.imed(.invalidSetTarget("nil"))
+            }
+            let target = args.removeFirst()
+            switch target {
+            case "sock-path":
+               guard args.count > 0 else {
+                  throw AppError.imed(.invalidPath("nil"))
+               }
+               let sockPath = args.removeFirst()
+               state.sockPath = sockPath
+               stdout = "sock-path set to: \(sockPath)"
+            case "macime-path":
+               guard args.count > 0 else {
+                  throw AppError.imed(.invalidPath("nil"))
+               }
+               let macimePath = args.removeFirst()
+               guard FS.pathExists(macimePath) else {
+                  throw AppError.imed(.macimeNotFound(macimePath))
+               }
+               guard Util.isExecutable(macimePath, args: ["--version"]) else {
+                  throw AppError.imed(.notExecutable(macimePath))
+               }
+               state.macimePath = macimePath
+               stdout = "macime-path set to: \(macimePath)"
+            default:
+               throw AppError.imed(.invalidSetTarget(target))
+            }
+         default:
+            throw AppError.imed(.invalidDaemonSubcmd(subcmd))
+         }
+
+      default:
+         throw AppError.imed(.invalidDaemonMethod(method))
       }
-      guard let stderr = String(data: errData, encoding: .utf8) else {
-         throw AppError.imed(.dataNotRecieved)
-      }
+
       return (stdout: stdout, stderr: stderr)
    }
 
@@ -96,7 +174,7 @@ public enum IMED {
             in: .whitespacesAndNewlines
          ) ?? ""
 
-      Log.log("Received command: \(command)")
+      Log.log("Recieved command: \(command)")
 
       var stdout = ""
       var stderr = ""
@@ -104,22 +182,22 @@ public enum IMED {
       do {
          let ms = try Util.elapsed {
             (stdout, stderr) = try self.execute(command)
+
+            stdout = stdout.trimmingCharacters(in: .newlines)
+            stderr = stderr.trimmingCharacters(in: .newlines)
+
+            if stderr.isEmpty {
+               stdout = stdout.isEmpty ? "OK" : stdout
+               write(client, stdout, strlen(stdout)) // Write stdout
+               Log.log("Client response : \(stdout)")
+            } else {
+               write(client, stderr, strlen(stderr)) // Write stderr
+               Log.log("Client error    : \(stderr)")
+            }
+
+            shutdown(client, SHUT_WR)
          }
-
-         stdout = stdout.trimmingCharacters(in: .newlines)
-         stderr = stderr.trimmingCharacters(in: .newlines)
-
-         stdout = (stderr.isEmpty && stdout.isEmpty) ? "OK" : stdout
-         Log.log("Client response : \(stdout)")
-
-         if !stderr.isEmpty {
-            Log.log("Client error    : \(stderr)")
-         }
-
          Log.log("Elapsed time    : \(ms)ms")
-
-         // let _ = write(client, stdout, stdout.count)  // Meaningless: The client(macime) are not listening any socket.
-         shutdown(client, SHUT_WR)
          return
       } catch let e as AppError {
          Log.log("Executing error : \(e.message)")
@@ -144,7 +222,8 @@ public enum IMED {
       var addr = sockaddr_un()
       addr.sun_family = sa_family_t(AF_UNIX)
 
-      let pathCStr = (Defaults.sockPath as NSString).utf8String!
+      // let pathCStr = (Defaults.sockPath as NSString).utf8String! -- DEBUG: REMOVE
+      let pathCStr = ((state.sockPath ?? "") as NSString).utf8String!
       strncpy(
          &addr.sun_path.0, pathCStr,
          MemoryLayout.size(ofValue: addr.sun_path) - 1
@@ -160,7 +239,8 @@ public enum IMED {
          throw NSError(domain: "bind", code: -1, userInfo: ["msg": "bind() failed"])
       }
 
-      Log.log("Socket bound to \(Defaults.sockPath)")
+      // Log.log("Socket bound to \(Defaults.sockPath)") -- DEBUG: REMOVE
+      Log.log("Socket bound to \(state.sockPath ?? "")")
 
       guard listen(fd, 5) == 0 else {
          throw NSError(domain: "listen", code: -1, userInfo: ["msg": "listen() failed"])

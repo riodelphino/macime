@@ -18,7 +18,7 @@ public enum Help {
       Set IME only (no save)
          macime set <IME_id>
       
-      Set IME while saving current IME to `DEFAULT` file in temp dir
+      Set IME while saving current IME to `GLOBAL` file in temp dir
          macime set <IME_id> --save
       
       Set IME while saving current IME to `<session_id>` file in temp dir
@@ -27,7 +27,7 @@ public enum Help {
    Save IME
       macime save [--session-id <session_id>]
 
-      Save current IME to `DEFAULT` file in temp dir
+      Save current IME to `GLOBAL` file in temp dir
          macime save
 
       Save current IME to `<session_id>` file in temp dir
@@ -36,7 +36,7 @@ public enum Help {
    Load (restore) IME
       macime load [--session-id <session_id>]
 
-      Load previouse IME from `DEFAULT` file in temp dir
+      Load previouse IME from `GLOBAL` file in temp dir
          macime load
 
       Load previous IME from `<session_id>` file in temp dir

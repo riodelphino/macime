@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.6.0](https://github.com/riodelphino/macime/compare/v3.5.0...v3.6.0) (2026-02-07)
 
+* **chore:** Change global saving path for previous IME (from `DEFAULT` -> `GLOBAL`)
 * **fix!** BREAKING CHANGE! Deprecate `--launchd` option and disable `[ERROR]` (Doesn't work in some cases)
 * **feat!:** BREAKING CHANGE! Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon sock-path`)
 * **build** Upgrade macOS version (10.13 -> 10.15) to enable `.withoutEscapingSlashes`

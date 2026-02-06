@@ -190,9 +190,9 @@ macime get --detail
 # Set IME
 macime set com.apple.keylayout.ABC
 
-# Set IME while saving current IME as `DEFAULT`
+# Set IME while saving current IME as `GLOBAL`
 macime set com.apple.keylayout.ABC --save
-# The IME ID is saved at `/tmp/riodelphino.macime/prev/DEFAULT`
+# The IME ID is saved at `/tmp/riodelphino.macime/prev/GLOBAL`
 
 # Set IME while saving current IME as <session_id>
 macime set com.apple.keylayout.ABC --save --session-id nvim-1001
@@ -207,9 +207,9 @@ macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 
 #### Save IME
 ```bash
-# Save current IME to `DEFAULT`
+# Save current IME to `GLOBAL`
 macime save
-# Current IME ID is set to `/tmp/riodelphino.macime/prev/DEFAULT`
+# Current IME ID is set to `/tmp/riodelphino.macime/prev/GLOBAL`
 
 # Save current IME to `<session_id>`
 macime save --session-id nvim-1001
@@ -218,9 +218,9 @@ macime save --session-id nvim-1001
 
 #### Load IME
 ```bash
-# Load IME from `DEFAULT`
+# Load IME from `GLOBAL`
 macime load
-# Reads previous IME ID from `/tmp/riodelphino.macime/prev/DEFAULT`, then set it.
+# Reads previous IME ID from `/tmp/riodelphino.macime/prev/GLOBAL`, then set it.
 
 # Load IME from `<session_id>`
 macime load --session-id nvim-1001
@@ -341,11 +341,11 @@ require("macime").send("daemon sockPath", function(ok, data) if ok then print(da
 Previous IME IDs are stored in the following paths.
 
 When running `macimed` manually (socket):
-* /tmp/riodelphino.macime/DEFAULT
+* /tmp/riodelphino.macime/GLOBAL
 * /tmp/riodelphino.macime/<session_id>
 
 When running via `Homebrew service`:
-* /private/tmp/riodelphino.macime/DEFAULT
+* /private/tmp/riodelphino.macime/GLOBAL
 * /private/tmp/riodelphino.macime/<session_id>
 
 These files are deleted when you shutdown macOS.

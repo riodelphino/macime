@@ -53,7 +53,7 @@ public enum IME {
    }
 
    public static func getStoredPath(_ sessionID: String?) -> String {
-      let basename = sessionID ?? "DEFAULT"
+      let basename = sessionID ?? "GLOBAL"
       return Defaults.tempDir + "/" + basename
    }
 

@@ -37,7 +37,6 @@ public struct IMECmdState {
    public var selectCapable: Bool = false
    public var detail: Bool = false
    public var sessionID: String?
-   public var launchd: Bool = false
    public var cjkRefresh: Bool = false
    public init() {}
 }

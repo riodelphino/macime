@@ -12,11 +12,8 @@ do {
    }
    exit(0)
 } catch let e as AppError {
-   IO.out("state.launchd: " + String(state.launchd)) // DEBUG:
-   let prefix = state.launchd == true ? "" : Util.colored(.red, "[ERROR] ")
-   IO.err(prefix + e.message)
+   IO.err(e.message)
 } catch {
-   let prefix = state.launchd == true ? "" : Util.colored(.red, "[ERROR] ")
-   IO.err(prefix + "Unexpected error\n")
+   IO.err("Unexpected error\n")
    exit(1)
 }

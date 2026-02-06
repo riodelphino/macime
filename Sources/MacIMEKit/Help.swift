@@ -10,10 +10,10 @@ public enum Help {
       list    List IMEs
 
    Get current IME
-      macime get [--detail] [--launchd]
+      macime get [--detail]
 
    Set IME 
-      macime set <IME_id> [--save] [--session-id <session_id>] [--launchd]
+      macime set <IME_id> [--save] [--session-id <session_id>]
 
       Set IME only (no save)
          macime set <IME_id>
@@ -25,7 +25,7 @@ public enum Help {
          macime set <IME_id> --save --session-id <session_id>
 
    Save IME
-      macime save [--session-id <session_id>] [--launchd]
+      macime save [--session-id <session_id>]
 
       Save current IME to `DEFAULT` file in temp dir
          macime save
@@ -34,7 +34,7 @@ public enum Help {
          macime save --session-id <session_id>
 
    Load (restore) IME
-      macime load [--session-id <session_id>] [--launchd]
+      macime load [--session-id <session_id>]
 
       Load previouse IME from `DEFAULT` file in temp dir
          macime load
@@ -43,7 +43,7 @@ public enum Help {
          macime load --session-id <session_id>
 
    List IMEs
-      macime list [--detail] [--select-capable] [--launchd]
+      macime list [--detail] [--select-capable]
 
 
    OPTIONS:
@@ -67,14 +67,11 @@ public enum Help {
 
       --cjk-refresh 
          Refresh IME for CJK input methods
-
-      --launchd
-         Indicate the command is called via launchd
    """
    public static let macimed = """
    Usage: macimed [options]
 
-   A daemon tool that wraps `macime` command for launchd service.
+   A daemon tool that wraps `macime` command.
 
    To start service via Homebrew (Faster):
       brew services start macime 

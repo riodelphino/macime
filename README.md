@@ -12,6 +12,7 @@ A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
 * [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):
     * Deprecate `--status` `--sock-path` `--macime-path` options from `macimed` (They don't reflect environmental variable)
+    * Deprecate `--launchd` option from `macime` (Doesn't work in some cases)
     * Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon sockpath`)
     * Upgrade macOS version (10.13 -> 10.15)
 * [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (Experimental and untested)
@@ -249,7 +250,6 @@ macime list --select-capable
 | --save                    | set           | Save current IME (with `macime set` only)                           |
 | --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir)         |
 | --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental and untested)       |
-| --launchd                 | (any)         | Indicate `called via launchd` (Ommit `[ERROR] ` prefix from stderr) |
 
 ### CJK refreshing
 

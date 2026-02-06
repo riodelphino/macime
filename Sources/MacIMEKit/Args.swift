@@ -24,7 +24,7 @@ public enum ArgsIME {
       "save": ["--session-id"],
       "list": ["--select-capable", "--detail"],
    ]
-   static let globalOpts = ["--launchd"]
+   static let globalOpts: [String] = ["--launchd"] // TODO: (Backward compatibility) Remove "--launchd" in later version
 
    public static func isOption(_ value: String) -> Bool {
       return value.hasPrefix("-")
@@ -118,8 +118,8 @@ public enum ArgsIME {
             }
             state.sessionID = next
             i += 1
-         case "--launchd":
-            state.launchd = true
+         case "--launchd": // TODO: (Backward compatibility) Remove in later version
+            break // Just pass through
          case "--cjk-refresh":
             state.cjkRefresh = true
          default:

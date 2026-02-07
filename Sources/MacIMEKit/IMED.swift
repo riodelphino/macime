@@ -223,7 +223,6 @@ public enum IMED {
       var addr = sockaddr_un()
       addr.sun_family = sa_family_t(AF_UNIX)
 
-      // let pathCStr = (Defaults.sockPath as NSString).utf8String! -- DEBUG: REMOVE
       let pathCStr = ((state.sockPath ?? "") as NSString).utf8String!
       strncpy(
          &addr.sun_path.0, pathCStr,
@@ -240,7 +239,6 @@ public enum IMED {
          throw NSError(domain: "bind", code: -1, userInfo: ["msg": "bind() failed"])
       }
 
-      // Log.log("Socket bound to \(Defaults.sockPath)") -- DEBUG: REMOVE
       Log.log("Socket bound to \(state.sockPath ?? "")")
 
       guard listen(fd, 5) == 0 else {

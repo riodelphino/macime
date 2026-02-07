@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [3.6.0](https://github.com/riodelphino/macime/compare/v3.5.0...v3.6.0) (2026-02-07)
 
+* **refactor:** Remove trash comments
 * **fix:** Show err if `--launchd` option is set
 * **fix:** Disabled `daemon set` command (It requires fundamental improvements)
 * **chore:** Change global saving path for previous IME (from `DEFAULT` -> `GLOBAL`)

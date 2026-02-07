@@ -13,7 +13,7 @@ A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 * [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):
     * Deprecate `--status` `--sock-path` `--macime-path` options from `macimed` (They don't reflect environmental variable)
     * Deprecate `--launchd` option from `macime` (Doesn't work in some cases)
-    * Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon sockpath`)
+    * Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon get sock-path`)
     * Upgrade macOS version (10.13 -> 10.15)
 * [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (Experimental and untested)
 * [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
@@ -317,22 +317,20 @@ Commands for `macimed`:
 daemon info
 
 # Get
-daemon sockpath # Get sock path
-daemon macimepath # Get macime path
-
-# Set
-daemon sockpath /tmp/riodelphino.macime.sock # Set sock path
-daemon macimepath /Users/yourname/project/macime/.build/release/macime # Set macime path
+daemon get sock-path # Get sock path
+daemon get macime-path # Get macime path
 ```
+> [!Note]
+> Currently `daemon set` is disabled since it requires restarting server and much more modifications.
+
 
 To test these commands via `macime.nvim` (Ensure `macimed` is running):
 (e.g.)
 ```lua
 require("macime").send("ime set com.apple.keylayout.ABC")
 require("macime").send("ime get", function(ok, data) if ok then print(data) end end)
-require("macime").send("daemon sockPath /tmp/path/to/another.sock")
 require("macime").send("daemon info", function(ok, data) if ok then print(data) end end)
-require("macime").send("daemon sockPath", function(ok, data) if ok then print(data) end end)
+require("macime").send("daemon get sock-path", function(ok, data) if ok then print(data) end end)
 ```
 
 

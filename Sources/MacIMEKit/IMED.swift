@@ -115,35 +115,36 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }
-         case "set":
-            guard args.count > 0 else {
-               throw AppError.imed(.invalidSetTarget("nil"))
-            }
-            let target = args.removeFirst()
-            switch target {
-            case "sock-path":
-               guard args.count > 0 else {
-                  throw AppError.imed(.invalidPath("nil"))
-               }
-               let sockPath = args.removeFirst()
-               state.sockPath = sockPath
-               stdout = "sock-path set to: \(sockPath)"
-            case "macime-path":
-               guard args.count > 0 else {
-                  throw AppError.imed(.invalidPath("nil"))
-               }
-               let macimePath = args.removeFirst()
-               guard FS.pathExists(macimePath) else {
-                  throw AppError.imed(.macimeNotFound(macimePath))
-               }
-               guard Util.isExecutable(macimePath, args: ["--version"]) else {
-                  throw AppError.imed(.notExecutable(macimePath))
-               }
-               state.macimePath = macimePath
-               stdout = "macime-path set to: \(macimePath)"
-            default:
-               throw AppError.imed(.invalidSetTarget(target))
-            }
+         // NOTE: Currently disabled (Since `set` requires restarting server and much more modifications.)
+         // case "set":
+         //    guard args.count > 0 else {
+         //       throw AppError.imed(.invalidSetTarget("nil"))
+         //    }
+         //    let target = args.removeFirst()
+         //    switch target {
+         //    case "sock-path":
+         //       guard args.count > 0 else {
+         //          throw AppError.imed(.invalidPath("nil"))
+         //       }
+         //       let sockPath = args.removeFirst()
+         //       state.sockPath = sockPath
+         //       stdout = "sock-path set to: \(sockPath)"
+         //    case "macime-path":
+         //       guard args.count > 0 else {
+         //          throw AppError.imed(.invalidPath("nil"))
+         //       }
+         //       let macimePath = args.removeFirst()
+         //       guard FS.pathExists(macimePath) else {
+         //          throw AppError.imed(.macimeNotFound(macimePath))
+         //       }
+         //       guard Util.isExecutable(macimePath, args: ["--version"]) else {
+         //          throw AppError.imed(.notExecutable(macimePath))
+         //       }
+         //       state.macimePath = macimePath
+         //       stdout = "macime-path set to: \(macimePath)"
+         //    default:
+         //       throw AppError.imed(.invalidSetTarget(target))
+         //    }
          default:
             throw AppError.imed(.invalidDaemonSubcmd(subcmd))
          }

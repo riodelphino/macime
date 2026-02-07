@@ -5,7 +5,7 @@ public var state = IMEDCmdState()
 public enum IMED {
    /// Clean up the socket
    public static func cleanupSocket() -> Bool {
-      return FS.removePath(Defaults.sockPath)
+      return FS.removePath(state.sockPath ?? "")
    }
 
    /// Check whether macime already running

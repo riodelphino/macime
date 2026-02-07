@@ -363,10 +363,14 @@ With `Apple Silicon`:
 * /opt/homebrew/var/log/riodelphino/macimed.out.log
 * /opt/homebrew/var/log/riodelphino.macimed.err.log
 
+To check the log paths, run `:checkhealth macime`.
+
 ### plist path via Homebrew
 
 plist path:
 * ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
+
+To check the plist paths, run `:checkhealth macime`.
 
 ### macime Executable Path
 

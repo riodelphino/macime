@@ -1,9 +1,10 @@
 # macime
 
+![GitHub tag](https://img.shields.io/github/v/tag/riodelphino/macime?style=for-the-badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Swift](https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white)](https://www.swift.org/)
 [![Easy Install](https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge)](#installation)
-[![Platform](https://img.shields.io/badge/Platform-macOS%2010.13%2B-blue?style=for-the-badge)](#)
+[![Platform](https://img.shields.io/badge/Platform-macOS%2010.15%2B-blue?style=for-the-badge)](#)
 
 A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
 
@@ -450,6 +451,16 @@ brew tap riodelphino/tap
 brew install macime
 ```
 This cleans up the corrupted tap cache and performs a fresh installation.
+
+## TODO
+
+### macime
+
+- [ ] Test CJK input methods
+
+### macimed
+
+- [ ] Make the server restartable (for `daemon set sock-path xxx`)
 
 
 ## Contribution

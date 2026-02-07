@@ -115,7 +115,7 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }
-         // NOTE: Currently disabled (Since `set` requires restarting server and much more modifications.)
+         // NOTE: Currently disabled (Since `set` requires restarting server and funcamental improvements.)
          // case "set":
          //    guard args.count > 0 else {
          //       throw AppError.imed(.invalidSetTarget("nil"))

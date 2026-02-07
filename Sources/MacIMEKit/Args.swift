@@ -119,7 +119,7 @@ public enum ArgsIME {
             state.sessionID = next
             i += 1
          case "--launchd": // TODO: (Backward compatibility) Remove in later version
-            break // Just pass through
+            IO.err("`--launchd` option is deprecated in macime v3.6.0")
          case "--cjk-refresh":
             state.cjkRefresh = true
          default:

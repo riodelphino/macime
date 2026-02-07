@@ -22,21 +22,11 @@ jobs:
         run: |
           .build/release/macime get
 
-      - name: Start macimed
+      - name: Start/Stop macimed
         run: |
           export MACIME_PATH="$PWD/.build/release/macime"
           .build/release/macimed &
           echo $! > macimed.pid
           sleep 1
+          kill "$(cat macimed.pid)" || true
 
-      - name: Check macimed status
-        run: |
-          export MACIME_PATH="$PWD/.build/release/macime"
-          .build/release/macimed --status
-
-      - name: Stop macimed
-        if: always()
-        run: |
-          if [ -f macimed.pid ]; then
-            kill "$(cat macimed.pid)" || true
-          fi

@@ -115,6 +115,31 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }
+         case "test": // DEBUG: test to get/set IME ID from daemon
+            guard args.count > 0 else {
+               throw AppError.imed(.invalidGetTarget("nil"))
+            }
+            let target = args.removeFirst()
+            switch target {
+            case "get":
+               if let curr = try IME.current() {
+                  // curr IME id as string
+                  stdout = curr.id
+                  Log.log(curr.id)
+               } else {
+                  stderr = "IME 取得できず"
+                  Log.log("取得できん")
+               }
+            case "set":
+               // Switch to new ID
+               guard args.count > 0 else {
+                  throw AppError.imed(.invalidGetTarget("nil"))
+               }
+               let newID = args.removeFirst()
+               _ = try IME.select(id: newID)
+            default:
+               break
+            }
          // NOTE: Currently disabled (Since `set` requires restarting server and funcamental improvements.)
          // case "set":
          //    guard args.count > 0 else {
@@ -182,7 +207,10 @@ public enum IMED {
 
       do {
          let ms = try Util.elapsed {
-            (stdout, stderr) = try self.execute(command)
+            // (stdout, stderr) = try self.execute(command)
+            try DispatchQueue.main.sync { // DEBUG: Cannot get stdout/stderr
+               (stdout, stderr) = try self.execute(command)
+            }
 
             stdout = stdout.trimmingCharacters(in: .newlines)
             stderr = stderr.trimmingCharacters(in: .newlines)

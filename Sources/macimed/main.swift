@@ -10,7 +10,8 @@ do {
    DispatchQueue.global().async { // DEBUG: try to make daemon get/set IME ID
       try? IMED.serve()
    }
-   dispatchMain()
+   // dispatchMain() // NG?
+   RunLoop.main.run()
 } catch let e as AppError {
    Log.log(e.message)
 } catch {

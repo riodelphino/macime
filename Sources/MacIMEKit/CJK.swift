@@ -17,15 +17,15 @@ enum CJK {
       guard window == nil, textField == nil else { return }
 
       let w = NSWindow(
-         contentRect: NSRect(x: 0, y: 0, width: 200, height: 40),
+         contentRect: NSRect(x: 0, y: 0, width: 10, height: 10),
          styleMask: [.borderless],
          backing: .buffered,
          defer: false
       )
       w.level = .screenSaver
-      w.backgroundColor = NSColor(white: 1.0, alpha: 0.95)
+      w.backgroundColor = NSColor(white: 1.0, alpha: 0.5)
 
-      let tf = NSTextField(frame: NSRect(x: 10, y: 8, width: 180, height: 24))
+      let tf = NSTextField(frame: NSRect(x: 0, y: 0, width: 10, height: 10))
       tf.cell = NSSecureTextFieldCell() // password mode
       w.contentView?.addSubview(tf)
 

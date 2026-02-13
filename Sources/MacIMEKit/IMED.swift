@@ -75,26 +75,28 @@ public enum IMED {
 
       switch method {
       case "ime":
-         if let macimePath = state.macimePath {
-            process.executableURL = URL(fileURLWithPath: macimePath)
-         }
-         process.arguments = args
-         process.standardOutput = outPipe
-         process.standardError = errPipe
-
-         try process.run()
-         process.waitUntilExit()
-
-         let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
-         let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
-         guard
-            let out = String(data: outData, encoding: .utf8),
-            let err = String(data: errData, encoding: .utf8)
-         else {
-            throw AppError.imed(.dataNotRecieved)
-         }
-         stdout = out
-         stderr = err
+         // if let macimePath = state.macimePath {
+         //    process.executableURL = URL(fileURLWithPath: macimePath)
+         // }
+         // process.arguments = args
+         // process.standardOutput = outPipe
+         // process.standardError = errPipe
+         //
+         // try process.run()
+         // process.waitUntilExit()
+         //
+         // let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
+         // let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
+         // guard
+         //    let out = String(data: outData, encoding: .utf8),
+         //    let err = String(data: errData, encoding: .utf8)
+         // else {
+         //    throw AppError.imed(.dataNotRecieved)
+         // }
+         let imeState = try ArgsIME.parse(args)
+         let ret = try IME.execute(imeState)
+         stdout = ret
+         stderr = "" // DEBUG: Should check success or not, then assort ret to stdout/stderr.
 
       case "daemon":
          let subcmd = args.removeFirst()

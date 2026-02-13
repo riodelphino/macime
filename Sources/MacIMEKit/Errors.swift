@@ -127,6 +127,7 @@ public enum IMEError: Error {
    case loadFailed(String)
    case jsonSerializationFailed(String)
    case invalidSubCommand(String)
+   case missingTargetID
 
    public var message: String {
       switch self {
@@ -150,6 +151,8 @@ public enum IMEError: Error {
          return "Json serializention failed: \(msg)"
       case let .invalidSubCommand(subcmd):
          return "Invalid sub command: \(subcmd)"
+      case .missingTargetID:
+         return "Target IME ID is missing."
       }
    }
 }

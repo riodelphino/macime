@@ -1,6 +1,14 @@
 import Foundation
 import InputMethodKit
 
+/// fields list
+enum fieldsList {
+   static let id: [String] = ["id"]
+   static let detail: [String] = [
+      "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
+   ]
+}
+
 public enum IME {
    /// Lazy load
    private static var _sources: [TISInputSource]?
@@ -65,81 +73,104 @@ public enum IME {
       }
    }
 
-   public static func execute(_ state: IMECmdState) throws -> String {
-      enum fieldList {
-         static let id: [String] = ["id"]
-         static let detail: [String] = [
-            "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
-         ]
+   /// save sub-command
+   public static func save(_ state: IMECmdState) throws -> String {
+      try createTempDir()
+      guard let curr = try current() else {
+         throw AppError.ime(.getCurrentFailed)
+      }
+      let path = getStoredPath(state.sessionID)
+      let success = FS.write(path, curr.id)
+      guard success else {
+         throw AppError.ime(.saveFailed(path))
+      }
+      return curr.id
+   }
+
+   /// load sub-command
+   public static func load(_ state: IMECmdState) throws -> String {
+      try createTempDir()
+      let prev_id = try previous(session_id: state.sessionID)
+      let src = try select(id: prev_id)
+      if state.cjkRefresh { CJK.refresh() } // CJK
+      return src.id
+   }
+
+   /// list sub-command
+   public static func list(_ state: IMECmdState) throws -> String {
+      var sources: [TISInputSource]
+      sources = list(selectCapable: state.selectCapable)
+      if state.detail {
+         // list detail as json
+         var outJson: [Any] = []
+         for source in sources {
+            try outJson.append(source.describe(format: .json, fields: fieldsList.detail))
+         }
+         return try Util.jsonToString(outJson, options: [.prettyPrinted])
+      } else {
+         // list IDs as string
+         var ids: [String] = []
+         for source in sources {
+            ids.append(source.id)
+         }
+         return ids.joined(separator: "\n")
+      }
+   }
+
+   /// Set sub-command
+   public static func set(_ state: IMECmdState) throws -> String {
+      // Switch to new ID
+      guard let curr = try current() else {
+         throw AppError.ime(.getCurrentFailed)
+      }
+      let currID = curr.id // Need to save here
+      guard let _newID = state.newID else {
+         throw AppError.ime(.missingTargetID)
       }
 
+      _ = try select(id: _newID)
+      if state.cjkRefresh { CJK.refresh() } // CJK
+      // Save to /tmp
+      if state.save {
+         let path = getStoredPath(state.sessionID)
+         let success = FS.write(path, currID)
+         guard success else {
+            throw AppError.ime(.saveFailed(path))
+         }
+      }
+      return "" // DEBUG: Should return nothing ?
+   }
+
+   /// get sub-command
+   public static func get(_ state: IMECmdState) throws -> String {
+      guard let curr = try current() else {
+         throw AppError.ime(.getCurrentFailed)
+      }
+      if state.detail {
+         // curr IME detail as JSON
+         let outJson: Any = try curr.describe(format: .json, fields: fieldsList.detail)
+         return try Util.jsonToString(outJson, options: [.prettyPrinted])
+      } else {
+         // curr IME id as string
+         return curr.id
+      }
+   }
+
+   /// execute appropriate sub-command with refering state
+   public static func execute(_ state: IMECmdState) throws -> String {
       switch state.subcmd {
       case "save":
-         try createTempDir()
-         if let curr = try current() {
-            let path = getStoredPath(state.sessionID)
-            let success = FS.write(path, curr.id)
-            guard success else {
-               throw AppError.ime(.saveFailed(path))
-            }
-            return curr.id
-         }
+         return try save(state)
       case "load":
-         try createTempDir()
-         let prev_id = try previous(session_id: state.sessionID)
-         let src = try select(id: prev_id)
-         if state.cjkRefresh { CJK.refresh() } // CJK
-         return src.id
+         return try load(state)
       case "list":
-         var sources: [TISInputSource]
-         sources = list(selectCapable: state.selectCapable)
-         if state.detail {
-            // list detail as json
-            var outJson: [Any] = []
-            for source in sources {
-               try outJson.append(source.describe(format: .json, fields: fieldList.detail))
-            }
-            return try Util.jsonToString(outJson, options: [.prettyPrinted])
-         } else {
-            // list IDs as string
-            var ids: [String] = []
-            for source in sources {
-               ids.append(source.id)
-            }
-            return ids.joined(separator: "\n")
-         }
+         return try list(state)
       case "set":
-         // Switch to new ID
-         if let curr = try current() {
-            let currID = curr.id // Need to save here
-            if let _newID = state.newID {
-               let _ = try select(id: _newID)
-               if state.cjkRefresh { CJK.refresh() } // CJK
-               // Save to /tmp
-               if state.save {
-                  let path = getStoredPath(state.sessionID)
-                  let success = FS.write(path, currID)
-                  guard success else {
-                     throw AppError.ime(.saveFailed(path))
-                  }
-               }
-               return ""
-            }
-         }
+         return try set(state)
       case "get":
-         if let curr = try current() {
-            if state.detail {
-               // curr IME detail as JSON
-               let outJson: Any = try curr.describe(format: .json, fields: fieldList.detail)
-               return try Util.jsonToString(outJson, options: [.prettyPrinted])
-            } else {
-               // curr IME id as string
-               return curr.id
-            }
-         }
+         return try get(state)
       default:
          throw AppError.ime(.invalidSubCommand(state.subcmd ?? "Unknown"))
       }
-      throw AppError.ime(.invalidSubCommand("Unknown"))
    }
 }

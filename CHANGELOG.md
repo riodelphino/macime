@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [4.0.0](https://github.com/riodelphino/macime/compare/v3.6.0...v4.0.0) (2026-02-13)
 
+* **refactor:** Restructure `IMED.swift`
 * **feat:** Add RunLoop for extremely fast switching via the daemon only (testing)
 
 ## [3.6.0](https://github.com/riodelphino/macime/compare/v3.5.0...v3.6.0) (2026-02-07)

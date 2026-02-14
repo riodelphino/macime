@@ -1,11 +1,11 @@
-// Note: The idea and code for refreshing input focus for CJK IMEs are from:
-//
-// ims-mac (MIT licensed)
+// Portions of this file are derived from refresh-input-focus.swift
+// in ims-mac:
 // https://github.com/LuSrackhall/ims-mac
 //
-// Thanks for all the effort!
+// Copyright (c) 2025 LuSrackhall
+// Licensed under the MIT License.
 //
-// (If you notice any issues with this code or the MIT License, please open an issue.)
+// Modifications have been made.
 
 import Cocoa
 

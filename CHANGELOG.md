@@ -1,4 +1,8 @@
 # CHANGELOG
+## [4.0.1](https://github.com/riodelphino/macime/compare/v4.0.0...v4.0.1) (2026-02-14)
+
+* **docs:** Correct the `CJK` code license
+
 ## [4.0.0](https://github.com/riodelphino/macime/compare/v3.6.0...v4.0.0) (2026-02-14)
 
 * **docs:** Update `README.md`

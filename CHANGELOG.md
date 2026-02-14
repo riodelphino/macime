@@ -1,6 +1,8 @@
 # CHANGELOG
-## [4.0.0](https://github.com/riodelphino/macime/compare/v3.6.0...v4.0.0) (2026-02-13)
+## [4.0.0](https://github.com/riodelphino/macime/compare/v3.6.0...v4.0.0) (2026-02-14)
 
+* **fix:** Fine-tune `CJK.swift` window
+* **wip:** `daemon calls IME.swift internally` works
 * **refactor:** Restructure `IMED.swift`
 * **feat:** Add RunLoop for extremely fast switching via the daemon only (testing)
 

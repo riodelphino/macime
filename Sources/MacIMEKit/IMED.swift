@@ -36,29 +36,11 @@ public enum IMED {
 
    /// Executes a macime command and returns its output
    public static func execute(_ cmd: String) throws -> (String, String) {
-      // -- UNFORTUNATELY, `TISInputSource` CANNOT GET/SET the IME OF FRONT APP FROM DAEMON SERVICE --
-      //
-      // It always returns the default `com.apple.keylayout.ABC`.
-      // See:
-      //   - https://stackoverflow.com/questions/26612735/os-x-how-to-get-tisinputsourceref-keyboard-layout-of-current-active-window-of
-      //   - https://leopard-adc.pepas.com/documentation/TextFonts/Reference/TextInputSourcesReference/TextInputSourcesReference.pdf?utm_source=chatgpt.com
-      //
-      // -- SO, THE FOLLOWING CODE NOT WORKS --
-      // let args = ArgsCommon.splitArgs(cmd)
-      // let state: CmdState = ArgsDaemon.parse(args)
-      // let response: Response = IMECore.execute(state)
-      // return response
-      //
-
       var args = ArgsCommon.splitArgs(cmd)
       guard args.count > 0 else {
          throw AppError.imed(.invalidDaemonMethod("nil"))
       }
       var method = args.removeFirst()
-
-      let process = Process()
-      let outPipe = Pipe()
-      let errPipe = Pipe()
 
       var stdout = ""
       var stderr = "" // if stderr != "" -> error
@@ -75,25 +57,6 @@ public enum IMED {
 
       switch method {
       case "ime":
-         // TODO: REMOVE
-         // if let macimePath = state.macimePath {
-         //    process.executableURL = URL(fileURLWithPath: macimePath)
-         // }
-         // process.arguments = args
-         // process.standardOutput = outPipe
-         // process.standardError = errPipe
-         //
-         // try process.run()
-         // process.waitUntilExit()
-         //
-         // let outData = outPipe.fileHandleForReading.readDataToEndOfFile()
-         // let errData = errPipe.fileHandleForReading.readDataToEndOfFile()
-         // guard
-         //    let out = String(data: outData, encoding: .utf8),
-         //    let err = String(data: errData, encoding: .utf8)
-         // else {
-         //    throw AppError.imed(.dataNotRecieved)
-         // }
          let imeState = try ArgsIME.parse(args)
          let ret = try IME.execute(imeState)
          stdout = ret
@@ -118,36 +81,6 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }
-         // NOTE: Currently disabled (Since `set` requires restarting server and funcamental improvements.)
-         // case "set":
-         //    guard args.count > 0 else {
-         //       throw AppError.imed(.invalidSetTarget("nil"))
-         //    }
-         //    let target = args.removeFirst()
-         //    switch target {
-         //    case "sock-path":
-         //       guard args.count > 0 else {
-         //          throw AppError.imed(.invalidPath("nil"))
-         //       }
-         //       let sockPath = args.removeFirst()
-         //       state.sockPath = sockPath
-         //       stdout = "sock-path set to: \(sockPath)"
-         //    case "macime-path":
-         //       guard args.count > 0 else {
-         //          throw AppError.imed(.invalidPath("nil"))
-         //       }
-         //       let macimePath = args.removeFirst()
-         //       guard FS.pathExists(macimePath) else {
-         //          throw AppError.imed(.macimeNotFound(macimePath))
-         //       }
-         //       guard Util.isExecutable(macimePath, args: ["--version"]) else {
-         //          throw AppError.imed(.notExecutable(macimePath))
-         //       }
-         //       state.macimePath = macimePath
-         //       stdout = "macime-path set to: \(macimePath)"
-         //    default:
-         //       throw AppError.imed(.invalidSetTarget(target))
-         //    }
          default:
             throw AppError.imed(.invalidDaemonSubcmd(subcmd))
          }

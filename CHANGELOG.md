@@ -1,6 +1,7 @@
 # CHANGELOG
 ## [4.0.0](https://github.com/riodelphino/macime/compare/v3.6.0...v4.0.0) (2026-02-14)
 
+* **refactor:** Remove unnecessary comments
 * **fix:** `daemon` works under `NSApplication(Cocoa)` to enable `CJK` operations
 * **fix:** Remove unused `Core.swift`
 * **fix:** Fine-tune `CJK.swift` window

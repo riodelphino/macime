@@ -96,46 +96,9 @@ public enum IME {
          _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
       }
 
-      // if state.cjkRefresh { // WORKS, but unstable
-      //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
-      //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
-      //    CJK.refresh()
-      // }
-
-      // if state.cjkRefresh {
-      //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      // }
-
-      // if state.cjkRefresh { // WORKS, but NG
-      //    while true {
-      //       let src = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      //       if src.id == "com.apple.keylayout.ABC" { break }
-      //    }
-      // }
-
-      // if state.cjkRefresh { // WORKS, still unstable
-      //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
-      // }
-
       let src = try select(id: prev_id)
 
-      // RunLoop.main.run(until: Date().addingTimeInterval(0.02)) // DEBUG: 二度打ち
-      // _ = try select(id: prev_id)
-
       if state.cjkRefresh { CJK.refresh() }
-
-      // if state.cjkRefresh { CJK.refresh() } // CJK // DEBUG:
-      // if state.cjkRefresh { DispatchQueue.main.sync { CJK.refresh() } } // NG
-      // if Thread.isMainThread { CJK.refresh() } else { DispatchQueue.main.sync { CJK.refresh() } } // zsh illigal hardware instruction
-      // if Thread.isMainThread {
-      //    CJK.refresh()
-      // } else {
-      //    DispatchQueue.main.sync {
-      //       CJK.refresh()
-      //    }
-      // } // zsh illigal hardware instruction
 
       return src.id
    }
@@ -172,42 +135,9 @@ public enum IME {
          throw AppError.ime(.missingTargetID)
       }
 
-      // if state.cjkRefresh { // WORKS, but still unstable
-      //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
-      //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
-      //    CJK.refresh()
-      // }
-
-      // if state.cjkRefresh { // WORKS, still unstable
-      //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
-      // }
-
-      // if state.cjkRefresh {
-      //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      // }
-
-      // if state.cjkRefresh { // WORKS, but NGらしい.
-      //    while true {
-      //       let src = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      //       if src.id == "com.apple.keylayout.ABC" { break }
-      //    }
-      // }
-
       _ = try select(id: _newID)
 
       if state.cjkRefresh { CJK.refresh() }
-
-      // if state.cjkRefresh { CJK.refresh() } // CJK // DEBUG:
-      // if state.cjkRefresh { DispatchQueue.main.sync { CJK.refresh() } } // NG
-      // if Thread.isMainThread {
-      //    CJK.refresh()
-      // } else {
-      //    DispatchQueue.main.sync {
-      //       CJK.refresh()
-      //    }
-      // } // zsh illigal hardware instruction
 
       // Save to /tmp
       if state.save {

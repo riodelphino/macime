@@ -1,19 +1,30 @@
+import Cocoa
 import Foundation
 import MacIMEKit
 
 public var args: [String] = ArgsCommon.getCmdArgs()
 
-do {
-   state = try ArgsIMED.parse(args)
-   Log.log("macimed \(Defaults.version) starting...")
-   // try IMED.serve()
-   DispatchQueue.global().async { // DEBUG: try to make daemon get/set IME ID
-      try? IMED.serve()
+let app = NSApplication.shared
+NSApp.setActivationPolicy(.accessory)
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+   func applicationDidFinishLaunching(_: Notification) {
+      do {
+         state = try ArgsIMED.parse(args)
+         Log.log("macimed \(Defaults.version) starting...")
+
+         DispatchQueue.global().async {
+            try? IMED.serve()
+         }
+
+      } catch let e as AppError {
+         Log.log(e.message)
+      } catch {
+         Log.log("Unexpected error")
+      }
    }
-   // dispatchMain() // NG?
-   RunLoop.main.run()
-} catch let e as AppError {
-   Log.log(e.message)
-} catch {
-   Log.log("Unexpected error\n")
 }
+
+let delegate = AppDelegate()
+app.delegate = delegate
+app.run()

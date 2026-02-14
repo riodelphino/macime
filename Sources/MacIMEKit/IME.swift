@@ -121,8 +121,10 @@ public enum IME {
 
       let src = try select(id: prev_id)
 
-      RunLoop.main.run(until: Date().addingTimeInterval(0.02)) // DEBUG: 二度打ち
-      _ = try select(id: prev_id)
+      // RunLoop.main.run(until: Date().addingTimeInterval(0.02)) // DEBUG: 二度打ち
+      // _ = try select(id: prev_id)
+
+      if state.cjkRefresh { CJK.refresh() }
 
       // if state.cjkRefresh { CJK.refresh() } // CJK // DEBUG:
       // if state.cjkRefresh { DispatchQueue.main.sync { CJK.refresh() } } // NG
@@ -170,10 +172,6 @@ public enum IME {
          throw AppError.ime(.missingTargetID)
       }
 
-      if state.cjkRefresh {
-         _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
-      }
-
       // if state.cjkRefresh { // WORKS, but still unstable
       //    RunLoop.main.run(until: Date().addingTimeInterval(0.01))
       //    _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
@@ -199,8 +197,7 @@ public enum IME {
 
       _ = try select(id: _newID)
 
-      RunLoop.main.run(until: Date().addingTimeInterval(0.02)) // DEBUG: 二度打ち
-      _ = try select(id: _newID)
+      if state.cjkRefresh { CJK.refresh() }
 
       // if state.cjkRefresh { CJK.refresh() } // CJK // DEBUG:
       // if state.cjkRefresh { DispatchQueue.main.sync { CJK.refresh() } } // NG

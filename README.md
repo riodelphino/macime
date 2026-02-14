@@ -1,35 +1,22 @@
 # macime
 
-![Version](https://img.shields.io/github/v/tag/riodelphino/macime?style=for-the-badge&cacheSeconds=0)
+![Version](https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.0.0&style=for-the-badge&cacheSeconds=0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Swift](https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white)](https://www.swift.org/)
 [![Easy Install](https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge)](#installation)
 [![Platform](https://img.shields.io/badge/Platform-macOS%2010.15%2B-blue?style=for-the-badge)](#)
 
-A **blazing faster** IME switching tool for macOS. (Swift via launchd service)
-
-
-## Breaking Changes
-
-* [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):
-    * Deprecate `--status` `--sock-path` `--macime-path` options from `macimed` (They don't reflect environmental variable)
-    * Deprecate `--launchd` option from `macime` (Doesn't work in some cases)
-    * Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon get sock-path`)
-    * Upgrade macOS version (10.13 -> 10.15)
-* [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (Experimental and untested)
-* [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
-* [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
-* [v3.0.0](https://github.com/riodelphino/macime/releases/tag/v3.0.0): Deprecate `$MACIME_TEMP_DIR` environmental value
+A **blazingly fast** IME switching tool for macOS, built with Swift and powered by launchd.
 
 
 ## Story
 
 I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
-But on my older Macs, these tools always required `a short wait` to switch IME modes. It was an unacceptable delay for daily use.
+But on my older Macs, these tools always required `a short wait` to switch IME modes. It was an unacceptable delay for daily use. (approximately 400ms)
 
-`macime` significantly reduces this delay by **30% to 70%**. (Depends on usage.)
+This tool significantly reduces that delay by **95%**. It means **x20 faster** when it runs as daemon/launchd. (5-20ms)
 
-Though it still has a slight delay, but I’m very satisfied with the switching speed since v3.x.
+(I was already very satisfied with the switching speed since `v3.x`, but `v4.x` broke through that limit.)
 
 If you’re a Mac user frustrated by slow IME switching, give it a try. 
 
@@ -37,23 +24,39 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 ## Why it’s fast
 
 1. Sets and gets the IME in a single operation
-2. Uses a launchd service
+2. Works as a daemon or launchd(brew service)
 3. Written in native Swift
 4. Optimized code
 
 
-## Feature
+## Features
 
-* Get current IME
-* Set a specified IME
-* Save current IME
-* Load(Restore) the previous IME
-* List all IMEs
-* Switch IME while saving the previous one (in single step)
-* Output detailed get|list results as JSON
-* Faster switching by `macimed` launchd service
-* Fallback to `im-select` style command usage
-* Refresh IME for CJK input methods (Experimental and untested)
+* Standalone (`macime`):
+    * Get, Set, Save current, Load previous, List all IMEs
+    * Switch IME while saving the previous one (in single step)
+    * Output detailed get|list results as JSON
+* Daemon/launchd (`macimed`):
+    * Faster switching by daemon
+    * Blazingly faster switching by `brew services`
+* Compatibility:
+    * Fallback to `im-select` style command usage
+* Others:
+    * Stable switching for CJK input methods (Experimental)
+
+
+## Breaking Changes
+
+* [v4.0.0](https://github.com/riodelphino/macime/releases/tag/v4.0.0):
+    * Switching speed is extremelly accelarated via internal `IME.swift` calling.
+* [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):
+    * Deprecate `--status` `--sock-path` `--macime-path` options from `macimed` (They don't reflect environmental variable)
+    * Deprecate `--launchd` option from `macime` (Doesn't work in some cases)
+    * Allow `macimed` socket command to handle both `ime` and `daemon` methods (e.g. `ime set com.apple...`, `daemon get sock-path`)
+    * Upgrade macOS version (10.13 -> 10.15)
+* [v3.5.0](https://github.com/riodelphino/macime/releases/tag/v3.5.0): Add CJK refreshing (Experimental)
+* [v3.4.0](https://github.com/riodelphino/macime/releases/tag/v3.4.0): Revive `$MACIME_TEMP_DIR` env and Add `$MACIME_SOCK_PATH`
+* [v3.3.3](https://github.com/riodelphino/macime/releases/tag/v3.3.3): Deprecate `--json` option (Use `--detail` option instead)
+* [v3.0.0](https://github.com/riodelphino/macime/releases/tag/v3.0.0): Deprecate `$MACIME_TEMP_DIR` environmental value
 
 
 ## Requirements
@@ -182,8 +185,6 @@ macime get --detail
 #     "zu"
 #   ]
 # }
-
-
 ```
 
 #### Set IME
@@ -200,9 +201,11 @@ macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 # The IME ID is saved at `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
 
+`--cjk-refresh` option is also available.
+
 > [!Note]
-> Using `set` and `--save` together reduces elapsed time **50%**.
-> While other tools need two excution like `<command_name>` -> `<command_name> set com.apple.keylayout.ABC`
+> Using `set` with `--save` reduces execution time by **50%**, compared to running `get` and `set` separately.
+> Other tools require two excutions. (e.g. `im-select` -> `im-select set com.apple.keylayout.ABC`)
 
 
 
@@ -228,6 +231,9 @@ macime load --session-id nvim-1001
 # Reads previous IME ID from `/tmp/riodelphino.macime/prev/nvim-1001`, then set it.
 ```
 
+`--cjk-refresh` option is also available.
+
+
 #### List IME
 ```bash
 # Show IME ID list
@@ -244,20 +250,27 @@ macime list --select-capable
 
 ### Options
 
-| Option                    | Available for | Description                                                         |
-| ------------------------- | ------------- | ------------------------------------------------------------------- |
-| --detail                  | get, list     | Show detailed IME info as JSON                                      |
-| --select-capable          | get, list     | Show only selectable IME                                            |
-| --save                    | set           | Save current IME (with `macime set` only)                           |
-| --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir)         |
-| --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental and untested)       |
+| Option                    | Available for | Description                                                 |
+| ------------------------- | ------------- | ----------------------------------------------------------- |
+| --detail                  | get, list     | Show detailed IME info as JSON                              |
+| --select-capable          | get, list     | Show only selectable IME                                    |
+| --save                    | set           | Save current IME (with `macime set` only)                   |
+| --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir) |
+| --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental)            |
 
 ### CJK refreshing
 
 > [!Warning]
-> Experimental and untested. Please test in your environment, then report any issues or submit a PR.
+> Experimental.
+> Please test in your environment, then report any issues or submit a PR.
 
-`macime` can refresh IME for CJK input methods (e.g. `百度拼音`, `搜狗拼音`).
+Reduces the failure rate of CJK IME switching, by creating a hidden window and forcibly refreshing the IME.  
+It still fails sometimes (Not perfect).
+
+e.g.
+- `Google日本語入力`: Google Japanese Input
+- `百度拼音`: Baidu Pinyin
+- `搜狗拼音`: Sogou Pinyin
 
 via `--cjk-refresh` option:
 ```bash
@@ -308,6 +321,7 @@ ime set com.apple.keylayout.ABC --save
 ime set com.apple.keylayout.ABC --save --session-id <session-id>
 ime load
 ime load --session-id <session-id>
+# `--cjk-refresh` is also available for `set` and `load`
 ```
 
 When the socket recieves a command like above, `macimed` executes `macime` command with these args immediately.
@@ -485,7 +499,7 @@ MACIME_PATH=/path/to/macime/.build/release/macime macimed
 ## Thanks To
 
 - The IME switching concept is inspired by [im-select](https://github.com/daipeihust/im-select) and [macism](https://github.com/laishulu/macism)
-- The CJK IME workaround is inspired by [ims-mac](https://github.com/LuSrackhall/ims-mac)
+- The CJK IME workaround comes from [ims-mac](https://github.com/LuSrackhall/ims-mac)
 - The idea that Swift can manipulate IME states was inspired by
   [Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
 

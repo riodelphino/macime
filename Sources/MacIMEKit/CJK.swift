@@ -19,7 +19,8 @@ enum CJK {
 
       let w = NSWindow(
          contentRect: NSRect(x: 0, y: 0, width: 1, height: 1),
-         styleMask: [.borderless, .nonactivatingPanel],
+         // styleMask: [.borderless, .nonactivatingPanel],
+         styleMask: [.borderless],
          backing: .buffered,
          defer: false
       )
@@ -78,9 +79,11 @@ enum CJK {
          setup()
       }
 
+      let previousApp = NSWorkspace.shared.frontmostApplication
+
       guard let w = window, let tf = textField else { return }
 
-      // NSApp.activate(ignoringOtherApps: true) // Disabled because it takes focus and does not return it in daemon.
+      NSApp.activate(ignoringOtherApps: true) // Disabled because it takes focus and does not return it in daemon.
       w.makeKeyAndOrderFront(nil)
       w.makeFirstResponder(tf)
 
@@ -91,6 +94,10 @@ enum CJK {
       tf.becomeFirstResponder()
 
       // Hide window
-      w.orderOut(nil)
+      // WORKS(カーソルキーがちらつくがOK)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+         w.orderOut(nil)
+         previousApp?.activate(options: [.activateIgnoringOtherApps])
+      }
    }
 }

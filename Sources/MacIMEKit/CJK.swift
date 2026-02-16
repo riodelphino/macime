@@ -75,6 +75,11 @@ enum CJK {
    }
 
    static func refresh() {
+      guard Thread.isMainThread else {
+         DispatchQueue.main.async { CJK.refresh() }
+         return
+      }
+
       _ = NSApplication.shared
       NSApp.setActivationPolicy(.accessory)
 

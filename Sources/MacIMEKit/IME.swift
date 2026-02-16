@@ -99,14 +99,7 @@ public enum IME {
       let src = try select(id: prev_id)
 
       if state.cjkRefresh {
-         if Thread.isMainThread {
-            CJK.refresh()
-         } else {
-            // DispatchQueue.main.sync { // WORKS
-            DispatchQueue.main.async {
-               CJK.refresh()
-            }
-         }
+         CJK.refresh()
       }
 
       return src.id

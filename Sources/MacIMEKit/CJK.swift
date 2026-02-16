@@ -75,9 +75,10 @@ enum CJK {
    }
 
    static func refresh() {
-      if window == nil || textField == nil {
-         setup()
-      }
+      _ = NSApplication.shared
+      NSApp.setActivationPolicy(.accessory)
+
+      if window == nil { setup() }
 
       let previousApp = NSWorkspace.shared.frontmostApplication
 
@@ -86,18 +87,17 @@ enum CJK {
       NSApp.activate(ignoringOtherApps: true) // Disabled because it takes focus and does not return it in daemon.
       w.makeKeyAndOrderFront(nil)
       w.makeFirstResponder(tf)
-
-      // Run the loop once // TODO: NO NEED?
-      // RunLoop.main.run(until: Date().addingTimeInterval(0.02))
-
       // Recieve events first
       tf.becomeFirstResponder()
 
+      // Run the loop once // TODO: NO NEED?
+      // RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+      // RunLoop.current.run(until: Date().addingTimeInterval(0.05))
+      RunLoop.main.run(until: Date().addingTimeInterval(0.05)) // WORKS but late
+      // RunLoop.main.run(until: Date().addingTimeInterval(0.02)) // IME NOT CHANGED YET. TOO EARLY
+
       // Hide window
-      // WORKS(カーソルキーがちらつくがOK)
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-         w.orderOut(nil)
-         previousApp?.activate(options: [.activateIgnoringOtherApps])
-      }
+      w.orderOut(nil)
+      previousApp?.activate(options: [.activateIgnoringOtherApps])
    }
 }

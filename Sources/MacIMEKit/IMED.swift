@@ -192,7 +192,6 @@ public enum IMED {
             Log.log("accept() failed")
             continue
          }
-
          DispatchQueue.global().async {
             self.handleClient(client)
          }

@@ -2,6 +2,7 @@
 
 ## [4.0.2](https://github.com/riodelphino/macime/compare/v4.0.1...v4.0.2) (2026-02-16)
 
+* **fix:** Wait for IME switched on hiding temp window in CJK
 * **chore:** Comment out `TextFieldDelegate` (Does not seem to contribute to switching success rate)
 * **chore:** `refresh()` includes checking `Thread.isMainThread`
 * **docs:** Add `com.apple.keylayout.ABC` to `Requirements`

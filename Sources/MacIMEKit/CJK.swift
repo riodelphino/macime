@@ -7,12 +7,14 @@
 //
 // Modifications have been made.
 
+import Carbon
 import Cocoa
 
 enum CJK {
    private static var window: NSWindow?
    private static var textField: NSTextField?
    private static var delegate: NSObject?
+   private static var inputSourceObserver: NSObjectProtocol?
 
    private static func setup() {
       guard window == nil else { return }
@@ -75,9 +77,9 @@ enum CJK {
       // delegate = d
    }
 
-   static func refresh() {
+   static func refresh(desiredID: String) {
       guard Thread.isMainThread else {
-         DispatchQueue.main.async { CJK.refresh() }
+         DispatchQueue.main.async { CJK.refresh(desiredID: desiredID) }
          return
       }
 
@@ -92,9 +94,45 @@ enum CJK {
       w.makeKey()
       w.makeFirstResponder(tf)
 
-      // Hide window (async)
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // TODO: 0.05 is Environment-dependent value
-         w.orderOut(nil)
+      // Hide window (async/simple ver)
+      // DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // 0.05 is Environment-dependent value
+      //    w.orderOut(nil)
+      // }
+
+      // Hide window (async/wait for switching)
+      if let observer = inputSourceObserver {
+         DistributedNotificationCenter.default().removeObserver(observer)
+         inputSourceObserver = nil
+      }
+      inputSourceObserver = DistributedNotificationCenter.default().addObserver(
+         forName: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String),
+         object: nil,
+         queue: .main
+      ) { _ in
+         func checkIMEChanged() {
+            guard let current = try? IME.current() else {
+               return
+            }
+            if current.id == desiredID || CFAbsoluteTimeGetCurrent() - start > timeout {
+               w.orderOut(nil)
+               if let observer = inputSourceObserver {
+                  DistributedNotificationCenter.default().removeObserver(observer)
+                  inputSourceObserver = nil
+               }
+               // if current.id != desiredID { // TODO: REMOVE: Doesn't contribute switching success rate
+               //    _ = try? IME.select(id: desiredID) // Ensure to select desiredID again
+               // }
+               return
+            } else {
+               DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+                  checkIMEChanged()
+               }
+            }
+         }
+
+         let start = CFAbsoluteTimeGetCurrent()
+         let timeout: CFTimeInterval = 0.2
+         checkIMEChanged()
       }
    }
 }

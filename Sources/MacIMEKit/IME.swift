@@ -99,7 +99,7 @@ public enum IME {
       let src = try select(id: prev_id)
 
       if state.cjkRefresh {
-         CJK.refresh()
+         CJK.refresh(desiredID: prev_id)
       }
 
       return src.id
@@ -139,7 +139,7 @@ public enum IME {
 
       _ = try select(id: _newID)
 
-      if state.cjkRefresh { CJK.refresh() }
+      if state.cjkRefresh { CJK.refresh(desiredID: _newID) }
 
       // Save to /tmp
       if state.save {

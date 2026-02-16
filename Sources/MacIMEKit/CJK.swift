@@ -80,20 +80,15 @@ enum CJK {
 
       if window == nil { setup() }
 
-      let previousApp = NSWorkspace.shared.frontmostApplication
-
       guard let w = window, let tf = textField else { return }
 
-      NSApp.activate(ignoringOtherApps: true) // Disabled because it takes focus and does not return it in daemon.
-      w.makeKeyAndOrderFront(nil)
+      w.orderFront(nil)
+      w.makeKey()
       w.makeFirstResponder(tf)
-      // Recieve events first
-      tf.becomeFirstResponder()
 
       // Hide window (async)
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // TODO: 0.05 is Environment-dependent value
          w.orderOut(nil)
-         previousApp?.activate(options: [.activateIgnoringOtherApps])
       }
    }
 }

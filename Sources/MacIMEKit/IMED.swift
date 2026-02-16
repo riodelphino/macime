@@ -118,10 +118,7 @@ public enum IMED {
 
       do {
          let ms = try Util.elapsed {
-            // (stdout, stderr) = try self.execute(command)
-            try DispatchQueue.main.sync { // DEBUG: Cannot get stdout/stderr
-               (stdout, stderr) = try self.execute(command)
-            }
+            (stdout, stderr) = try self.execute(command)
 
             stdout = stdout.trimmingCharacters(in: .newlines)
             stderr = stderr.trimmingCharacters(in: .newlines)

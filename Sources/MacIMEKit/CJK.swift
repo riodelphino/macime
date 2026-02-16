@@ -43,25 +43,26 @@ enum CJK {
       tf.isSelectable = true
       tf.cell = NSSecureTextFieldCell()
 
-      class TextFieldDelegate: NSObject, NSTextFieldDelegate {
-         func controlTextDidChange(_ obj: Notification) {
-            _ = (obj.object as? NSTextField)?.stringValue
-         }
-
-         func control(
-            _: NSControl,
-            textView _: NSTextView,
-            doCommandBy commandSelector: Selector
-         ) -> Bool {
-            if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
-               return true
-            }
-            return false
-         }
-      }
-
-      let d = TextFieldDelegate()
-      tf.delegate = d
+      // TODO: REMOVE (Does not seem to contribute to switching success rate)
+      // class TextFieldDelegate: NSObject, NSTextFieldDelegate {
+      //    func controlTextDidChange(_ obj: Notification) {
+      //       _ = (obj.object as? NSTextField)?.stringValue
+      //    }
+      //
+      //    func control(
+      //       _: NSControl,
+      //       textView _: NSTextView,
+      //       doCommandBy commandSelector: Selector
+      //    ) -> Bool {
+      //       if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
+      //          return true
+      //       }
+      //       return false
+      //    }
+      // }
+      //
+      // let d = TextFieldDelegate()
+      // tf.delegate = d
 
       w.contentView?.addSubview(effectView)
       w.contentView?.addSubview(tf)
@@ -71,7 +72,7 @@ enum CJK {
 
       window = w
       textField = tf
-      delegate = d
+      // delegate = d
    }
 
    static func refresh() {

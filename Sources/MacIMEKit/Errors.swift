@@ -6,6 +6,7 @@ public enum AppError: Error {
    case util(UtilError)
    case ime(IMEError)
    case imed(IMEDError)
+   case cjk(CJKError)
 
    public var message: String {
       switch self {
@@ -18,6 +19,8 @@ public enum AppError: Error {
       case let .ime(e):
          return e.message
       case let .imed(e):
+         return e.message
+      case let .cjk(e):
          return e.message
       }
    }
@@ -153,6 +156,17 @@ public enum IMEError: Error {
          return "Invalid sub command: \(subcmd)"
       case .missingTargetID:
          return "Target IME ID is missing."
+      }
+   }
+}
+
+public enum CJKError: Error {
+   case getCurrentFailed
+
+   public var message: String {
+      switch self {
+      case .getCurrentFailed:
+         return "Get current failed."
       }
    }
 }

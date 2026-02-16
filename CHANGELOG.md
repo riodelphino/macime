@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.0.2](https://github.com/riodelphino/macime/compare/v4.0.1...v4.0.2) (2026-02-16)
+## [4.1.0](https://github.com/riodelphino/macime/compare/v4.0.1...v4.1.0) (2026-02-17)
 
+* **docs:** Update minor version and date
 * **docs:** Add an issue `Unstable switching`
 * **chore:** Add CJK error
 * **chore:** Wait for IME switched on hiding temp window in CJK

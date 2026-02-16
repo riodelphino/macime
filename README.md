@@ -432,6 +432,11 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 ## Issues
 
+### Unstable switching
+
+Via `macime.nvim`:
+When switching back to nvim on the terminal App from another App, the IME switching is unstable.
+
 ### azookey prevents macime to change IME
 
 `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
@@ -468,12 +473,9 @@ This cleans up the corrupted tap cache and performs a fresh installation.
 
 ## TODO
 
-### macime
-
-- [ ] Test CJK input methods
-
 ### macimed
 
+- [ ] Stable IME switching
 - [ ] Make the server restartable (for `daemon set sock-path xxx`)
 
 

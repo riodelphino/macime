@@ -2,6 +2,7 @@
 
 ## [4.0.2](https://github.com/riodelphino/macime/compare/v4.0.1...v4.0.2) (2026-02-16)
 
+* **docs:** Add an issue `Unstable switching`
 * **chore:** Add CJK error
 * **chore:** Wait for IME switched on hiding temp window in CJK
 * **fix:** Wait for IME switched on hiding temp window in CJK

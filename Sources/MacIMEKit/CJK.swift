@@ -90,14 +90,10 @@ enum CJK {
       // Recieve events first
       tf.becomeFirstResponder()
 
-      // Run the loop once // TODO: NO NEED?
-      // RunLoop.main.run(until: Date().addingTimeInterval(0.02))
-      // RunLoop.current.run(until: Date().addingTimeInterval(0.05))
-      RunLoop.main.run(until: Date().addingTimeInterval(0.05)) // WORKS but late
-      // RunLoop.main.run(until: Date().addingTimeInterval(0.02)) // IME NOT CHANGED YET. TOO EARLY
-
-      // Hide window
-      w.orderOut(nil)
-      previousApp?.activate(options: [.activateIgnoringOtherApps])
+      // Hide window (async)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // TODO: 0.05 is Environment-dependent value
+         w.orderOut(nil)
+         previousApp?.activate(options: [.activateIgnoringOtherApps])
+      }
    }
 }

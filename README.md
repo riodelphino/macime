@@ -1,6 +1,6 @@
 # macime
 
-![Version](https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.0.1&style=for-the-badge&cacheSeconds=0)
+![Version](https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.0.2&style=for-the-badge&cacheSeconds=0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Swift](https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white)](https://www.swift.org/)
 [![Easy Install](https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge)](#installation)

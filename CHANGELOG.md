@@ -2,6 +2,7 @@
 
 ## [4.0.2](https://github.com/riodelphino/macime/compare/v4.0.1...v4.0.2) (2026-02-16)
 
+* **fix:** Replace `RunLoop.main.run (waiting synchronously)` to `DispatchQueue.main.asyncAfter (async)` in CJK again
 * **fix:** Restrict NSApp to work only with `CJK.swift`
 * **fix:** Activate CJK window 
 

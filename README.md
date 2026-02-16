@@ -62,7 +62,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 ## Requirements
 
 * macOS (>=10.15)
-
+* `com.apple.keylayout.ABC` is installed and enabled (Used in `load` sub-command)
 
 ## Install
 

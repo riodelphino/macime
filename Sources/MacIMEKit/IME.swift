@@ -93,7 +93,7 @@ public enum IME {
       let prev_id = try previous(session_id: state.sessionID)
 
       if state.cjkRefresh {
-         _ = try select(id: "com.apple.keylayout.ABC") // DEBUG: once set it before set newID
+         _ = try select(id: "com.apple.keylayout.ABC") // NOTE: Should set it once before setting desired ID (to make IME switching more reliably)
       }
 
       let src = try select(id: prev_id)

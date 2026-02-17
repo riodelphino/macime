@@ -93,8 +93,6 @@ brew services restart macime
 
 `macimed` can be managed by `launchd` via Homebrew.
 
-It's optional, but STRONGLY RECOMMENDED!!  
-**30% faster** than running `macimed` manually. (e.g. 128ms -> 89ms)
 ```bash
 # Start `macimed` service
 brew services start macime
@@ -110,7 +108,7 @@ Or, you can also start `macimed` manually to monitor logs and observe its behavi
 ```bash
 macimed
 ```
-Useful for debuging, but performance will be slower.
+Useful for debuging. (Almost same performance with `brew services` in `macime` >= v4.x)
 
 
 ## Usage

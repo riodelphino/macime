@@ -2,6 +2,7 @@
 
 ## [4.1.3](https://github.com/riodelphino/macime/compare/v4.1.2...v4.1.3) (2026-02-18)
 
+* **fix:** `macimed --version` recieves only version info without loggin message
 * **docs:** Correct the command path in `Contribution`
 * **docs:** Clairfy `near-native` on the top, Bundle the speed on daemon/launchd, Detailed unstable situations
 

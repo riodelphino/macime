@@ -4,8 +4,8 @@ import MacIMEKit
 public var args: [String] = ArgsCommon.getCmdArgs()
 
 do {
-   Log.log("macimed \(Defaults.version) starting...")
    let state = try ArgsIMED.parse(args)
+   Log.log("macimed \(Defaults.version) starting...")
    IMED.setState(state)
    DispatchQueue.global().async {
       try? IMED.serve()

@@ -3,6 +3,7 @@
 ## [4.1.2](https://github.com/riodelphino/macime/compare/v4.1.1...v4.1.2) (2026-02-17)
 
 * **docs:** Update logo
+* **docs:** Update logo
 * **docs:** Update `Story` and `why fast`
 * **docs:** Add logo
 

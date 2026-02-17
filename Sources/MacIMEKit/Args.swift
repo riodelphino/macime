@@ -17,8 +17,8 @@ public enum ArgsCommon {
 
 /// macime
 public enum ArgsIME {
-   static let capableSubcmd = ["get", "set", "load", "save", "list"]
-   static let capableOpts = [
+   static let validSubcmds = ["get", "set", "load", "save", "list"]
+   static let validOpts = [
       "get": ["--detail"],
       "set": ["--save", "--session-id", "--cjk-refresh"],
       "load": ["--session-id", "--cjk-refresh"],
@@ -27,12 +27,16 @@ public enum ArgsIME {
    ]
    static let globalOpts: [String] = ["--launchd"] // TODO: (Backward compatibility) Remove "--launchd" in later version
 
-   public static func isOption(_ value: String) -> Bool {
+   private static func isValidSubcmd(_ subcmd: String) -> Bool {
+      return validSubcmds.contains(subcmd)
+   }
+
+   private static func isOption(_ value: String) -> Bool {
       return value.hasPrefix("-")
    }
 
-   public static func isCapableOption(_ subcmd: String, _ value: String) -> Bool {
-      return globalOpts.contains(value) || (capableOpts[subcmd]?.contains(value) ?? false)
+   private static func isValidOption(_ subcmd: String, _ value: String) -> Bool {
+      return globalOpts.contains(value) || (validOpts[subcmd]?.contains(value) ?? false)
    }
 
    /// Parse args array into CmdState
@@ -45,8 +49,8 @@ public enum ArgsIME {
          args.insert("get", at: 0)
       } else {
          if let first = args.first {
-            if !capableSubcmd.contains(first) { // If invalid sub-command
-               if isCapableOption("get", first) { // Fallback to `get` if first is capable option for `get`
+            if !isValidSubcmd(first) { // If invalid sub-command
+               if isValidOption("get", first) { // Fallback to `get` if first is capable option for `get`
                   args.insert("get", at: 0)
                } else {
                   // Fallback to `set` if first is valid IME ID
@@ -71,7 +75,7 @@ public enum ArgsIME {
             }
             let second = args[1]
             guard
-               !capableSubcmd.contains(second), // IME ID must not be a valid subcmd
+               !isValidSubcmd(second), // IME ID must not be a valid subcmd
                !isOption(second) // IME ID must not start with `-` (option-like value)
             else {
                throw AppError.cmd(.setMissingID)
@@ -103,7 +107,7 @@ public enum ArgsIME {
          guard isOption(arg) else {
             throw AppError.cmd(.invalidOption(arg))
          }
-         guard isCapableOption(subcmd, arg) else {
+         guard isValidOption(subcmd, arg) else {
             throw AppError.cmd(.unknownOptionForSubcmd(subcmd, arg))
          }
          switch arg {

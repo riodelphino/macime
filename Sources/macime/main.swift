@@ -2,10 +2,10 @@ import Foundation
 import MacIMEKit
 
 public let args: [String] = ArgsCommon.getCmdArgs()
-public var state = IMECmdState()
 
 do {
-   state = try ArgsIME.parse(args)
+   let state = try ArgsIME.parse(args)
+   IME.setState(state)
    let ret: String = try IME.execute(state)
    if ret != "" {
       IO.out(ret)

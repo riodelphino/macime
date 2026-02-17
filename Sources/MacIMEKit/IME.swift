@@ -10,6 +10,12 @@ enum fieldsList {
 }
 
 public enum IME {
+   public static var state: IMECmdState!
+
+   public static func setState(_ newState: IMECmdState) {
+      state = newState
+   }
+
    /// Lazy load
    private static var _sources: [TISInputSource]?
 

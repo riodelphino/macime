@@ -1,30 +1,35 @@
 import Foundation
 
 public enum Defaults {
-   public static let version: String = "4.1.0"
+   public static let version: String = "4.1.1"
 
-   public static var macimePath: String {
+   public static func macimePath() throws -> String {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_PATH"], "/usr/local/bin/macime", "/opt/homebrew/bin/macime"]
-
       let path = Util.fallbackPaths(checkPathExists: true, paths: checkPaths)
-      guard let path else { return "" } // TODO: Should throw an Error
+      guard let path else {
+         throw AppError.config(.invalidMacimePath)
+      }
       return path
    }
 
-   public static var sockPath: String {
+   public static func sockPath() throws -> String {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_SOCK_PATH"], "/tmp/riodelphino.macimed.sock"]
       let path = Util.fallbackPaths(checkPathExists: false, paths: checkPaths)
-      guard let path else { return "" } // TODO: Should throw an Error
+      guard let path else {
+         throw AppError.config(.invalidSockPath)
+      }
       return path
    }
 
-   public static var tempDir: String {
+   public static func tempDir() throws -> String {
       let env = ProcessInfo.processInfo.environment
       let checkPaths = [env["MACIME_TEMP_DIR"], "/tmp/riodelphino.macime"]
       let path = Util.fallbackPaths(checkPathExists: false, paths: checkPaths)
-      guard let path else { return "" } // TODO: Should throw an Error
+      guard let path else {
+         throw AppError.config(.invalidTempDir)
+      }
       return path
    }
 }
@@ -48,10 +53,10 @@ public struct IMEDCmdState {
    public var status: String?
    public var logPath: String?
    public var errPath: String?
-   public init() {
-      macimePath = Defaults.macimePath
-      sockPath = Defaults.sockPath
-      status = IMED.isMacimedRunning(sockPath: Defaults.sockPath) ? "running" : "stopped"
+   public init() throws {
+      macimePath = try Defaults.macimePath()
+      sockPath = try Defaults.sockPath()
+      status = try IMED.isMacimedRunning(sockPath: Defaults.sockPath()) ? "running" : "stopped"
    }
 }
 

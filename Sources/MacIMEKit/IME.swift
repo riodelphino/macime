@@ -53,22 +53,22 @@ public enum IME {
    }
 
    public static func previous(session_id: String?) throws -> String {
-      let path = getStoredPath(session_id)
+      let path = try getStoredPath(session_id)
       guard let prev_id = FS.read(path) else {
          throw AppError.ime(.previousIDNotFound)
       }
       return prev_id // return IME ID as String for performance
    }
 
-   public static func getStoredPath(_ sessionID: String?) -> String {
+   public static func getStoredPath(_ sessionID: String?) throws -> String {
       let basename = sessionID ?? "GLOBAL"
-      return Defaults.tempDir + "/" + basename
+      return try Defaults.tempDir() + "/" + basename
    }
 
    public static func createTempDir() throws {
-      if !FS.pathExists(Defaults.tempDir) {
-         guard FS.createDir(Defaults.tempDir) else {
-            throw AppError.ime(.createDirFailed(Defaults.tempDir))
+      if try !FS.pathExists(Defaults.tempDir()) {
+         guard try FS.createDir(Defaults.tempDir()) else {
+            throw try AppError.ime(.createDirFailed(Defaults.tempDir()))
          }
       }
    }
@@ -79,7 +79,7 @@ public enum IME {
       guard let curr = try current() else {
          throw AppError.ime(.getCurrentFailed)
       }
-      let path = getStoredPath(state.sessionID)
+      let path = try getStoredPath(state.sessionID)
       let success = FS.write(path, curr.id)
       guard success else {
          throw AppError.ime(.saveFailed(path))
@@ -143,7 +143,7 @@ public enum IME {
 
       // Save to /tmp
       if state.save {
-         let path = getStoredPath(state.sessionID)
+         let path = try getStoredPath(state.sessionID)
          let success = FS.write(path, currID)
          guard success else {
             throw AppError.ime(.saveFailed(path))

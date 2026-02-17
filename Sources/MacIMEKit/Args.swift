@@ -1,4 +1,5 @@
 import Foundation
+import InputMethodKit
 
 /// Arguments
 public enum ArgsCommon {
@@ -39,19 +40,24 @@ public enum ArgsIME {
       var args: [String] = args
       var state = IMECmdState()
 
-      // Fallbacks to `get` or `set`
-      if let first = args.first {
-         let isSubcmd = capableSubcmd.contains(first)
-         if !isSubcmd { // If not sub command
-            if isCapableOption("get", first) {
-               args.insert("get", at: 0) // Fallback to `get`
-            } else if !isOption(first) {
-               args.insert("set", at: 0) // Fallback to `set`
+      // Fallbacks to `get` or `set` (Compatibility for `im-select`-like command usage)
+      if args.isEmpty { // Fallback to `get` if zero args
+         args.insert("get", at: 0)
+      } else {
+         if let first = args.first {
+            if !capableSubcmd.contains(first) { // If invalid sub-command
+               if isCapableOption("get", first) { // Fallback to `get` if first is capable option for `get`
+                  args.insert("get", at: 0)
+               } else {
+                  // Fallback to `set` if first is valid IME ID
+                  let sources: [TISInputSource] = IME.list(selectCapable: true)
+                  let validImeIDs = Set(sources.map(\.id))
+                  if validImeIDs.contains(first) {
+                     args.insert("set", at: 0)
+                  }
+               }
             }
          }
-      } else {
-         // Fallback to `get` if zero args
-         args.insert("get", at: 0)
       }
 
       // Parse the first arg

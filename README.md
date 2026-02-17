@@ -10,7 +10,7 @@ built with Swift and powered by launchd.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.1&style=for-the-badge" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.2&style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />

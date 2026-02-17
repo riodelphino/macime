@@ -5,12 +5,13 @@
 <h1 align="center">macime</h1>
 
 <p align="center">
-A <strong>blazingly fast</strong> IME switching tool for macOS,</br>
-built with Swift and powered by launchd.
+A <strong>Blazingly fast</strong> IME switching tool for macOS,</br>
+built with Swift and powered by launchd,</br>
+delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.2&style=for-the-badge" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.3&style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -23,7 +24,7 @@ built with Swift and powered by launchd.
 I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
 But on my older Macs, these tools always required `a short wait` to switch IME modes. It was an unacceptable delay for daily use. (approximately 400ms)
 
-This tool reduces the delay by about **95%** when running as a daemon via launchd—down to 5–20 ms (around **20× faster** than other tools), delivering near-native IME switching.
+This tool reduces the delay by about **95%** when running as a daemon or launchd — down to 5–20 ms (around **20× faster** than other tools), delivering near-native IME switching.
 
 (I was already very satisfied with the switching speed since `v3.x`, but `v4.x` broke through that limit.)
 
@@ -46,8 +47,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
     * Switch IME while saving the previous one (in single step)
     * Output detailed get|list results as JSON
 * Daemon/launchd (`macimed`):
-    * Faster switching by daemon
-    * Blazingly faster switching by `brew services`
+    * Blazingly fast switching via daemon or `brew services`
 * Compatibility:
     * Fallback to `im-select` style command usage
 * Others:
@@ -442,8 +442,9 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 ### Unstable switching
 
-Via `macime.nvim`:
-When switching back to nvim on the terminal App from another App, the IME switching is unstable.
+Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching is unstable in following cases:
+- When switching back to nvim terminal from another App.
+- When have not run IME switching for a while.
 
 ### azookey prevents macime to change IME
 

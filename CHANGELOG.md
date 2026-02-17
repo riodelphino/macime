@@ -2,6 +2,7 @@
 
 ## [4.1.1](https://github.com/riodelphino/macime/compare/v4.1.0...v4.1.1) (2026-02-17)
 
+* **chore:** Change `state` variable from global to `IMED` local
 * **chore:** Throw error on `Defaults`
 
 ## [4.1.0](https://github.com/riodelphino/macime/compare/v4.0.1...v4.1.0) (2026-02-17)

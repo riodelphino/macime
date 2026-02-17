@@ -1,8 +1,12 @@
 import Foundation
 
-public var state = IMEDCmdState()
-
 public enum IMED {
+   public static var state: IMEDCmdState!
+
+   public static func setState(_ newState: IMEDCmdState) {
+      state = newState
+   }
+
    /// Clean up the socket
    public static func cleanupSocket() -> Bool {
       return FS.removePath(state.sockPath ?? "")

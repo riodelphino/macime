@@ -135,7 +135,7 @@ public enum ArgsIME {
 public enum ArgsIMED {
    /// Check args
    public static func parse(_ args: [String]) throws -> IMEDCmdState {
-      let state = IMEDCmdState()
+      let state = try IMEDCmdState()
       // Check the first arg
       if let arg = args.first {
          switch arg {

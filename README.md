@@ -1,12 +1,21 @@
-# macime
+<p align="center">
+  <img src="./assets/logo/macime_logo.png" width="512" />
+</p>
 
-![Version](https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.1&style=for-the-badge&cacheSeconds=0)
-[![License: MIT](https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Swift](https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white)](https://www.swift.org/)
-[![Easy Install](https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge)](#installation)
-[![Platform](https://img.shields.io/badge/Platform-macOS%2010.15%2B-blue?style=for-the-badge)](#)
+<h1 align="center">macime</h1>
 
-A **blazingly fast** IME switching tool for macOS, built with Swift and powered by launchd.
+<p align="center">
+A <strong>blazingly fast</strong> IME switching tool for macOS,</br>
+built with Swift and powered by launchd.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.1&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
+  <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Platform-macOS%2010.15%2B-blue?style=for-the-badge" />
+</p>
 
 
 ## Story

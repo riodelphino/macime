@@ -2,6 +2,7 @@
 
 ## [4.1.1](https://github.com/riodelphino/macime/compare/v4.1.0...v4.1.1) (2026-02-17)
 
+* **chore:** Change `fieldList` variable from global to `IME` local / Add `IME_BASE` const
 * **chore:** Change `state` variable from global to `IME` local
 * **chore:** Change `state` variable from global to `IMED` local
 * **chore:** Throw error on `Defaults`

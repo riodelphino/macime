@@ -1,19 +1,21 @@
 import Foundation
 import InputMethodKit
 
-/// fields list
-enum fieldsList {
-   static let id: [String] = ["id"]
-   static let detail: [String] = [
-      "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
-   ]
-}
-
 public enum IME {
    public static var state: IMECmdState!
 
    public static func setState(_ newState: IMECmdState) {
       state = newState
+   }
+
+   private static let IME_BASE = "com.apple.keylayout.ABC"
+
+   /// fields list
+   private enum fieldsList {
+      static let id: [String] = ["id"]
+      static let detail: [String] = [
+         "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
+      ]
    }
 
    /// Lazy load
@@ -99,7 +101,7 @@ public enum IME {
       let prev_id = try previous(session_id: state.sessionID)
 
       if state.cjkRefresh {
-         _ = try select(id: "com.apple.keylayout.ABC") // NOTE: Should set it once before setting desired ID (to make IME switching more reliably)
+         _ = try select(id: IME_BASE) // NOTE: Should set it once before setting desired ID (to make IME switching more reliably)
       }
 
       let src = try select(id: prev_id)

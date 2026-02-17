@@ -26,7 +26,7 @@ public enum AppError: Error {
    }
 }
 
-public enum ConfigError: Error { // TODO: Remove if unused
+public enum ConfigError: Error {
    case invalidMacimePath
    case invalidSockPath
    case invalidTempDir

@@ -23,8 +23,7 @@ built with Swift and powered by launchd.
 I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
 But on my older Macs, these tools always required `a short wait` to switch IME modes. It was an unacceptable delay for daily use. (approximately 400ms)
 
-This tool reduces the delay by about **95%** when running as a daemon via launchd—down to 5–20 ms (around **20× faster** than other tools).
-It feels almost like native IME switching.
+This tool reduces the delay by about **95%** when running as a daemon via launchd—down to 5–20 ms (around **20× faster** than other tools), delivering near-native IME switching.
 
 (I was already very satisfied with the switching speed since `v3.x`, but `v4.x` broke through that limit.)
 
@@ -35,8 +34,9 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 
 1. Sets and gets the IME in a single operation
 2. Works as a daemon or launchd(brew service)
-3. Written in native Swift
-4. Optimized code
+3. The daemon handles IME switching internally
+4. Written in native Swift
+5. Optimized code
 
 
 ## Features

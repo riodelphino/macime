@@ -502,9 +502,10 @@ swift build
 swift build -c release
 ```
 
-For debugging, temporary force the built `macimed` use the built `macime`:
+For debugging, temporary run the built `macimed` with the locally built `macime`:
 ```bash
-MACIME_PATH=/path/to/macime/.build/release/macime macimed
+# In the macime repository root:
+MACIME_PATH=.build/release/macime .build/release/macimed
 ```
 
 ## Thanks To

@@ -54,7 +54,7 @@ public enum ArgsIME {
                   args.insert("get", at: 0)
                } else {
                   // Fallback to `set` if first is valid IME ID
-                  let sources: [TISInputSource] = IME.list(selectCapable: true)
+                  let sources: [TISInputSource] = IME.sources(selectCapable: true)
                   let validImeIDs = Set(sources.map(\.id))
                   if validImeIDs.contains(first) {
                      args.insert("set", at: 0)

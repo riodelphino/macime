@@ -52,7 +52,7 @@ public enum IME {
       return source
    }
 
-   public static func list(selectCapable: Bool) -> [TISInputSource] {
+   public static func sources(selectCapable: Bool) -> [TISInputSource] {
       if selectCapable {
          return sources.filter(\.isSelectCapable)
       } else {
@@ -115,12 +115,10 @@ public enum IME {
 
    /// list sub-command
    public static func list(_ state: IMECmdState) throws -> String {
-      var sources: [TISInputSource]
-      sources = list(selectCapable: state.selectCapable)
       if state.detail {
          // list detail as json
          var outJson: [Any] = []
-         for source in sources {
+         for source in sources(selectCapable: state.selectCapable) {
             try outJson.append(source.describe(format: .json, fields: fieldsList.detail))
          }
          return try Util.jsonToString(outJson, options: [.prettyPrinted])

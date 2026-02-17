@@ -2,6 +2,7 @@
 
 ## [4.1.2](https://github.com/riodelphino/macime/compare/v4.1.1...v4.1.2) (2026-02-18)
 
+* **refactor:** Rename duplicate `list()` methods in `IME.swift`
 * **refactor:** Change func & variable names from `capable` to `valid`
 * **chore:** Improve fallback logic for `im-select` compatible command usage
 * **docs:** Update logo

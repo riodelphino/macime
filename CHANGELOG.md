@@ -2,6 +2,7 @@
 
 ## [4.1.1](https://github.com/riodelphino/macime/compare/v4.1.0...v4.1.1) (2026-02-17)
 
+* **refactor:** Change `checkIMEChanged()` from internal func to CJK method
 * **chore:** Remove obsolete TODO comment
 * **chore:** Change `fieldList` variable from global to `IME` local / Add `IME_BASE` const
 * **chore:** Change `state` variable from global to `IME` local

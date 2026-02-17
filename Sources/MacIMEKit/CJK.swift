@@ -15,6 +15,8 @@ enum CJK {
    private static var textField: NSTextField?
    private static var delegate: NSObject?
    private static var inputSourceObserver: NSObjectProtocol?
+   private static var start: CFAbsoluteTime = 0
+   private static var timeout: CFTimeInterval = 0.2
 
    private static func setup() {
       guard window == nil else { return }
@@ -77,6 +79,30 @@ enum CJK {
       // delegate = d
    }
 
+   private static func checkIMEChanged(desiredID: String) {
+      guard
+         let current = try? IME.current(),
+         let w = window
+      else {
+         return
+      }
+      if current.id == desiredID || CFAbsoluteTimeGetCurrent() - start > timeout {
+         w.orderOut(nil)
+         if let observer = inputSourceObserver {
+            DistributedNotificationCenter.default().removeObserver(observer)
+            inputSourceObserver = nil
+         }
+         // if current.id != desiredID { // TODO: REMOVE: Doesn't contribute switching success rate
+         //    _ = try? IME.select(id: desiredID) // Ensure to select desiredID again
+         // }
+         return
+      } else {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+            checkIMEChanged(desiredID: desiredID)
+         }
+      }
+   }
+
    static func refresh(desiredID: String) {
       guard Thread.isMainThread else {
          DispatchQueue.main.async { CJK.refresh(desiredID: desiredID) }
@@ -109,30 +135,8 @@ enum CJK {
          object: nil,
          queue: .main
       ) { _ in
-         func checkIMEChanged() {
-            guard let current = try? IME.current() else {
-               return
-            }
-            if current.id == desiredID || CFAbsoluteTimeGetCurrent() - start > timeout {
-               w.orderOut(nil)
-               if let observer = inputSourceObserver {
-                  DistributedNotificationCenter.default().removeObserver(observer)
-                  inputSourceObserver = nil
-               }
-               // if current.id != desiredID { // TODO: REMOVE: Doesn't contribute switching success rate
-               //    _ = try? IME.select(id: desiredID) // Ensure to select desiredID again
-               // }
-               return
-            } else {
-               DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
-                  checkIMEChanged()
-               }
-            }
-         }
-
-         let start = CFAbsoluteTimeGetCurrent()
-         let timeout: CFTimeInterval = 0.2
-         checkIMEChanged()
+         start = CFAbsoluteTimeGetCurrent()
+         checkIMEChanged(desiredID: desiredID)
       }
    }
 }

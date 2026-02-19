@@ -147,7 +147,7 @@ public enum ArgsIME {
 public enum ArgsIMED {
    /// Check args
    public static func parse(_ args: [String]) throws -> IMEDCmdState {
-      var state = try IMEDCmdState()
+      let state = try IMEDCmdState()
       // Check the first arg
       if let arg = args.first {
          switch arg {
@@ -157,8 +157,14 @@ public enum ArgsIMED {
          case "--help", "-h":
             IO.out(Help.macimed)
             exit(0)
-         case "--debug":
-            state.debug = true
+         case "--log-level", "-l":
+            guard args.count >= 2 else {
+               // throw AppError.imed(.missingLogLevel)
+               IO.err("Missing log level.")
+               exit(1)
+            }
+            let level: LogLevel = Log.getLogLevelByString(args[1])
+            Runtime.logLevel = level
          default:
             IO.err("Unknown Option: \(arg)")
             exit(1)

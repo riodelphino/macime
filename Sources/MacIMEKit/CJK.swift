@@ -39,6 +39,8 @@ enum CJK {
       effectView.material = .popover
       effectView.state = .active
 
+      Log.debug("Initialized CJK temp window")
+
       let tf = NSTextField(frame: NSRect(x: 0, y: 0, width: 1, height: 1))
 
       tf.font = NSFont.systemFont(ofSize: 13)
@@ -46,6 +48,8 @@ enum CJK {
       tf.isEditable = true
       tf.isSelectable = true
       tf.cell = NSSecureTextFieldCell()
+
+      Log.debug("Initialized CJK temp textField")
 
       // TODO: REMOVE (Does not seem to contribute to switching success rate)
       // class TextFieldDelegate: NSObject, NSTextFieldDelegate {

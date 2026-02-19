@@ -1,5 +1,9 @@
 import Foundation
 
+public enum Runtime {
+   public static var logLevel: LogLevel = .info
+}
+
 public enum Defaults {
    public static let version: String = "4.1.4"
 
@@ -65,6 +69,32 @@ public struct IMEDCmdState {
 public struct IMEDCommand {
    public let method: String?
    public let args: [String]?
+}
+
+public enum LogLevel: Int {
+   case debug = 0
+   case info
+   case warn
+   case error
+
+   public var desc: String {
+      switch self {
+      case .debug:
+         return "DEBUG"
+      case .info:
+         return "INFO "
+      case .warn:
+         return "WARN "
+      case .error:
+         return "ERROR "
+      }
+   }
+}
+
+extension LogLevel: Comparable {
+   public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
+      return lhs.rawValue < rhs.rawValue
+   }
 }
 
 public enum OutFormat {

@@ -1,9 +1,5 @@
 import Foundation
 
-public enum Runtime {
-   public static var logLevel: LogLevel = .info
-}
-
 public enum Defaults {
    public static let version: String = "4.1.4"
 
@@ -38,7 +34,12 @@ public enum Defaults {
    }
 }
 
-/// [macime] Keep commmand line args
+/// [Common] Keep runtime options
+public enum Runtime {
+   public static var logLevel: LogLevel = .info
+}
+
+/// [macime] Commmand line args
 public struct IMECmdState {
    public var subcmd: String?
    public var save: Bool = false
@@ -49,6 +50,12 @@ public struct IMECmdState {
    public var cjkRefresh: Bool = false
    public var debug: Bool = false
    public init() {}
+}
+
+/// [macime] Output formats
+public enum OutFormat {
+   case text
+   case json
 }
 
 /// [macimed] Keep command line args
@@ -64,11 +71,6 @@ public struct IMEDCmdState {
       sockPath = try Defaults.sockPath()
       status = try IMED.isMacimedRunning(sockPath: Defaults.sockPath()) ? "running" : "stopped"
    }
-}
-
-public struct IMEDCommand {
-   public let method: String?
-   public let args: [String]?
 }
 
 public enum LogLevel: Int {
@@ -108,11 +110,6 @@ extension LogLevel: Comparable {
    public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
       return lhs.rawValue < rhs.rawValue
    }
-}
-
-public enum OutFormat {
-   case text
-   case json
 }
 
 public enum Color {

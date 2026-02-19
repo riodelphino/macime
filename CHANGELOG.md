@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-20)
 
+* **refactor:** Sort definitions in `Type.swift`, Remove unused enum
 * **refactor:** Make `formatter` static in `Log`
 * **chore:** Colorize log on TTY (not on launchd)
 * **chore:** Add LogLevel for daemon

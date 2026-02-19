@@ -17,26 +17,22 @@ public enum ArgsCommon {
 
 /// macime
 public enum ArgsIME {
-   static let validSubcmds = ["get", "set", "load", "save", "list"]
-   static let validOpts = [
-      "get": ["--detail"],
-      "set": ["--save", "--session-id", "--cjk-refresh"],
-      "load": ["--session-id", "--cjk-refresh"],
-      "save": ["--session-id"],
-      "list": ["--select-capable", "--detail"],
-   ]
-   static let globalOpts: [String] = ["--debug", "--launchd"] // TODO: (Backward compatibility) Remove "--launchd" in later version
-
    private static func isValidSubcmd(_ subcmd: String) -> Bool {
-      return validSubcmds.contains(subcmd)
+      return IMESubCmd(rawValue: subcmd) != nil
    }
 
    private static func isOption(_ value: String) -> Bool {
       return value.hasPrefix("-")
    }
 
-   private static func isValidOption(_ subcmd: String, _ value: String) -> Bool {
-      return globalOpts.contains(value) || (validOpts[subcmd]?.contains(value) ?? false)
+   private static func isValidOption(_ subcmd: String, _ option: String) -> Bool {
+      guard
+         let cmd = IMESubCmd(rawValue: subcmd),
+         let opt = IMEOption(rawValue: option)
+      else {
+         return false
+      }
+      return cmd.validOptions.contains(opt)
    }
 
    private static func fallback(_ args: [String]) -> [String] {

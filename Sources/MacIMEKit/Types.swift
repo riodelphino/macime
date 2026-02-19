@@ -39,6 +39,41 @@ public enum Runtime {
    public static var logLevel: LogLevel = .info
 }
 
+/// IME sub commands
+public enum IMESubCmd: String {
+   case get
+   case set
+   case load
+   case save
+   case list
+
+   var validOptions: Set<IMEOption> {
+      switch self {
+      case .get:
+         return [.detail, .launchd, .debug]
+      case .set:
+         return [.save, .sessionID, .cjkRefresh, .launchd, .debug]
+      case .load:
+         return [.sessionID, .cjkRefresh, .launchd, .debug]
+      case .save:
+         return [.sessionID, .launchd, .debug]
+      case .list:
+         return [.selectCapable, .detail, .launchd, .debug]
+      }
+   }
+}
+
+/// IME options
+public enum IMEOption: String {
+   case detail = "--detail"
+   case save = "--save"
+   case sessionID = "--session-id"
+   case cjkRefresh = "--cjk-refresh"
+   case selectCapable = "--select-capable"
+   case launchd = "--launchd" // TODO: [Backward compatibility] Remove "--launchd" in later version
+   case debug = "--debug"
+}
+
 /// [macime] Commmand line args
 public struct IMEState {
    public var subcmd: String?

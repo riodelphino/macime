@@ -14,9 +14,7 @@ enum CJK {
    private static var window: NSWindow?
    private static var textField: NSTextField?
    private static var delegate: NSObject?
-   private static var inputSourceObserver: NSObjectProtocol?
-   private static var start: CFAbsoluteTime = 0
-   private static var timeout: CFTimeInterval = 0.2
+   private static var imeStabilizationDelay: Double = 0.00 // Doesn't seem to contribute success rate // 0.05: Environment-dependent value
 
    private static func setup() {
       guard window == nil else { return }
@@ -84,12 +82,12 @@ enum CJK {
    }
 
    static func refresh(desiredID: String) {
-      Log.debug("refresh() called")
       guard Thread.isMainThread else {
-         Log.debug("Recall refresh() async")
+         Log.debug("Recall refresh() asynchronously")
          DispatchQueue.main.async { refresh(desiredID: desiredID) }
          return
       }
+      Log.debug("refresh() started")
 
       _ = NSApplication.shared
       NSApp.setActivationPolicy(.accessory)
@@ -104,7 +102,7 @@ enum CJK {
       Log.debug("Activated the temp window.")
 
       // Hide window (async/simple ver)
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // 0.05 is Environment-dependent value
+      DispatchQueue.main.asyncAfter(deadline: .now() + imeStabilizationDelay) {
          w.orderOut(nil)
          Log.debug("Deactivated the temp window.")
       }

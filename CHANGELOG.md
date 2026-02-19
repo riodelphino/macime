@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-20)
 
+* **refactor:** Refine comments, Remove unused variables
 * **refactor:** Split `macime` command fallback to func (re)
 * **fix:** Remove checking current IME since it cannot catch CJK IME internal mode changes
 * **refactor:** Split `macime` command fallback to func

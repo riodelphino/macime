@@ -8,7 +8,7 @@ public enum IME {
       state = newState
    }
 
-   private static let IME_BASE = "com.apple.keylayout.ABC"
+   private static let BASE_IME = "com.apple.keylayout.ABC"
 
    /// fields list
    private enum fieldsList {
@@ -101,7 +101,7 @@ public enum IME {
       let prev_id = try previous(session_id: state.sessionID)
 
       if state.cjkRefresh {
-         _ = try select(id: IME_BASE) // NOTE: Should set it once before setting desired ID (to make IME switching more reliably)
+         _ = try select(id: BASE_IME) // NOTE: Should set it once before setting desired ID (to make IME switching more reliably)
       }
 
       let src = try select(id: prev_id)

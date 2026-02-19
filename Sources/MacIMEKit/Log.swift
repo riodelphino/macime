@@ -2,11 +2,15 @@ import Darwin
 import Foundation
 
 public enum Log {
+   private static let formatter: ISO8601DateFormatter = {
+      let f = ISO8601DateFormatter()
+      f.timeZone = .current
+      return f
+   }()
+
    /// Leave log (to stderr)
    public static func log(_ msg: String, logLevel: LogLevel = .info) {
       guard shouldLog(logLevel) else { return }
-      let formatter = ISO8601DateFormatter()
-      formatter.timeZone = .current
       let timestamp = formatter.string(from: Date())
       let isTTY = isatty(STDERR_FILENO) != 0
       var logLevelStr = logLevel.desc

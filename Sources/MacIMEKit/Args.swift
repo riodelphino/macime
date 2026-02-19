@@ -39,11 +39,8 @@ public enum ArgsIME {
       return globalOpts.contains(value) || (validOpts[subcmd]?.contains(value) ?? false)
    }
 
-   /// Parse args array into CmdState
-   public static func parse(_ args: [String]) throws -> IMECmdState {
-      var args: [String] = args
-      var state = IMECmdState()
-
+   private static func fallback(_ args: [String]) -> [String] {
+      var args = args
       // Fallbacks to `get` or `set` (Compatibility for `im-select`-like command usage)
       if args.isEmpty { // Fallback to `get` if zero args
          args.insert("get", at: 0)
@@ -63,6 +60,13 @@ public enum ArgsIME {
             }
          }
       }
+      return args
+   }
+
+   /// Parse args array into CmdState
+   public static func parse(_ args: [String]) throws -> IMECmdState {
+      let args: [String] = fallback(args)
+      var state = IMECmdState()
 
       // Parse the first arg
       var index = 0

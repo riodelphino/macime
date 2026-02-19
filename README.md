@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.3&style=for-the-badge" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.1.4&style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -265,6 +265,7 @@ macime list --select-capable
 | --save                    | set           | Save current IME (with `macime set` only)                   |
 | --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir) |
 | --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental)            |
+| --debug                   | <all>         | Show debug information                                      |
 
 ### CJK refreshing
 
@@ -297,8 +298,11 @@ It runs in the background and controls `macime` by receiving commands over a Uni
 
 Run `macimed` manually (for debugging):
 ```bash
+# Show err/log
 macimed
-# It shows useful err/log
+# Show more detailed err/log
+macimed --debug
+
 ```
 
 Show the `macimed` version:

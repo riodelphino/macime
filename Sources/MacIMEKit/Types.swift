@@ -1,7 +1,7 @@
 import Foundation
 
 public enum Defaults {
-   public static let version: String = "4.1.3"
+   public static let version: String = "4.1.4"
 
    public static func macimePath() throws -> String {
       let env = ProcessInfo.processInfo.environment
@@ -43,6 +43,7 @@ public struct IMECmdState {
    public var detail: Bool = false
    public var sessionID: String?
    public var cjkRefresh: Bool = false
+   public var debug: Bool = false
    public init() {}
 }
 
@@ -53,6 +54,7 @@ public struct IMEDCmdState {
    public var status: String?
    public var logPath: String?
    public var errPath: String?
+   public var debug: Bool = false
    public init() throws {
       macimePath = try Defaults.macimePath()
       sockPath = try Defaults.sockPath()

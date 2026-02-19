@@ -25,7 +25,7 @@ public enum ArgsIME {
       "save": ["--session-id"],
       "list": ["--select-capable", "--detail"],
    ]
-   static let globalOpts: [String] = ["--launchd"] // TODO: (Backward compatibility) Remove "--launchd" in later version
+   static let globalOpts: [String] = ["--debug", "--launchd"] // TODO: (Backward compatibility) Remove "--launchd" in later version
 
    private static func isValidSubcmd(_ subcmd: String) -> Bool {
       return validSubcmds.contains(subcmd)
@@ -132,6 +132,8 @@ public enum ArgsIME {
             IO.err("`--launchd` option is deprecated in macime v3.6.0")
          case "--cjk-refresh":
             state.cjkRefresh = true
+         case "--debug":
+            state.debug = true
          default:
             throw AppError.cmd(.invalidOption(arg))
          }
@@ -145,7 +147,7 @@ public enum ArgsIME {
 public enum ArgsIMED {
    /// Check args
    public static func parse(_ args: [String]) throws -> IMEDCmdState {
-      let state = try IMEDCmdState()
+      var state = try IMEDCmdState()
       // Check the first arg
       if let arg = args.first {
          switch arg {
@@ -155,6 +157,8 @@ public enum ArgsIMED {
          case "--help", "-h":
             IO.out(Help.macimed)
             exit(0)
+         case "--debug":
+            state.debug = true
          default:
             IO.err("Unknown Option: \(arg)")
             exit(1)

@@ -10,13 +10,13 @@ public enum IME {
 
    private static let BASE_IME = "com.apple.keylayout.ABC"
 
-   /// fields list
-   private enum fieldsList {
-      static let id: [String] = ["id"]
-      static let detail: [String] = [
-         "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
-      ]
-   }
+   // /// fields list
+   // private enum fieldsList {
+   //    static let id: [String] = ["id"]
+   //    static let detail: [String] = [
+   //       "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
+   //    ]
+   // }
 
    /// Lazy load
    private static var _sources: [TISInputSource]?
@@ -118,7 +118,7 @@ public enum IME {
          // list detail as json
          var outJson: [Any] = []
          for source in sources(selectCapable: state.selectCapable) {
-            try outJson.append(source.describe(format: .json, fields: fieldsList.detail))
+            try outJson.append(source.describe(format: .json, fields: IMEFieldList.detail.fields)) // TODO: fields は 文字列配列を期待。今渡そうとしてるのは IMEFieldの配列
          }
          return try Util.jsonToString(outJson, options: [.prettyPrinted])
       } else {
@@ -165,7 +165,7 @@ public enum IME {
       }
       if state.detail {
          // curr IME detail as JSON
-         let outJson: Any = try curr.describe(format: .json, fields: fieldsList.detail)
+         let outJson: Any = try curr.describe(format: .json, fields: IMEFieldList.detail.fields)
          return try Util.jsonToString(outJson, options: [.prettyPrinted])
       } else {
          // curr IME id as string

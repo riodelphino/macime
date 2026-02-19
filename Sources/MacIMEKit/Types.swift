@@ -1,5 +1,6 @@
 import Foundation
 
+/// [Common] default values
 public enum Defaults {
    public static let version: String = "4.1.4"
 
@@ -34,7 +35,7 @@ public enum Defaults {
    }
 }
 
-/// [Common] Keep runtime options
+/// [Common] Runtime options
 public enum Runtime {
    public static var logLevel: LogLevel = .info
 }
@@ -74,7 +75,7 @@ public enum IMEOption: String {
    case debug = "--debug"
 }
 
-/// [macime] Commmand line args
+/// IME state
 public struct IMEState {
    public var subcmd: String?
    public var save: Bool = false
@@ -87,13 +88,42 @@ public struct IMEState {
    public init() {}
 }
 
-/// [macime] Output formats
+/// IME Output formats
 public enum OutFormat {
    case text
    case json
 }
 
-/// [macimed] Keep command line args
+public enum IMEField: String {
+   case id
+   case localizedName
+   case isSelectCapable
+   case isSelected
+   case sourceLanguages
+}
+
+public enum IMEFieldList {
+   case id
+   case detail
+   var fields: [IMEField] {
+      switch self {
+      case .id:
+         return [.id]
+      case .detail:
+         return [.id, .localizedName, .isSelectCapable, .isSelected, .sourceLanguages]
+      }
+   }
+}
+
+/// fields list
+private enum fieldsList {
+   static let id: [String] = ["id"]
+   static let detail: [String] = [
+      "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
+   ]
+}
+
+/// IMED Keep command line args
 public struct IMEDState {
    public var macimePath: String?
    public var sockPath: String?
@@ -108,6 +138,7 @@ public struct IMEDState {
    }
 }
 
+/// IMED log level
 public enum LogLevel: Int {
    case debug = 0
    case info
@@ -147,6 +178,7 @@ extension LogLevel: Comparable {
    }
 }
 
+/// Color
 public enum Color {
    case normal
    case gray

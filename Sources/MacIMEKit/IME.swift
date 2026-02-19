@@ -2,9 +2,9 @@ import Foundation
 import InputMethodKit
 
 public enum IME {
-   public static var state: IMECmdState!
+   public static var state: IMEState!
 
-   public static func setState(_ newState: IMECmdState) {
+   public static func setState(_ newState: IMEState) {
       state = newState
    }
 
@@ -82,7 +82,7 @@ public enum IME {
    }
 
    /// save sub-command
-   public static func save(_ state: IMECmdState) throws -> String {
+   public static func save(_ state: IMEState) throws -> String {
       try createTempDir()
       guard let curr = try current() else {
          throw AppError.ime(.getCurrentFailed)
@@ -96,7 +96,7 @@ public enum IME {
    }
 
    /// load sub-command
-   public static func load(_ state: IMECmdState) throws -> String {
+   public static func load(_ state: IMEState) throws -> String {
       try createTempDir()
       let prev_id = try previous(session_id: state.sessionID)
 
@@ -113,7 +113,7 @@ public enum IME {
    }
 
    /// list sub-command
-   public static func list(_ state: IMECmdState) throws -> String {
+   public static func list(_ state: IMEState) throws -> String {
       if state.detail {
          // list detail as json
          var outJson: [Any] = []
@@ -132,7 +132,7 @@ public enum IME {
    }
 
    /// Set sub-command
-   public static func set(_ state: IMECmdState) throws -> String {
+   public static func set(_ state: IMEState) throws -> String {
       // Switch to new ID
       guard let curr = try current() else {
          throw AppError.ime(.getCurrentFailed)
@@ -159,7 +159,7 @@ public enum IME {
    }
 
    /// get sub-command
-   public static func get(_ state: IMECmdState) throws -> String {
+   public static func get(_ state: IMEState) throws -> String {
       guard let curr = try current() else {
          throw AppError.ime(.getCurrentFailed)
       }
@@ -174,7 +174,7 @@ public enum IME {
    }
 
    /// execute appropriate sub-command with refering state
-   public static func execute(_ state: IMECmdState) throws -> String {
+   public static func execute(_ state: IMEState) throws -> String {
       switch state.subcmd {
       case "save":
          return try save(state)

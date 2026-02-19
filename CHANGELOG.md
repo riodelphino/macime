@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-20)
 
+* **refactor:** Rename `IMECmdState` `IMEDCmdState` to `IMEState` `IMEDState`
 * **docs:** Add `--log-level` option
 * **refactor:** Rename `IME_BASE` to `BASE_IME`
 * **refactor:** Refine comments, Remove unused variables

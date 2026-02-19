@@ -40,7 +40,7 @@ public enum Runtime {
 }
 
 /// [macime] Commmand line args
-public struct IMECmdState {
+public struct IMEState {
    public var subcmd: String?
    public var save: Bool = false
    public var newID: String?
@@ -59,7 +59,7 @@ public enum OutFormat {
 }
 
 /// [macimed] Keep command line args
-public struct IMEDCmdState {
+public struct IMEDState {
    public var macimePath: String?
    public var sockPath: String?
    public var status: String?

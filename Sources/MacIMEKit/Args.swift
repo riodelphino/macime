@@ -64,9 +64,9 @@ public enum ArgsIME {
    }
 
    /// Parse args array into CmdState
-   public static func parse(_ args: [String]) throws -> IMECmdState {
+   public static func parse(_ args: [String]) throws -> IMEState {
       let args: [String] = fallback(args)
-      var state = IMECmdState()
+      var state = IMEState()
 
       // Parse the first arg
       var index = 0
@@ -150,8 +150,8 @@ public enum ArgsIME {
 /// macimed (daemon)
 public enum ArgsIMED {
    /// Check args
-   public static func parse(_ args: [String]) throws -> IMEDCmdState {
-      let state = try IMEDCmdState()
+   public static func parse(_ args: [String]) throws -> IMEDState {
+      let state = try IMEDState()
       // Check the first arg
       if let arg = args.first {
          switch arg {

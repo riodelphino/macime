@@ -1,9 +1,9 @@
 import Foundation
 
 public enum IMED {
-   public static var state: IMEDCmdState!
+   public static var state: IMEDState!
 
-   public static func setState(_ newState: IMEDCmdState) {
+   public static func setState(_ newState: IMEDState) {
       state = newState
    }
 

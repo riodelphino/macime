@@ -100,13 +100,13 @@ public enum IMED {
    public static func handleClient(_ client: Int32) {
       defer { close(client) }
 
-      Log.log("Client connected: fd=\(client)")
+      Log.info("Client connected: fd=\(client)")
 
       var buffer = [UInt8](repeating: 0, count: 4096)
       let bytesRead = read(client, &buffer, buffer.count)
 
       guard bytesRead > 0 else {
-         Log.log("Client read failed or EOF")
+         Log.error("Client read failed or EOF")
          return
       }
 
@@ -115,7 +115,7 @@ public enum IMED {
             in: .whitespacesAndNewlines
          ) ?? ""
 
-      Log.log("Recieved command: \(command)")
+      Log.info("Recieved command: \(command)")
 
       var stdout = ""
       var stderr = ""
@@ -130,20 +130,20 @@ public enum IMED {
             if stderr.isEmpty {
                stdout = stdout.isEmpty ? "OK" : stdout
                write(client, stdout, strlen(stdout)) // Write stdout
-               Log.log("Client response : \(stdout)")
+               Log.info("Client response : \(stdout)")
             } else {
                write(client, stderr, strlen(stderr)) // Write stderr
-               Log.log("Client error    : \(stderr)")
+               Log.error("Client error    : \(stderr)")
             }
 
             shutdown(client, SHUT_WR)
          }
-         Log.log("Elapsed time    : \(ms)ms")
+         Log.info("Elapsed time    : \(ms)ms")
          return
       } catch let e as AppError {
-         Log.log("Executing error : \(e.message)")
+         Log.error("Executing error : \(e.message)")
       } catch {
-         Log.log("Unexpected error: ")
+         Log.error("Unexpected error: ")
       }
    }
 
@@ -156,7 +156,7 @@ public enum IMED {
          throw NSError(domain: "socket", code: -1, userInfo: ["msg": "socket() failed"])
       }
 
-      Log.log("Socket created: fd=\(fd)")
+      Log.info("Socket created: fd=\(fd)")
 
       defer { close(fd) }
 
@@ -179,18 +179,18 @@ public enum IMED {
          throw NSError(domain: "bind", code: -1, userInfo: ["msg": "bind() failed"])
       }
 
-      Log.log("Socket bound to \(state.sockPath ?? "")")
+      Log.info("Socket bound to \(state.sockPath ?? "")")
 
       guard listen(fd, 5) == 0 else {
          throw NSError(domain: "listen", code: -1, userInfo: ["msg": "listen() failed"])
       }
 
-      Log.log("Listening for connections...")
+      Log.info("Listening for connections...")
 
       while true {
          let client = accept(fd, nil, nil)
          guard client >= 0 else {
-            Log.log("accept() failed")
+            Log.error("accept() failed")
             continue
          }
          DispatchQueue.global().async {

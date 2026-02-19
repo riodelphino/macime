@@ -5,15 +5,15 @@ public var args: [String] = ArgsCommon.getCmdArgs()
 
 do {
    let state = try ArgsIMED.parse(args)
-   Log.log("macimed \(Defaults.version) starting...")
+   Log.info("macimed \(Defaults.version) starting...")
    IMED.setState(state)
    DispatchQueue.global().async {
       try? IMED.serve()
    }
 } catch let e as AppError {
-   Log.log(e.message)
+   Log.error(e.message)
 } catch {
-   Log.log("Unexpected error")
+   Log.error("Unexpected error")
 }
 
 RunLoop.main.run()

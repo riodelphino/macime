@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-19)
 
+* **chore:** Add LogLevels
 * **feat:** Add `--debug` option to `macime` and `macimed`
 
 ## [4.1.3](https://github.com/riodelphino/macime/compare/v4.1.2...v4.1.3) (2026-02-18)

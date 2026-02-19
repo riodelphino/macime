@@ -1,3 +1,4 @@
+import Darwin
 import Foundation
 
 public enum Log {
@@ -7,7 +8,13 @@ public enum Log {
       let formatter = ISO8601DateFormatter()
       formatter.timeZone = .current
       let timestamp = formatter.string(from: Date())
-      let logMsg = "[\(timestamp)] \(msg)\n"
+      let isTTY = isatty(STDERR_FILENO) != 0
+      var logLevelStr = logLevel.desc
+      if isTTY {
+         let color = logLevel.color
+         logLevelStr = color.colorize(logLevelStr)
+      }
+      let logMsg = "[\(timestamp)] \(logLevelStr) \(msg)\n"
       if let data = logMsg.data(using: .utf8) {
          FileHandle.standardError.write(data) // standardOutput is not appropriate here
       }

@@ -82,11 +82,24 @@ public enum LogLevel: Int {
       case .debug:
          return "DEBUG"
       case .info:
-         return "INFO "
+         return " INFO"
       case .warn:
-         return "WARN "
+         return " WARN"
       case .error:
-         return "ERROR "
+         return "ERROR"
+      }
+   }
+
+   public var color: Color {
+      switch self {
+      case .debug:
+         return Color.gray
+      case .info:
+         return Color.green
+      case .warn:
+         return Color.yellow
+      case .error:
+         return Color.red
       }
    }
 }
@@ -102,14 +115,21 @@ public enum OutFormat {
    case json
 }
 
-public enum Colors {
+public enum Color {
+   case normal
+   case gray
    case red
    case blue
    case green
    case yellow
    case reset
-   public var color: String {
+
+   public var seq: String {
       switch self {
+      case .normal:
+         return ""
+      case .gray:
+         return "\u{001B}[90m"
       case .red:
          return "\u{001B}[31m"
       case .green:
@@ -120,6 +140,14 @@ public enum Colors {
          return "\u{001B}[34m"
       case .reset:
          return "\u{001B}[0m"
+      }
+   }
+
+   public func colorize(_ text: String) -> String {
+      if self == .normal {
+         return text
+      } else {
+         return "\(seq)\(text)\(Color.reset.seq)"
       }
    }
 }

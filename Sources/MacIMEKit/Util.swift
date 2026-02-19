@@ -22,10 +22,6 @@ public enum Util {
       return Int(ms.rounded())
    }
 
-   public static func colored(_ color: Colors, _ text: String) -> String {
-      return color.color + text + Colors.reset.color
-   }
-
    /// Return the first existing path in paths
    public static func fallbackPaths(checkPathExists: Bool, paths: [String?]) -> String? {
       for path in paths {

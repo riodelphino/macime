@@ -105,10 +105,9 @@ public enum IME {
       }
 
       let src = try select(id: prev_id)
+      // NOTE: The CJK IME internal mode has not been switched yet because the change happens asynchronously.
 
-      if state.cjkRefresh {
-         CJK.refresh(desiredID: prev_id)
-      }
+      if state.cjkRefresh { CJK.refresh(desiredID: prev_id) }
 
       return src.id
    }
@@ -144,6 +143,7 @@ public enum IME {
       }
 
       _ = try select(id: _newID)
+      // NOTE: The CJK IME internal mode has not been switched yet because the change happens asynchronously.
 
       if state.cjkRefresh { CJK.refresh(desiredID: _newID) }
 

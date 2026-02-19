@@ -83,33 +83,11 @@ enum CJK {
       // delegate = d
    }
 
-   private static func checkIMEChanged(desiredID: String) {
-      guard
-         let current = try? IME.current(),
-         let w = window
-      else {
-         return
-      }
-      if current.id == desiredID || CFAbsoluteTimeGetCurrent() - start > timeout {
-         w.orderOut(nil)
-         if let observer = inputSourceObserver {
-            DistributedNotificationCenter.default().removeObserver(observer)
-            inputSourceObserver = nil
-         }
-         // if current.id != desiredID { // TODO: REMOVE: Doesn't contribute switching success rate
-         //    _ = try? IME.select(id: desiredID) // Ensure to select desiredID again
-         // }
-         return
-      } else {
-         DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
-            checkIMEChanged(desiredID: desiredID)
-         }
-      }
-   }
-
    static func refresh(desiredID: String) {
+      Log.debug("refresh() called")
       guard Thread.isMainThread else {
-         DispatchQueue.main.async { CJK.refresh(desiredID: desiredID) }
+         Log.debug("Recall refresh() async")
+         DispatchQueue.main.async { refresh(desiredID: desiredID) }
          return
       }
 
@@ -123,24 +101,12 @@ enum CJK {
       w.orderFront(nil)
       w.makeKey()
       w.makeFirstResponder(tf)
+      Log.debug("Activated the temp window.")
 
       // Hide window (async/simple ver)
-      // DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // 0.05 is Environment-dependent value
-      //    w.orderOut(nil)
-      // }
-
-      // Hide window (async/wait for switching)
-      if let observer = inputSourceObserver {
-         DistributedNotificationCenter.default().removeObserver(observer)
-         inputSourceObserver = nil
-      }
-      inputSourceObserver = DistributedNotificationCenter.default().addObserver(
-         forName: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String),
-         object: nil,
-         queue: .main
-      ) { _ in
-         start = CFAbsoluteTimeGetCurrent()
-         checkIMEChanged(desiredID: desiredID)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // 0.05 is Environment-dependent value
+         w.orderOut(nil)
+         Log.debug("Deactivated the temp window.")
       }
    }
 }

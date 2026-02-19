@@ -317,6 +317,13 @@ macimed --help
 macimed -h
 ```
 
+Set log level:
+```bash
+macimed --log-level info # Default
+macimed -l info
+# debug|info|warn|error
+````
+
 #### Default Socket Path
 
 `macimed` listens to:

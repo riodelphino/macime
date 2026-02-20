@@ -166,20 +166,21 @@ public enum IME {
    }
 
    /// execute appropriate sub-command with refering state
-   public static func execute(_ state: IMEState) throws -> String {
-      switch state.subcmd {
-      case "save":
-         return try save(state)
-      case "load":
-         return try load(state)
-      case "list":
-         return try list(state)
-      case "set":
-         return try set(state)
-      case "get":
+   public static func execute(_ state: IMEState) throws -> String? {
+      guard let subcmd = IMESubCmd(rawValue: state.subcmd ?? "") else {
+         return nil
+      }
+      switch subcmd {
+      case .get:
          return try get(state)
-      default:
-         throw AppError.ime(.invalidSubCommand(state.subcmd ?? "Unknown"))
+      case .set:
+         return try set(state)
+      case .save:
+         return try save(state)
+      case .load:
+         return try load(state)
+      case .list:
+         return try list(state)
       }
    }
 }

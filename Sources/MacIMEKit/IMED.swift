@@ -62,7 +62,7 @@ public enum IMED {
       switch method {
       case "ime":
          let imeState = try IMEArgs.parse(args)
-         let ret = try IME.execute(imeState)
+         let ret = try IME.execute(imeState) ?? ""
          stdout = ret
          stderr = "" // DEBUG: Should check success or not, then assort ret to stdout/stderr.
 

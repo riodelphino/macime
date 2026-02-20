@@ -7,9 +7,11 @@ do {
    let state = try IMEArgs.parse(args)
    try IMEArgs.validate(state)
    IME.setState(state)
-   let ret: String = try IME.execute(state)
-   if ret != "" {
-      IO.out(ret)
+
+   if let ret = try IME.execute(state) {
+      if ret != "" {
+         IO.out(ret)
+      }
    }
    exit(0)
 } catch let e as AppError {

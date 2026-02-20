@@ -137,6 +137,16 @@ public enum LogLevel: Int {
    case warn
    case error
 
+   public init?(_ level: String) {
+      switch level.lowercased() {
+      case "debug": self = .debug
+      case "info": self = .info
+      case "warn": self = .warn
+      case "error": self = .error
+      default: return nil
+      }
+   }
+
    public var desc: String {
       switch self {
       case .debug:

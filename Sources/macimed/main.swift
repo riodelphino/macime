@@ -5,7 +5,8 @@ public var args: [String] = ArgsCommon.getCmdArgs()
 
 do {
    let state = try ArgsIMED.parse(args)
-   Log.info("macimed \(Defaults.version) starting...")
+   ArgsIMED.validate(state)
+   Log.info("macimed \(Defaults.version) starting...") // DEBUG: REMOVE
    Log.debug("a test for debug log")
    Log.info("a test for info log")
    Log.warn("a test for warn log")

@@ -24,22 +24,6 @@ public enum Log {
       }
    }
 
-   public static func getLogLevelByString(_ level: String) -> LogLevel {
-      switch level {
-      case "debug":
-         return .debug
-      case "info":
-         return .info
-      case "warn":
-         return .warn
-      case "error":
-         return .error
-      default:
-         IO.err("Invalid log level: \(level) (Choose from debug|info|warn|error)") // TODO: Should be AppError?
-         exit(1)
-      }
-   }
-
    public static func shouldLog(_ level: LogLevel) -> Bool {
       return level >= Runtime.logLevel
    }

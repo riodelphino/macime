@@ -149,7 +149,7 @@ public enum ArgsIME {
 
 /// macimed (daemon)
 public enum ArgsIMED {
-   /// Check args
+   /// Parse command-line args
    public static func parse(_ args: [String]) throws -> IMEDState {
       let state = try IMEDState()
       // Check the args
@@ -169,7 +169,10 @@ public enum ArgsIMED {
                IO.err("Missing log level. Use one of debug, info, warn, error.")
                exit(1)
             }
-            let level: LogLevel = Log.getLogLevelByString(args[i + 1])
+            guard let level = LogLevel(args[i + 1]) else {
+               IO.err("Invalid log level `\(args[i + 1])`. Use one of debug, info, warn, error.")
+               exit(1)
+            }
             Runtime.logLevel = level
             i += 1
          default:
@@ -183,5 +186,10 @@ public enum ArgsIMED {
       }
 
       return state
+   }
+
+   /// Validate IMEDState
+   public static func validate(_: IMEDState) {
+      // Add validations in future
    }
 }

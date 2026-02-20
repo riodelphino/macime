@@ -454,8 +454,10 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 ### Unstable switching
 
 Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching is unstable in following cases:
-- When switching back to nvim terminal from another App.
 - When have not run IME switching for a while.
+
+Solution for now:
+- Switch IME several times, and might warm up `macimed` or CJK IME. It probably reduces the CJK switching error rate. 
 
 ### azookey prevents macime to change IME
 

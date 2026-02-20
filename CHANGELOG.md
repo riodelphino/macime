@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-21)
 
+* **chore:** Remove unnecessary comment
 * **docs:** Add CJK text to `Log.debug` in `CJK`
 * **chore:** Remove test logs
 * **refactor:** Rename `ArgsIME` `ArgsIMED` to `IMEArgs` `IMEDArgs`

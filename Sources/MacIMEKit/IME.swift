@@ -110,7 +110,7 @@ public enum IME {
          // list detail as json
          var outJson: [Any] = []
          for source in sources(selectCapable: state.selectCapable) {
-            try outJson.append(source.describe(format: .json, fields: IMEFieldList.detail.fields)) // TODO: fields は 文字列配列を期待。今渡そうとしてるのは IMEFieldの配列
+            try outJson.append(source.describe(format: .json, fields: IMEFieldList.detail.fields))
          }
          return try Util.jsonToString(outJson, options: [.prettyPrinted])
       } else {

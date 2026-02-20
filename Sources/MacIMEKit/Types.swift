@@ -40,7 +40,45 @@ public enum Runtime {
    public static var logLevel: LogLevel = .info
 }
 
-/// IME sub commands
+/// [Common] Color
+public enum Color {
+   case normal
+   case gray
+   case red
+   case blue
+   case green
+   case yellow
+   case reset
+
+   public var seq: String {
+      switch self {
+      case .normal:
+         return ""
+      case .gray:
+         return "\u{001B}[90m"
+      case .red:
+         return "\u{001B}[31m"
+      case .green:
+         return "\u{001B}[32m"
+      case .yellow:
+         return "\u{001B}[33m"
+      case .blue:
+         return "\u{001B}[34m"
+      case .reset:
+         return "\u{001B}[0m"
+      }
+   }
+
+   public func colorize(_ text: String) -> String {
+      if self == .normal {
+         return text
+      } else {
+         return "\(seq)\(text)\(Color.reset.seq)"
+      }
+   }
+}
+
+/// [IME] sub commands
 public enum IMESubCmd: String {
    case get
    case set
@@ -64,7 +102,7 @@ public enum IMESubCmd: String {
    }
 }
 
-/// IME options
+/// [IME] options
 public enum IMEOption: String {
    case detail = "--detail"
    case save = "--save"
@@ -75,7 +113,7 @@ public enum IMEOption: String {
    case debug = "--debug"
 }
 
-/// IME state
+/// [IME] state
 public struct IMEState {
    public var subcmd: String?
    public var save: Bool = false
@@ -88,12 +126,13 @@ public struct IMEState {
    public init() {}
 }
 
-/// IME Output formats
+/// [IME] Output formats
 public enum OutFormat {
    case text
    case json
 }
 
+/// [IME] Field
 public enum IMEField: String {
    case id
    case localizedName
@@ -102,6 +141,7 @@ public enum IMEField: String {
    case sourceLanguages
 }
 
+/// [IME] Field list
 public enum IMEFieldList {
    case id
    case detail
@@ -115,7 +155,7 @@ public enum IMEFieldList {
    }
 }
 
-/// IMED Keep command line args
+/// [IMED] Keep command line args
 public struct IMEDState {
    public var macimePath: String?
    public var sockPath: String?
@@ -130,8 +170,8 @@ public struct IMEDState {
    }
 }
 
-/// IMED log level
-public enum LogLevel: Int {
+/// [IMED] log level
+public enum LogLevel: Int, Comparable {
    case debug = 0
    case info
    case warn
@@ -172,48 +212,8 @@ public enum LogLevel: Int {
          return Color.red
       }
    }
-}
 
-extension LogLevel: Comparable {
    public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
       return lhs.rawValue < rhs.rawValue
-   }
-}
-
-/// Color
-public enum Color {
-   case normal
-   case gray
-   case red
-   case blue
-   case green
-   case yellow
-   case reset
-
-   public var seq: String {
-      switch self {
-      case .normal:
-         return ""
-      case .gray:
-         return "\u{001B}[90m"
-      case .red:
-         return "\u{001B}[31m"
-      case .green:
-         return "\u{001B}[32m"
-      case .yellow:
-         return "\u{001B}[33m"
-      case .blue:
-         return "\u{001B}[34m"
-      case .reset:
-         return "\u{001B}[0m"
-      }
-   }
-
-   public func colorize(_ text: String) -> String {
-      if self == .normal {
-         return text
-      } else {
-         return "\(seq)\(text)\(Color.reset.seq)"
-      }
    }
 }

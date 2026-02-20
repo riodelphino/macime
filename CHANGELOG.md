@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-20)
 
+* **refactor:** Add while loop to `ArgsIMED`
 * **chore:** Remove unused old `fieldsList`
 * **chore:** Add `valueStr()`
 * **chore:** Change `value()` arg type from `Strng` to `IMEField`

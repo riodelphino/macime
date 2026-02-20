@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-21)
+## [4.2.0](https://github.com/riodelphino/macime/compare/v4.1.3...v4.2.0) (2026-02-21)
 
+* **docs:** Add tech info about `Unstable Switching Issue`
 * **chore:** Make `IMED.execute()` return `IMEDResult` instead of `(stdout: ..., stderr: ...)`
 * **refactor:** Types.swift
 * **refactor:** `IME.execute()` should return `nil` instead of ""

@@ -10,14 +10,6 @@ public enum IME {
 
    private static let BASE_IME = "com.apple.keylayout.ABC"
 
-   // /// fields list
-   // private enum fieldsList {
-   //    static let id: [String] = ["id"]
-   //    static let detail: [String] = [
-   //       "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
-   //    ]
-   // }
-
    /// Lazy load
    private static var _sources: [TISInputSource]?
 

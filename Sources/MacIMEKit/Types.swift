@@ -115,14 +115,6 @@ public enum IMEFieldList {
    }
 }
 
-/// fields list
-private enum fieldsList {
-   static let id: [String] = ["id"]
-   static let detail: [String] = [
-      "id", "localizedName", "isSelectCapable", "isSelected", "sourceLanguages",
-   ]
-}
-
 /// IMED Keep command line args
 public struct IMEDState {
    public var macimePath: String?

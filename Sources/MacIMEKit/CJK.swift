@@ -83,11 +83,11 @@ enum CJK {
 
    static func refresh(desiredID: String) {
       guard Thread.isMainThread else {
-         Log.debug("Recall refresh() asynchronously")
+         Log.debug("Recall CJK.refresh() asynchronously")
          DispatchQueue.main.async { refresh(desiredID: desiredID) }
          return
       }
-      Log.debug("refresh() started")
+      Log.debug("CJK.refresh() started")
 
       _ = NSApplication.shared
       NSApp.setActivationPolicy(.accessory)
@@ -99,12 +99,12 @@ enum CJK {
       w.orderFront(nil)
       w.makeKey()
       w.makeFirstResponder(tf)
-      Log.debug("Activated the temp window.")
+      Log.debug("Activated CJK temp window.")
 
       // Hide window (async/simple ver)
       DispatchQueue.main.asyncAfter(deadline: .now() + imeStabilizationDelay) {
          w.orderOut(nil)
-         Log.debug("Deactivated the temp window.")
+         Log.debug("Deactivated CJK temp window.")
       }
    }
 }

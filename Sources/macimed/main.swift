@@ -4,8 +4,8 @@ import MacIMEKit
 public var args: [String] = ArgsCommon.getCmdArgs()
 
 do {
-   let state = try ArgsIMED.parse(args)
-   ArgsIMED.validate(state)
+   let state = try IMEDArgs.parse(args)
+   IMEDArgs.validate(state)
    Log.info("macimed \(Defaults.version) starting...") // DEBUG: REMOVE
    Log.debug("a test for debug log")
    Log.info("a test for info log")

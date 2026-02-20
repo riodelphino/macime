@@ -16,7 +16,7 @@ public enum ArgsCommon {
 }
 
 /// macime
-public enum ArgsIME {
+public enum IMEArgs {
    private static func isValidSubcmd(_ subcmd: String) -> Bool {
       return IMESubCmd(rawValue: subcmd) != nil
    }
@@ -148,7 +148,7 @@ public enum ArgsIME {
 }
 
 /// macimed (daemon)
-public enum ArgsIMED {
+public enum IMEDArgs {
    /// Parse command-line args
    public static func parse(_ args: [String]) throws -> IMEDState {
       let state = try IMEDState()

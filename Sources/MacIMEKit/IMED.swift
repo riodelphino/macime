@@ -39,7 +39,7 @@ public enum IMED {
    }
 
    /// Executes a macime command and returns its output
-   public static func execute(_ cmd: String) throws -> (String, String) {
+   public static func execute(_ cmd: String) throws -> IMEDResult {
       var args = ArgsCommon.splitArgs(cmd)
       guard args.count > 0 else {
          throw AppError.imed(.invalidDaemonMethod("nil"))
@@ -93,7 +93,7 @@ public enum IMED {
          throw AppError.imed(.invalidDaemonMethod(method))
       }
 
-      return (stdout: stdout, stderr: stderr)
+      return IMEDResult(stdout: stdout, stderr: stderr)
    }
 
    /// Handles a single connected client socket
@@ -117,21 +117,16 @@ public enum IMED {
 
       Log.info("Recieved command: \(command)")
 
-      var stdout = ""
-      var stderr = ""
-
       do {
          let ms = try Util.elapsed {
-            (stdout, stderr) = try self.execute(command)
+            let ret: IMEDResult = try self.execute(command)
 
-            stdout = stdout.trimmingCharacters(in: .newlines)
-            stderr = stderr.trimmingCharacters(in: .newlines)
-
-            if stderr.isEmpty {
+            switch ret {
+            case var .success(stdout):
                stdout = stdout.isEmpty ? "OK" : stdout
                write(client, stdout, strlen(stdout)) // Write stdout
                Log.info("Client response : \(stdout)")
-            } else {
+            case let .failure(stderr):
                write(client, stderr, strlen(stderr)) // Write stderr
                Log.error("Client error    : \(stderr)")
             }

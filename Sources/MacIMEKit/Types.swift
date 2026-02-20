@@ -217,3 +217,18 @@ public enum LogLevel: Int, Comparable {
       return lhs.rawValue < rhs.rawValue
    }
 }
+
+/// [IMED] Result
+public enum IMEDResult {
+   case success(String)
+   case failure(String)
+   public init(stdout: String, stderr: String) {
+      if stderr.isEmpty {
+         let stdout = stdout.trimmingCharacters(in: .newlines)
+         self = .success(stdout)
+      } else {
+         let stderr = stderr.trimmingCharacters(in: .newlines)
+         self = .failure(stderr)
+      }
+   }
+}

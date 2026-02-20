@@ -27,6 +27,7 @@ public extension TISInputSource {
       getProperty(kTISPropertyInputSourceLanguages) as? [String] ?? []
    }
 
+   /// Get raw value of the field
    private func value(of field: IMEField) -> Any {
       switch field {
       case .id: return id
@@ -37,14 +38,18 @@ public extension TISInputSource {
       }
    }
 
+   /// Get value of the field as string
+   private func valueStr(of field: IMEField) -> String {
+      return String(describing: value(of: field))
+   }
+
    /// Return IME fields as specific format
    func describe(format: OutFormat, fields: [IMEField]) throws -> Any {
       switch format {
       case .text:
          var lines: [String] = []
          for field in fields {
-            let value = value(of: field)
-            lines.append(String(describing: value))
+            lines.append(valueStr(of: field))
          }
          return lines.joined(separator: "\n")
       case .json:

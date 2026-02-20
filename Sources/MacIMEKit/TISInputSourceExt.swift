@@ -27,14 +27,13 @@ public extension TISInputSource {
       getProperty(kTISPropertyInputSourceLanguages) as? [String] ?? []
    }
 
-   private func value(of field: String) -> Any {
+   private func value(of field: IMEField) -> Any {
       switch field {
-      case "id": return id
-      case "localizedName": return localizedName
-      case "isSelectCapable": return isSelectCapable
-      case "isSelected": return isSelected
-      case "sourceLanguages": return sourceLanguages
-      default: return ""
+      case .id: return id
+      case .localizedName: return localizedName
+      case .isSelectCapable: return isSelectCapable
+      case .isSelected: return isSelected
+      case .sourceLanguages: return sourceLanguages
       }
    }
 
@@ -44,14 +43,14 @@ public extension TISInputSource {
       case .text:
          var lines: [String] = []
          for field in fields {
-            let value = value(of: field.rawValue)
+            let value = value(of: field)
             lines.append(String(describing: value))
          }
          return lines.joined(separator: "\n")
       case .json:
          var json: [String: Any] = [:]
          for field in fields {
-            json[field.rawValue] = value(of: field.rawValue)
+            json[field.rawValue] = value(of: field)
          }
          return json
       }

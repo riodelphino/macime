@@ -2,6 +2,7 @@
 
 ## [4.1.4](https://github.com/riodelphino/macime/compare/v4.1.3...v4.1.4) (2026-02-20)
 
+* **chore:** Change `value()` arg type from `Strng` to `IMEField`
 * **chore:** Declare fields as enum
 * **chore:** Declare args as enum
 * **refactor:** Rename `IMECmdState` `IMEDCmdState` to `IMEState` `IMEDState`

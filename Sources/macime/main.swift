@@ -5,6 +5,7 @@ public let args: [String] = ArgsCommon.getCmdArgs()
 
 do {
    let state = try ArgsIME.parse(args)
+   try ArgsIME.validate(state)
    IME.setState(state)
    let ret: String = try IME.execute(state)
    if ret != "" {

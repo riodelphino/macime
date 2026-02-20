@@ -50,6 +50,7 @@ public enum CmdError: Error {
    case invalidOption(String)
    case subcmdNotFound
    case unknownOptionForSubcmd(String, String)
+   case missingSave
 
    public var message: String {
       switch self {
@@ -66,6 +67,8 @@ public enum CmdError: Error {
          return "Sub command not found."
       case let .unknownOptionForSubcmd(subcmd, option):
          return "Unknown option for `\(subcmd)`: \(option)"
+      case .missingSave:
+         return "`--session-id` requires `save` sub command or `--save` option."
       }
    }
 }

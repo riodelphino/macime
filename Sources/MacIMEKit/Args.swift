@@ -73,14 +73,7 @@ public enum ArgsIME {
             guard args.count >= 2 else {
                throw AppError.cmd(.setMissingID)
             }
-            let second = args[1]
-            guard
-               !isValidSubcmd(second), // IME ID must not be a valid subcmd
-               !isOption(second) // IME ID must not start with `-` (option-like value)
-            else {
-               throw AppError.cmd(.setMissingID)
-            }
-            state.newID = second
+            state.newID = args[1]
             index += 2
          case "get", "list", "save", "load":
             state.subcmd = first
@@ -118,15 +111,11 @@ public enum ArgsIME {
          case "--save":
             state.save = true
          case "--session-id":
-            // TODO: Should check `set xxx --session-id xxx` has `--save` option togerther
             guard i + 1 < args.count else {
                throw AppError.cmd(.missingSessionID)
             }
-            let next = args[i + 1]
-            guard !isOption(next) else {
-               throw AppError.cmd(.missingSessionID)
-            }
-            state.sessionID = next
+            let sessionID = args[i + 1]
+            state.sessionID = sessionID
             i += 1
          case "--launchd": // TODO: (Backward compatibility) Remove in later version
             IO.err("`--launchd` option is deprecated in macime v3.6.0")
@@ -140,6 +129,21 @@ public enum ArgsIME {
          i += 1
       }
       return state
+   }
+
+   public static func validate(_ state: IMEState) throws {
+      if let sessionID = state.sessionID {
+         if !state.save { // `sessionID` requires `save` togather
+            throw AppError.cmd(.missingSave)
+         }
+         if isOption(sessionID) {
+            throw AppError.cmd(.missingSessionID)
+         }
+      }
+      if let newID = state.newID {
+         if isValidSubcmd(newID) { throw AppError.cmd(.setMissingID) } // IME ID must not be a valid subcmd
+         if isOption(newID) { throw AppError.cmd(.setMissingID) } // IME ID must not start with `-` (option-like value)
+      }
    }
 }
 

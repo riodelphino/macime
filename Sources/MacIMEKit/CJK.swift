@@ -14,7 +14,7 @@ enum CJK {
    private static var window: NSWindow?
    private static var textField: NSTextField?
    private static var delegate: NSObject?
-   private static var imeStabilizationDelay: Double = 0.00 // Doesn't seem to contribute success rate // 0.05: Environment-dependent value
+   private static var imeStabilizationDelay: Double = 0.05 // Doesn't seem to contribute success rate // 0.05: Environment-dependent value
 
    private static func setup() {
       guard window == nil else { return }

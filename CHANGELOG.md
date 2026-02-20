@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [4.2.1](https://github.com/riodelphino/macime/compare/v4.2.0...v4.2.1) (2026-02-21)
+
+* **fix:** Change `imeStabilizationDelay` to 0.05 again
+
 ## [4.2.0](https://github.com/riodelphino/macime/compare/v4.1.3...v4.2.0) (2026-02-21)
 
 * **docs:** Add tech info about `Unstable Switching Issue`

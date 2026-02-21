@@ -100,6 +100,13 @@ public enum IMESubCmd: String {
          return [.selectCapable, .detail, .launchd, .debug]
       }
    }
+
+   public init(_ rawValue: String) throws {
+      guard let subcmd = IMESubCmd(rawValue: rawValue) else {
+         throw AppError.cmd(.invalidSubCommand(rawValue))
+      }
+      self = subcmd
+   }
 }
 
 /// [IME] Options
@@ -112,6 +119,13 @@ public enum IMEOption: String {
    case cjkDelay = "--cjk-delay"
    case launchd = "--launchd" // TODO: [Backward compatibility] REMOVE in later version
    case debug = "--debug"
+
+   public init(_ rawValue: String) throws {
+      guard let opt = IMEOption(rawValue: rawValue) else {
+         throw AppError.cmd(.invalidOption(rawValue))
+      }
+      self = opt
+   }
 }
 
 /// [IME] State

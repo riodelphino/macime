@@ -42,7 +42,7 @@ public enum IMEArgs {
       } else {
          if let first = args.first {
             if !isValidSubcmd(first) { // If invalid sub-command
-               if isValidOption(IMESubCmd(rawValue: "get")!, first) { // Fallback to `get` if first is capable option for `get`
+               if isValidOption(try! IMESubCmd("get"), first) { // Fallback to `get` if first is capable option for `get`
                   args.insert("get", at: 0)
                } else {
                   // Fallback to `set` if first is valid IME ID
@@ -79,9 +79,7 @@ public enum IMEArgs {
 
       // Parse the first arg
       let subcmdStr = args.removeFirst()
-      guard let subcmd = IMESubCmd(rawValue: subcmdStr) else {
-         throw AppError.cmd(.invalidSubCommand(subcmdStr))
-      }
+      let subcmd = try IMESubCmd(subcmdStr)
 
       switch subcmd {
       case .set:
@@ -104,7 +102,7 @@ public enum IMEArgs {
          guard isValidOption(subcmd, arg) else {
             throw AppError.cmd(.invalidOptionForSubcmd(subcmd.rawValue, arg))
          }
-         let opt = IMEOption(rawValue: arg)
+         let opt = try IMEOption(arg)
          switch opt {
          case .detail:
             state.detail = true
@@ -137,8 +135,6 @@ public enum IMEArgs {
             i += 1
          case .debug:
             state.debug = true
-         default:
-            throw AppError.cmd(.invalidOption(arg))
          }
          i += 1
       }

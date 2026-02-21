@@ -101,8 +101,8 @@ public enum IMEDError: Error {
    case invalidSetTarget(String)
    case invalidPath(String)
    case notExecutable(String)
-   // case missingLogLevel
-   // case invalidLogLevel(String)
+   case missingLogLevel
+   case invalidLogLevel(String)
 
    public var message: String {
       switch self {
@@ -126,10 +126,10 @@ public enum IMEDError: Error {
          return "Invalid path: \(path)"
       case let .notExecutable(path):
          return "Not executable: \(path)"
-         // case .missingLogLevel:
-         //    return "Require log level. (debug|info|warn|error)"
-         // case let .invalidLogLevel(level):
-         //    return "Invalid log level: \(level) (Choose from debug|info|warn|error)"
+      case .missingLogLevel:
+         return "Require log level. Use one of debug|info|warn|error."
+      case let .invalidLogLevel(level):
+         return "Invalid log level: \(level). Use one of debug|info|warn|error."
       }
    }
 }

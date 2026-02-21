@@ -85,6 +85,20 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }
+         case "set":
+            let target = args.removeFirst()
+            switch target {
+            case "log-level":
+               guard args.count > 0 else {
+                  throw AppError.imed(.missingLogLevel)
+               }
+               guard let logLevel = LogLevel(args.first ?? "") else {
+                  throw AppError.imed(.invalidLogLevel(args.first ?? "nil"))
+               }
+               Runtime.logLevel = logLevel
+            default:
+               throw AppError.imed(.invalidSetTarget(target))
+            }
          default:
             throw AppError.imed(.invalidDaemonSubcmd(subcmd))
          }

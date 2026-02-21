@@ -354,6 +354,10 @@ daemon info
 # Get
 daemon get sock-path # Get sock path
 daemon get macime-path # Get macime path
+
+# Set
+daemon set log-level info # Set log level. Use one of debug|info|warn|error (Default: info)
+
 ```
 > [!Note]
 > Currently `daemon set` is disabled since it requires restarting server and much more modifications.
@@ -366,6 +370,7 @@ require("macime").send("ime set com.apple.keylayout.ABC")
 require("macime").send("ime get", function(ok, data) if ok then print(data) end end)
 require("macime").send("daemon info", function(ok, data) if ok then print(data) end end)
 require("macime").send("daemon get sock-path", function(ok, data) if ok then print(data) end end)
+require("macime").send("daemon set log-level debug", function(ok, data) if ok then print(data) end end)
 ```
 
 

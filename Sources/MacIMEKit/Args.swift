@@ -144,8 +144,11 @@ public enum IMEArgs {
    }
 
    public static func validate(_ state: IMEState) throws {
-      if let sessionID = state.sessionID {
-         guard state.save else { // `sessionID` requires `save` togather
+      if
+         state.subcmd != "save",
+         let sessionID = state.sessionID
+      {
+         guard state.save else { // `sessionID` requires `--save` togather
             throw AppError.cmd(.missingRequiredOption("--session-id", "--save"))
          }
          guard !isOption(sessionID) else { // `sessionID` must not be an option-like value `--xxx`

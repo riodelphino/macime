@@ -25,14 +25,13 @@ public enum IMEArgs {
       return value.hasPrefix("-")
    }
 
-   private static func isValidOption(_ subcmd: String, _ option: String) -> Bool {
+   private static func isValidOption(_ subcmd: IMESubCmd, _ option: String) -> Bool {
       guard
-         let cmd = IMESubCmd(rawValue: subcmd),
          let opt = IMEOption(rawValue: option)
       else {
          return false
       }
-      return cmd.validOptions.contains(opt)
+      return subcmd.validOptions.contains(opt)
    }
 
    private static func fallback(_ args: [String]) -> [String] {
@@ -43,7 +42,7 @@ public enum IMEArgs {
       } else {
          if let first = args.first {
             if !isValidSubcmd(first) { // If invalid sub-command
-               if isValidOption("get", first) { // Fallback to `get` if first is capable option for `get`
+               if isValidOption(IMESubCmd(rawValue: "get")!, first) { // Fallback to `get` if first is capable option for `get`
                   args.insert("get", at: 0)
                } else {
                   // Fallback to `set` if first is valid IME ID
@@ -61,7 +60,7 @@ public enum IMEArgs {
 
    /// Parse args array into CmdState
    public static func parse(_ args: [String]) throws -> IMEState {
-      let args: [String] = fallback(args)
+      var args: [String] = fallback(args)
       var state = IMEState()
 
       // Parse help and version
@@ -79,37 +78,31 @@ public enum IMEArgs {
       }
 
       // Parse the first arg
-      var index = 0
-      if let first = args.first {
-         switch first {
-         case "set":
-            state.subcmd = "set"
-            guard args.count >= 2 else {
-               throw AppError.cmd(.missingRequiredValue("set", "IME ID"))
-            }
-            state.newID = args[1]
-            index += 2
-         case "get", "list", "save", "load":
-            state.subcmd = first
-            index += 1
-         default:
-            throw AppError.cmd(.invalidSubCommand(first))
-         }
+      let subcmdStr = args.removeFirst()
+      guard let subcmd = IMESubCmd(rawValue: subcmdStr) else {
+         throw AppError.cmd(.invalidSubCommand(subcmdStr))
       }
 
-      guard let subcmd = state.subcmd else {
-         throw AppError.cmd(.subcmdNotFound)
+      switch subcmd {
+      case .set:
+         state.subcmd = subcmd
+         guard args.count > 0 else {
+            throw AppError.cmd(.missingRequiredValue("set", "IME ID"))
+         }
+         state.newID = args.removeFirst()
+      case .get, .list, .save, .load:
+         state.subcmd = subcmd
       }
 
       // Parse other args
-      var i = index
+      var i = 0
       while i < args.count {
          let arg = args[i]
          guard isOption(arg) else {
             throw AppError.cmd(.invalidOption(arg))
          }
          guard isValidOption(subcmd, arg) else {
-            throw AppError.cmd(.invalidOptionForSubcmd(subcmd, arg))
+            throw AppError.cmd(.invalidOptionForSubcmd(subcmd.rawValue, arg))
          }
          switch arg {
          case "--detail":
@@ -153,7 +146,7 @@ public enum IMEArgs {
 
    public static func validate(_ state: IMEState) throws {
       if
-         state.subcmd != "save",
+         state.subcmd != .save,
          let sessionID = state.sessionID
       {
          guard state.save else { // `sessionID` requires `--save` togather

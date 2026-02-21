@@ -167,7 +167,7 @@ public enum IME {
 
    /// execute appropriate sub-command with refering state
    public static func execute(_ state: IMEState) throws -> String? {
-      guard let subcmd = IMESubCmd(rawValue: state.subcmd ?? "") else {
+      guard let subcmd = state.subcmd else {
          return nil
       }
       switch subcmd {

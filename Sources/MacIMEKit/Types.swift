@@ -116,7 +116,7 @@ public enum IMEOption: String {
 
 /// [IME] State
 public struct IMEState {
-   public var subcmd: String?
+   public var subcmd: IMESubCmd?
    public var newID: String?
    public var save: Bool = false
    public var sessionID: String?

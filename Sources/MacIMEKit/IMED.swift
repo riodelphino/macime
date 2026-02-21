@@ -44,28 +44,30 @@ public enum IMED {
       guard args.count > 0 else {
          throw AppError.imed(.invalidDaemonMethod("nil"))
       }
-      var method = args.removeFirst()
+      var methodStr = args.removeFirst()
 
       var stdout = ""
       // var stderr = "" // stderr is modified only by AppError.
 
-      // Backward compatibility (`macime.nvim` < v3.0.0) // TODO: Remove this in later version
-      switch method {
+      // (Backward compatibility) Add `ime` if methodStr is missing. (`macime.nvim` < v3.0.0) // TODO: Remove this in later version
+      switch methodStr {
       case "ime", "daemon":
          break
       default: // set, get, load, e.t.c. -> Fallback to `ime` method
-         let subcmd = method
-         method = "ime"
-         args.insert(subcmd, at: 0)
+         let subcmd = methodStr
+         methodStr = "ime"
+         args.insert(subcmd, at: 0) // Insert subcmd back to the head of args
+         Log.warn("Missing IMED method. Fallback to 'ime' method")
       }
+      let method = try IMEDMethod(methodStr)
 
       switch method {
-      case "ime":
+      case .ime:
          let imeState = try IMEArgs.parse(args)
          let ret = try IME.execute(imeState) ?? ""
          stdout = ret
 
-      case "daemon":
+      case .daemon:
          let subcmd = args.removeFirst()
          switch subcmd {
          case "info":
@@ -103,9 +105,6 @@ public enum IMED {
          default:
             throw AppError.imed(.invalidDaemonSubcmd(subcmd))
          }
-
-      default:
-         throw AppError.imed(.invalidDaemonMethod(method))
       }
 
       return IMEDResult(stdout: stdout, stderr: "")

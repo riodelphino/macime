@@ -67,6 +67,9 @@ public enum Help {
 
       --cjk-refresh 
          Refresh IME for CJK input methods
+
+      --cjk-delay
+         Delay time(sec) for CJK refresh
    """
    public static let macimed = """
    Usage: macimed [options]
@@ -86,5 +89,8 @@ public enum Help {
 
       --version, -v
          Show version
+
+      --log-level
+         Set log level. Use: debug|info|warn|error (Defaut: info)
    """
 }

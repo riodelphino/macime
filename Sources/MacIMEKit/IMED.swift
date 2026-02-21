@@ -47,7 +47,7 @@ public enum IMED {
       var method = args.removeFirst()
 
       var stdout = ""
-      var stderr = "" // if stderr != "" -> error
+      // var stderr = "" // stderr is modified only by AppError.
 
       // Backward compatibility (`macime.nvim` < v3.0.0) // TODO: Remove this in later version
       switch method {
@@ -64,7 +64,6 @@ public enum IMED {
          let imeState = try IMEArgs.parse(args)
          let ret = try IME.execute(imeState) ?? ""
          stdout = ret
-         stderr = "" // DEBUG: Should check success or not, then assort ret to stdout/stderr.
 
       case "daemon":
          let subcmd = args.removeFirst()
@@ -92,10 +91,12 @@ public enum IMED {
                guard args.count > 0 else {
                   throw AppError.imed(.missingLogLevel)
                }
-               guard let logLevel = LogLevel(args.first ?? "") else {
-                  throw AppError.imed(.invalidLogLevel(args.first ?? "nil"))
+               let logLevelStr = args.first ?? ""
+               guard let logLevel = LogLevel(logLevelStr) else {
+                  throw AppError.imed(.invalidLogLevel(logLevelStr))
                }
                Runtime.logLevel = logLevel
+               stdout = "Log level set to: \(logLevelStr)"
             default:
                throw AppError.imed(.invalidSetTarget(target))
             }
@@ -107,7 +108,7 @@ public enum IMED {
          throw AppError.imed(.invalidDaemonMethod(method))
       }
 
-      return IMEDResult(stdout: stdout, stderr: stderr)
+      return IMEDResult(stdout: stdout, stderr: "")
    }
 
    /// Handles a single connected client socket

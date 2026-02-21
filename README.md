@@ -321,7 +321,7 @@ macimed -h
 
 Set log level:
 ```bash
-macimed --log-level info # Use one of debug, info, warn, error (Default: info)
+macimed --log-level info # Use: debug|info|warn|error (Default: info)
 macimed -l info
 ````
 

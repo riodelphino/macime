@@ -58,23 +58,23 @@ public enum CmdError: Error {
       switch self {
       // macime
       case .setMissingID:
-         return "`set` sub command requires IME ID."
+         return "'set' sub command requires IME ID."
       case let .invalidSubCommand(subcmd):
          return "Invalid sub command: \(subcmd)"
       case .missingSessionID:
-         return "`--session-id` option requires session ID."
+         return "'--session-id' option requires session ID."
       case let .invalidOption(option):
          return "Unknown option: \(option)"
       case .subcmdNotFound:
          return "Sub command not found."
       case let .unknownOptionForSubcmd(subcmd, option):
-         return "Unknown option for `\(subcmd)`: \(option)"
+         return "Unknown option for '\(subcmd)': \(option)"
       case .missingSave:
-         return "`--session-id` requires `save` sub command or `--save` option."
+         return "'--session-id' requires 'save' sub command or '--save' option."
       case .missingCJKDelay:
-         return "`--cjk-delay` requires a number (e.g. 0.05)."
+         return "'--cjk-delay' requires a number (e.g. 0.05)."
       case let .invalidCJKDelay(delay):
-         return "Invalid value for `--cjk-delay`: \(delay). Expected a number between 0 and 1 (e.g. 0.05)."
+         return "Invalid value for '--cjk-delay': \(delay). Expected a number between 0 and 1 (e.g. 0.05)."
       }
    }
 }
@@ -113,23 +113,23 @@ public enum IMEDError: Error {
       case let .sockPathNotFound(path):
          return "sock-path not found: \(path)"
       case let .macimeReturnsError(err):
-         return "`macime` returns Error: \(err)"
+         return "'macime' returns Error: \(err)"
       case let .invalidDaemonMethod(method):
          return "Invalid daemon method: \(method)"
       case let .invalidDaemonSubcmd(subcmd):
          return "Invalid daemon sub command: \(subcmd)"
       case let .invalidGetTarget(target):
-         return "Invalid `get` target: \(target)"
+         return "Invalid 'get' target: \(target)"
       case let .invalidSetTarget(target):
-         return "Invalid `set` target: \(target)"
+         return "Invalid 'set' target: \(target)"
       case let .invalidPath(path):
          return "Invalid path: \(path)"
       case let .notExecutable(path):
          return "Not executable: \(path)"
       case .missingLogLevel:
-         return "Require log level. Use one of debug|info|warn|error."
+         return "Require log level. Use: debug|info|warn|error"
       case let .invalidLogLevel(level):
-         return "Invalid log level: \(level). Use one of debug|info|warn|error."
+         return "Invalid log level: \(level). Use: debug|info|warn|error"
       }
    }
 }

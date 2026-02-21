@@ -18,19 +18,19 @@ public enum Help {
       Set IME only (no save)
          macime set <IME_id>
       
-      Set IME while saving current IME to `GLOBAL` file in temp dir
+      Set IME while saving current IME to 'GLOBAL' file in temp dir
          macime set <IME_id> --save
       
-      Set IME while saving current IME to `<session_id>` file in temp dir
+      Set IME while saving current IME to '<session_id>' file in temp dir
          macime set <IME_id> --save --session-id <session_id>
 
    Save IME
       macime save [--session-id <session_id>]
 
-      Save current IME to `GLOBAL` file in temp dir
+      Save current IME to 'GLOBAL' file in temp dir
          macime save
 
-      Save current IME to `<session_id>` file in temp dir
+      Save current IME to '<session_id>' file in temp dir
          macime save --session-id <session_id>
 
    Load (restore) IME
@@ -39,7 +39,7 @@ public enum Help {
       Load previouse IME from `GLOBAL` file in temp dir
          macime load
 
-      Load previous IME from `<session_id>` file in temp dir
+      Load previous IME from '<session_id>' file in temp dir
          macime load --session-id <session_id>
 
    List IMEs
@@ -71,7 +71,7 @@ public enum Help {
    public static let macimed = """
    Usage: macimed [options]
 
-   A daemon tool that wraps `macime` command.
+   A daemon tool that wraps 'macime' command.
 
    To start service via Homebrew (Faster):
       brew services start macime 

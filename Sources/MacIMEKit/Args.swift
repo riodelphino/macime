@@ -118,7 +118,7 @@ public enum IMEArgs {
             state.sessionID = sessionID
             i += 1
          case "--launchd": // TODO: (Backward compatibility) Remove in later version
-            IO.err("`--launchd` option is deprecated in macime v3.6.0")
+            IO.err("'--launchd' option is deprecated in macime v3.6.0")
          case "--cjk-refresh":
             state.cjkRefresh = true
          case "--cjk-delay":
@@ -178,11 +178,11 @@ public enum IMEDArgs {
          case "--log-level", "-l":
             guard args.count > i + 1 else {
                // throw AppError.imed(.missingLogLevel)
-               IO.err("Missing log level. Use one of debug, info, warn, error.")
+               IO.err("Missing log level. Use: debug|info|warn|error")
                exit(1)
             }
             guard let level = LogLevel(args[i + 1]) else {
-               IO.err("Invalid log level `\(args[i + 1])`. Use one of debug, info, warn, error.")
+               IO.err("Invalid log level: \(args[i + 1]). Use: debug|info|warn|error")
                exit(1)
             }
             Runtime.logLevel = level

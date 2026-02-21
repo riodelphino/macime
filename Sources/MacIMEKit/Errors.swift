@@ -44,37 +44,40 @@ public enum ConfigError: Error {
 }
 
 public enum CmdError: Error {
-   case setMissingID
    case invalidSubCommand(String)
-   case missingSessionID
    case invalidOption(String)
    case subcmdNotFound
-   case unknownOptionForSubcmd(String, String)
+   case invalidOptionForSubcmd(String, String)
+   case invalidImeId(String)
    case missingSave
-   case missingCJKDelay
-   case invalidCJKDelay(String)
+   case missingCjkDelay
+   case invalidCjkDelay(String)
+   case missingRequiredOption(String, String)
+   case missingRequiredValue(String, String)
 
    public var message: String {
       switch self {
       // macime
-      case .setMissingID:
-         return "'set' sub command requires IME ID."
       case let .invalidSubCommand(subcmd):
          return "Invalid sub command: \(subcmd)"
-      case .missingSessionID:
-         return "'--session-id' option requires session ID."
       case let .invalidOption(option):
-         return "Unknown option: \(option)"
+         return "Invalid option: \(option)"
       case .subcmdNotFound:
          return "Sub command not found."
-      case let .unknownOptionForSubcmd(subcmd, option):
-         return "Unknown option for '\(subcmd)': \(option)"
+      case let .invalidOptionForSubcmd(subcmd, option):
+         return "Invalid option for '\(subcmd)': \(option)"
+      case let .invalidImeId(imeId):
+         return "Invalid IME ID: \(imeId)"
       case .missingSave:
          return "'--session-id' requires 'save' sub command or '--save' option."
-      case .missingCJKDelay:
+      case .missingCjkDelay:
          return "'--cjk-delay' requires a number (e.g. 0.05)."
-      case let .invalidCJKDelay(delay):
+      case let .invalidCjkDelay(delay):
          return "Invalid value for '--cjk-delay': \(delay). Expected a number between 0 and 1 (e.g. 0.05)."
+      case let .missingRequiredOption(option, requiredOption):
+         return "'\(option)' requires \(requiredOption)"
+      case let .missingRequiredValue(option, requiredValue):
+         return "'\(option)' requires \(requiredValue)"
       }
    }
 }

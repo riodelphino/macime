@@ -71,7 +71,7 @@ public enum IMEArgs {
          case "set":
             state.subcmd = "set"
             guard args.count >= 2 else {
-               throw AppError.cmd(.setMissingID)
+               throw AppError.cmd(.missingRequiredValue("set", "IME ID"))
             }
             state.newID = args[1]
             index += 2
@@ -101,7 +101,7 @@ public enum IMEArgs {
             throw AppError.cmd(.invalidOption(arg))
          }
          guard isValidOption(subcmd, arg) else {
-            throw AppError.cmd(.unknownOptionForSubcmd(subcmd, arg))
+            throw AppError.cmd(.invalidOptionForSubcmd(subcmd, arg))
          }
          switch arg {
          case "--detail":
@@ -112,7 +112,7 @@ public enum IMEArgs {
             state.save = true
          case "--session-id":
             guard i + 1 < args.count else {
-               throw AppError.cmd(.missingSessionID)
+               throw AppError.cmd(.missingRequiredValue("--sessiond-id", "Session ID"))
             }
             let sessionID = args[i + 1]
             state.sessionID = sessionID
@@ -123,13 +123,13 @@ public enum IMEArgs {
             state.cjkRefresh = true
          case "--cjk-delay":
             guard i + 1 < args.count else {
-               throw AppError.cmd(.missingCJKDelay)
+               throw AppError.cmd(.missingCjkDelay)
             }
             guard let delay = Double(args[i + 1]) else {
-               throw AppError.cmd(.invalidCJKDelay(args[i + 1]))
+               throw AppError.cmd(.invalidCjkDelay(args[i + 1]))
             }
             guard delay >= 0 && delay <= 1 else {
-               throw AppError.cmd(.invalidCJKDelay(args[i + 1]))
+               throw AppError.cmd(.invalidCjkDelay(args[i + 1]))
             }
             state.cjkDelay = delay
             i += 1
@@ -148,13 +148,18 @@ public enum IMEArgs {
          if !state.save { // `sessionID` requires `save` togather
             throw AppError.cmd(.missingSave)
          }
-         if isOption(sessionID) {
-            throw AppError.cmd(.missingSessionID)
+         if isOption(sessionID) { // sessionID should not be start from `-`
+            throw AppError.cmd(.missingRequiredValue("--session-id", "Session ID"))
          }
       }
       if let newID = state.newID {
-         if isValidSubcmd(newID) { throw AppError.cmd(.setMissingID) } // IME ID must not be a valid subcmd
-         if isOption(newID) { throw AppError.cmd(.setMissingID) } // IME ID must not start with `-` (option-like value)
+         if
+            isValidSubcmd(newID), // IME ID must not be a valid subcmd
+            isOption(newID) // IME ID must not start with `-` (option-like value)
+         { throw AppError.cmd(.invalidImeId(newID)) }
+      }
+      if let _ = state.cjkDelay {
+         if !state.cjkRefresh { throw AppError.cmd(.missingRequiredOption("--cjk-delay", "--cjk-refresh")) }
       }
    }
 }

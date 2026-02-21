@@ -51,6 +51,8 @@ public enum CmdError: Error {
    case subcmdNotFound
    case unknownOptionForSubcmd(String, String)
    case missingSave
+   case missingCJKDelay
+   case invalidCJKDelay(String)
 
    public var message: String {
       switch self {
@@ -69,6 +71,10 @@ public enum CmdError: Error {
          return "Unknown option for `\(subcmd)`: \(option)"
       case .missingSave:
          return "`--session-id` requires `save` sub command or `--save` option."
+      case .missingCJKDelay:
+         return "`--cjk-delay` requires a number (e.g. 0.05)."
+      case let .invalidCJKDelay(delay):
+         return "Invalid value for `--cjk-delay`: \(delay). Expected a number between 0 and 1 (e.g. 0.05)."
       }
    }
 }

@@ -91,9 +91,9 @@ public enum IMESubCmd: String {
       case .get:
          return [.detail, .launchd, .debug]
       case .set:
-         return [.save, .sessionID, .cjkRefresh, .launchd, .debug]
+         return [.save, .sessionID, .cjkRefresh, .cjkDelay, .launchd, .debug]
       case .load:
-         return [.sessionID, .cjkRefresh, .launchd, .debug]
+         return [.sessionID, .cjkRefresh, .cjkDelay, .launchd, .debug]
       case .save:
          return [.sessionID, .launchd, .debug]
       case .list:
@@ -104,24 +104,27 @@ public enum IMESubCmd: String {
 
 /// [IME] Options
 public enum IMEOption: String {
-   case detail = "--detail"
    case save = "--save"
    case sessionID = "--session-id"
-   case cjkRefresh = "--cjk-refresh"
    case selectCapable = "--select-capable"
-   case launchd = "--launchd" // TODO: [Backward compatibility] Remove "--launchd" in later version
+   case detail = "--detail"
+   case cjkRefresh = "--cjk-refresh"
+   case cjkDelay = "--cjk-delay"
+   case launchd = "--launchd" // TODO: [Backward compatibility] REMOVE in later version
    case debug = "--debug"
 }
 
 /// [IME] State
 public struct IMEState {
    public var subcmd: String?
-   public var save: Bool = false
    public var newID: String?
+   public var save: Bool = false
+   public var sessionID: String?
    public var selectCapable: Bool = false
    public var detail: Bool = false
-   public var sessionID: String?
    public var cjkRefresh: Bool = false
+   public var cjkDelay: Double?
+   public var launchd: Bool = false // TODO: [Backward compatibility] REMOVE in later version
    public var debug: Bool = false
    public init() {}
 }
@@ -162,7 +165,6 @@ public struct IMEDState {
    public var status: String?
    public var logPath: String?
    public var errPath: String?
-   public var cjkDelay: Double?
    public var debug: Bool = false
    public init() throws {
       macimePath = try Defaults.macimePath()

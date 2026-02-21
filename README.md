@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.2.1&style=for-the-badge" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.3.0&style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -258,14 +258,15 @@ macime list --select-capable
 
 ### Options
 
-| Option                    | Available for | Description                                                 |
-| ------------------------- | ------------- | ----------------------------------------------------------- |
-| --detail                  | get, list     | Show detailed IME info as JSON                              |
-| --select-capable          | get, list     | Show only selectable IME                                    |
-| --save                    | set           | Save current IME (with `macime set` only)                   |
-| --session-id <session_id> | save, load    | Specify the save / load session id (= filename in temp dir) |
-| --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental)            |
-| --debug                   | <all>         | Show debug information                                      |
+| Option                    | Available for | Description                                                                              |
+| ------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
+| --detail                  | get, list     | Show detailed IME info as JSON                                                           |
+| --select-capable          | get, list     | Show only selectable IME                                                                 |
+| --save                    | set           | Save current IME (with `macime set` only)                                                |
+| --session-id <string> | save, load    | Specify the save / load session id (= filename in temp dir)                              |
+| --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental)                                         |
+| --cjk-delay <number>      | set, load     | Set CJK refreshing delay time as a number between 0 and 1 (Default: 0.05) (Experimental) |
+| --debug                   | (all)         | Show debug information                                                                   |
 
 ### CJK refreshing
 
@@ -281,14 +282,15 @@ e.g.
 - `百度拼音`: Baidu Pinyin
 - `搜狗拼音`: Sogou Pinyin
 
-via `--cjk-refresh` option:
+via `--cjk-refresh` and `--cjk-delay` option:
 ```bash
 # Set
-macime set com.baidu.inputmethod.BaiduPinyin --cjk-refresh
-macime set com.sogou.inputmethod.sogou --cjk-refresh
+macime set com.baidu.inputmethod.BaiduPinyin --cjk-refresh --cjk-delay 0.05
+macime set com.sogou.inputmethod.sogou --cjk-refresh --cjk-delay 0.05
 
 # load
-macime load --cjk-refresh
+macime load --cjk-refresh --cjk-delay 0.05
+
 ```
 
 ### macimed
@@ -319,9 +321,8 @@ macimed -h
 
 Set log level:
 ```bash
-macimed --log-level info # Default
+macimed --log-level info # Use one of debug, info, warn, error (Default: info)
 macimed -l info
-# debug|info|warn|error
 ````
 
 #### Default Socket Path

@@ -14,7 +14,7 @@ enum CJK {
    private static var window: NSWindow?
    private static var textField: NSTextField?
    private static var delegate: NSObject?
-   private static var imeStabilizationDelay: Double = 0.05 // Doesn't seem to contribute success rate // 0.05: Environment-dependent value
+   private static let defaultCjkDelay: Double = 0.05 // TODO: Doesn't seem to contribute success rate
 
    private static func setup() {
       guard window == nil else { return }
@@ -81,13 +81,15 @@ enum CJK {
       // delegate = d
    }
 
-   static func refresh(desiredID: String) {
+   static func refresh(desiredID: String, cjkDelay: Double?) {
       guard Thread.isMainThread else {
          Log.debug("Recall CJK.refresh() asynchronously")
-         DispatchQueue.main.async { refresh(desiredID: desiredID) }
+         DispatchQueue.main.async { refresh(desiredID: desiredID, cjkDelay: cjkDelay) }
+
          return
       }
       Log.debug("CJK.refresh() started")
+      Log.debug("CJK delay: \(String(cjkDelay ?? defaultCjkDelay))")
 
       _ = NSApplication.shared
       NSApp.setActivationPolicy(.accessory)
@@ -102,7 +104,7 @@ enum CJK {
       Log.debug("Activated CJK temp window.")
 
       // Hide window (async/simple ver)
-      DispatchQueue.main.asyncAfter(deadline: .now() + imeStabilizationDelay) {
+      DispatchQueue.main.asyncAfter(deadline: .now() + defaultCjkDelay) {
          w.orderOut(nil)
          Log.debug("Deactivated CJK temp window.")
       }

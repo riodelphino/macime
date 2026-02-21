@@ -121,6 +121,18 @@ public enum IMEArgs {
             IO.err("`--launchd` option is deprecated in macime v3.6.0")
          case "--cjk-refresh":
             state.cjkRefresh = true
+         case "--cjk-delay":
+            guard i + 1 < args.count else {
+               throw AppError.cmd(.missingCJKDelay)
+            }
+            guard let delay = Double(args[i + 1]) else {
+               throw AppError.cmd(.invalidCJKDelay(args[i + 1]))
+            }
+            guard delay >= 0 && delay <= 1 else {
+               throw AppError.cmd(.invalidCJKDelay(args[i + 1]))
+            }
+            state.cjkDelay = delay
+            i += 1
          case "--debug":
             state.debug = true
          default:

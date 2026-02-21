@@ -104,25 +104,26 @@ public enum IMEArgs {
          guard isValidOption(subcmd, arg) else {
             throw AppError.cmd(.invalidOptionForSubcmd(subcmd.rawValue, arg))
          }
-         switch arg {
-         case "--detail":
+         let opt = IMEOption(rawValue: arg)
+         switch opt {
+         case .detail:
             state.detail = true
-         case "--select-capable":
+         case .selectCapable:
             state.selectCapable = true
-         case "--save":
+         case .save:
             state.save = true
-         case "--session-id":
+         case .sessionID:
             guard i + 1 < args.count else {
                throw AppError.cmd(.missingRequiredValue("--sessiond-id", "Session ID"))
             }
             let sessionID = args[i + 1]
             state.sessionID = sessionID
             i += 1
-         case "--launchd": // TODO: (Backward compatibility) Remove in later version
+         case .launchd: // TODO: (Backward compatibility) Remove in later version
             IO.err("'--launchd' option is deprecated in macime v3.6.0")
-         case "--cjk-refresh":
+         case .cjkRefresh:
             state.cjkRefresh = true
-         case "--cjk-delay":
+         case .cjkDelay:
             guard i + 1 < args.count else {
                throw AppError.cmd(.missingCjkDelay)
             }
@@ -134,7 +135,7 @@ public enum IMEArgs {
             }
             state.cjkDelay = delay
             i += 1
-         case "--debug":
+         case .debug:
             state.debug = true
          default:
             throw AppError.cmd(.invalidOption(arg))

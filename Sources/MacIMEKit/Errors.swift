@@ -49,7 +49,6 @@ public enum IMECmdError: Error {
    case subcmdNotFound
    case invalidOptionForSubcmd(String, String)
    case invalidImeId(String)
-   case missingSave
    case missingCjkDelay
    case invalidCjkDelay(String)
    case missingRequiredOption(String, String)
@@ -68,8 +67,6 @@ public enum IMECmdError: Error {
          return "Invalid option for '\(subcmd)': \(option)"
       case let .invalidImeId(imeId):
          return "Invalid IME ID: \(imeId)"
-      case .missingSave:
-         return "'--session-id' requires 'save' sub command or '--save' option."
       case .missingCjkDelay:
          return "'--cjk-delay' requires a number (e.g. 0.05)."
       case let .invalidCjkDelay(delay):

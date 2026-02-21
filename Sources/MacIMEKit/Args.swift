@@ -145,18 +145,20 @@ public enum IMEArgs {
 
    public static func validate(_ state: IMEState) throws {
       if let sessionID = state.sessionID {
-         if !state.save { // `sessionID` requires `save` togather
-            throw AppError.cmd(.missingSave)
+         guard state.save else { // `sessionID` requires `save` togather
+            throw AppError.cmd(.missingRequiredOption("--session-id", "--save"))
          }
-         if isOption(sessionID) { // sessionID should not be start from `-`
+         guard !isOption(sessionID) else { // `sessionID` must not be an option-like value `--xxx`
             throw AppError.cmd(.missingRequiredValue("--session-id", "Session ID"))
          }
       }
       if let newID = state.newID {
-         if
-            isValidSubcmd(newID), // IME ID must not be a valid subcmd
-            isOption(newID) // IME ID must not start with `-` (option-like value)
-         { throw AppError.cmd(.invalidImeId(newID)) }
+         guard
+            !isValidSubcmd(newID), // IME ID must not be a valid subcmd
+            !isOption(newID) // IME ID must not start with `-` (option-like value)
+         else {
+            throw AppError.cmd(.invalidImeId(newID))
+         }
       }
       if let _ = state.cjkDelay {
          if !state.cjkRefresh { throw AppError.cmd(.missingRequiredOption("--cjk-delay", "--cjk-refresh")) }

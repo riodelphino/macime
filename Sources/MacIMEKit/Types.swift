@@ -2,7 +2,7 @@ import Foundation
 
 /// [Common] Default values
 public enum Defaults {
-   public static let version: String = "4.3.0"
+   public static let version: String = "4.3.1"
 
    public static func macimePath() throws -> String {
       let env = ProcessInfo.processInfo.environment

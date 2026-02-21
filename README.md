@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.3.0&style=for-the-badge" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.3.1&style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -465,6 +465,9 @@ Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching
 Solution for now:
 - Switch IME several times, and might warm up `macimed` or CJK IME. It probably reduces the CJK switching error rate. 
 
+See further information: [Unstable CJK Switching #2](https://github.com/riodelphino/macime/issues/2)
+
+
 ### azookey prevents macime to change IME
 
 `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
@@ -499,54 +502,6 @@ brew install macime
 ```
 This cleans up the corrupted tap cache and performs a fresh installation.
 
-## Technical Info
-
-### Unstable Switching Issue
-
-See [Unstable Switching](#unstable-switching)
-
-#### Successful CJK IME Switching
-
-The switch works correctly with the following sequence:
-1. Recieve `set com.google.inputmethod.Japanese.base` comannd
-2. Call `IME.execute()`
-3. Call `IME.set()`
-4. Call `IME.select()` to select specified IME
-5. The CJK IME activates specific mode internaly (OK: Before `CJK.refresh()`)
-6. Call `CJK.refresh()` (OK: After IME mode changed)
-7. Activate CJK temp window
-8. Deactivate CJK temp window
-9. ✅ The CJK IME and it's mode are applied correctly
-
-
-#### Failed CJK IME Switching
-
-When it fails, the sequence appears to be:
-1. Recieve `set com.google.inputmethod.Japanese.base` comannd
-2. Call `IME.execute()`
-3. Call `IME.set()`
-4. Call `IME.select()` to select specified IME
-5. Call `CJK.refresh()` (NG: Before IME mode changed. Too fast)
-6. Activate CJK temp window
-7. Deactivate CJK temp window
-8. The CJK IME activates specific mode internaly (NG: After `CJK.refresh()`. Too late)
-9. ❌ The CJK IME is switched, but the mode is not applied.
-
-> [!Important]
-> `CJK.refresh()` must be called after CJK IME has internally switched modes.
-> However, the execution order occasionally reverses.
-
-#### Attempt to Fix
-
-I tried adding an `imeStabilizationDelay = 0.05` (ms) at first.  
-However, even setting the delay to `0.00` does not change the success rate.
-
-I also added a code to switch to `com.apple.keylayout.ABC` once before switching to CJK IME.  
-This modification boosted the success rate somehow.
-
-`kTISNotifySelectedKeyboardInputSourceChanged` can catch the IME changing event, but cannot catch the IME Internal mode changing.
-
-Further investigation and proper fix are needed.
 
 ## TODO
 

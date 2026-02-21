@@ -2,7 +2,7 @@ import Foundation
 
 public enum AppError: Error {
    case config(ConfigError)
-   case cmd(CmdError)
+   case cmd(IMECmdError)
    case util(UtilError)
    case ime(IMEError)
    case imed(IMEDError)
@@ -43,7 +43,7 @@ public enum ConfigError: Error {
    }
 }
 
-public enum CmdError: Error {
+public enum IMECmdError: Error {
    case invalidSubCommand(String)
    case invalidOption(String)
    case subcmdNotFound

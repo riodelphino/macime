@@ -2,6 +2,7 @@
 
 ## [4.3.0](https://github.com/riodelphino/macime/compare/v4.2.0...v4.3.0) (2026-02-21)
 
+* **chore:** Rename `CmdError` to `IMECmdError`
 * **docs:** Refine error enum
 * **docs:** Add `--cjk-delay` `--log-level` to Help
 * **docs:** Refine IO and Log messages, Replace `` to ''

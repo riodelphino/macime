@@ -1,6 +1,6 @@
 import Foundation
 
-/// [Common] default values
+/// [Common] Default values
 public enum Defaults {
    public static let version: String = "4.2.1"
 
@@ -78,7 +78,7 @@ public enum Color {
    }
 }
 
-/// [IME] sub commands
+/// [IME] Sub commands
 public enum IMESubCmd: String {
    case get
    case set
@@ -102,7 +102,7 @@ public enum IMESubCmd: String {
    }
 }
 
-/// [IME] options
+/// [IME] Options
 public enum IMEOption: String {
    case detail = "--detail"
    case save = "--save"
@@ -113,7 +113,7 @@ public enum IMEOption: String {
    case debug = "--debug"
 }
 
-/// [IME] state
+/// [IME] State
 public struct IMEState {
    public var subcmd: String?
    public var save: Bool = false
@@ -155,13 +155,14 @@ public enum IMEFieldList {
    }
 }
 
-/// [IMED] Keep command line args
+/// [IMED] State
 public struct IMEDState {
    public var macimePath: String?
    public var sockPath: String?
    public var status: String?
    public var logPath: String?
    public var errPath: String?
+   public var cjkDelay: Double?
    public var debug: Bool = false
    public init() throws {
       macimePath = try Defaults.macimePath()
@@ -170,7 +171,7 @@ public struct IMEDState {
    }
 }
 
-/// [IMED] log level
+/// [IMED] Log level
 public enum LogLevel: Int, Comparable {
    case debug = 0
    case info

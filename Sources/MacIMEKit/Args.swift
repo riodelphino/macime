@@ -1,7 +1,7 @@
 import Foundation
 import InputMethodKit
 
-/// Arguments
+/// [Common] Args
 public enum ArgsCommon {
    /// Get command-line args as String array
    public static func getCmdArgs() -> [String] {
@@ -15,7 +15,7 @@ public enum ArgsCommon {
    }
 }
 
-/// macime
+/// [IME] Args
 public enum IMEArgs {
    private static func isValidSubcmd(_ subcmd: String) -> Bool {
       return IMESubCmd(rawValue: subcmd) != nil
@@ -147,7 +147,7 @@ public enum IMEArgs {
    }
 }
 
-/// macimed (daemon)
+/// [IMED] Args
 public enum IMEDArgs {
    /// Parse command-line args
    public static func parse(_ args: [String]) throws -> IMEDState {

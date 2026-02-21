@@ -2,6 +2,7 @@
 
 ## [4.3.0](https://github.com/riodelphino/macime/compare/v4.2.0...v4.3.0) (2026-02-21)
 
+* **refactor:** Split parsing `--help` `--version` in `IMEArgs`
 * **fix:** Correct condition for `save` with `--session-id`
 * **chore:** Deprecate `.missingSave` error
 * **fix:** Correct validation for `save` `--save` and `--session-id`

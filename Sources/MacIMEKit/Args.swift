@@ -64,6 +64,20 @@ public enum IMEArgs {
       let args: [String] = fallback(args)
       var state = IMEState()
 
+      // Parse help and version
+      if let first = args.first {
+         switch first {
+         case "--version", "-v":
+            IO.out(Defaults.version)
+            exit(0)
+         case "--help", "-h":
+            IO.out(Help.macime)
+            exit(0)
+         default:
+            break
+         }
+      }
+
       // Parse the first arg
       var index = 0
       if let first = args.first {
@@ -78,12 +92,6 @@ public enum IMEArgs {
          case "get", "list", "save", "load":
             state.subcmd = first
             index += 1
-         case "--version", "-v":
-            IO.out(Defaults.version)
-            exit(0)
-         case "--help", "-h":
-            IO.out(Help.macime)
-            exit(0)
          default:
             throw AppError.cmd(.invalidSubCommand(first))
          }

@@ -200,6 +200,20 @@ public enum IMEDMethod: String {
    }
 }
 
+/// [IMED] Sub command
+public enum IMEDSubCmd: String {
+   case info
+   case get
+   case set
+
+   public init(_ rawValue: String) throws {
+      guard let subcmd = IMEDSubCmd(rawValue: rawValue) else {
+         throw AppError.imed(.invalidDaemonSubcmd(rawValue))
+      }
+      self = subcmd
+   }
+}
+
 /// [IMED] Log level
 public enum LogLevel: Int, Comparable {
    case debug = 0

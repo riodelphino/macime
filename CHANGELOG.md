@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.3.0](https://github.com/riodelphino/macime/compare/v4.2.0...v4.3.0) (2026-02-21)
+## [4.3.0](https://github.com/riodelphino/macime/compare/v4.2.0...v4.3.0) (2026-02-22)
 
+* **refactor:** Add `IMEDSubCmd` enum
 * **refactor:** Add `IMEDMethod` enum
 * **refactor:** Throws error on initializing of `IMESubCmd` and `IMEOption`
 * **refactor:** Use `IMEOption` instead of `String` in `IMEArgs`

@@ -68,12 +68,14 @@ public enum IMED {
          stdout = ret
 
       case .daemon:
-         let subcmd = args.removeFirst()
+         let subcmdStr = args.removeFirst()
+         let subcmd = try IMEDSubCmd(subcmdStr)
+
          switch subcmd {
-         case "info":
+         case .info:
             let json: [String: Any] = ["status": state.status ?? "", "sock-path": state.sockPath ?? "", "macime-path": state.macimePath ?? ""]
             stdout = try Util.jsonToString(json, options: [.withoutEscapingSlashes])
-         case "get":
+         case .get:
             guard args.count > 0 else {
                throw AppError.imed(.invalidGetTarget("nil"))
             }
@@ -86,7 +88,7 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }
-         case "set":
+         case .set:
             let target = args.removeFirst()
             switch target {
             case "log-level":
@@ -102,8 +104,6 @@ public enum IMED {
             default:
                throw AppError.imed(.invalidSetTarget(target))
             }
-         default:
-            throw AppError.imed(.invalidDaemonSubcmd(subcmd))
          }
       }
 

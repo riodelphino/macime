@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-x86_64:
+    runs-on: macos-13          # Intel runner
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (x86_64)
+        run: |
+          swift build -c release --disable-sandbox --arch x86_64
+
+      - name: Package (x86_64)
+        run: |
+          tar -czf macime-${{ github.ref_name }}-x86_64.tar.gz \
+            -C .build/x86_64-apple-macosx/release macime macimed
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: x86_64
+          path: macime-${{ github.ref_name }}-x86_64.tar.gz
+
+  build-arm64:
+    runs-on: macos-latest      # Apple Silicon runner (M1/M2)
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (arm64)
+        run: |
+          swift build -c release --disable-sandbox --arch arm64
+
+      - name: Package (arm64)
+        run: |
+          tar -czf macime-${{ github.ref_name }}-arm64.tar.gz \
+            -C .build/arm64-apple-macosx/release macime macimed
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arm64
+          path: macime-${{ github.ref_name }}-arm64.tar.gz
+
+  release:
+    needs: [build-x86_64, build-arm64]
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: x86_64
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: arm64
+
+      - name: Compute SHA256
+        run: |
+          echo "SHA256_X86=$(shasum -a 256 macime-${{ github.ref_name }}-x86_64.tar.gz | awk '{print $1}')" >> $GITHUB_ENV
+          echo "SHA256_ARM=$(shasum -a 256 macime-${{ github.ref_name }}-arm64.tar.gz | awk '{print $1}')" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            macime-${{ github.ref_name }}-x86_64.tar.gz
+            macime-${{ github.ref_name }}-arm64.tar.gz
+
+      - name: Show SHA256 (for formula update)
+        run: |
+          echo "x86_64: $SHA256_X86"
+          echo "arm64 : $SHA256_ARM"

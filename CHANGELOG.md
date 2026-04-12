@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.3.1](https://github.com/riodelphino/macime/compare/v4.3.0...v4.3.1) (2026-04-13)
+## [4.4.0](https://github.com/riodelphino/macime/compare/v4.3.0...v4.4.0) (2026-04-13)
 
+* **docs:** Add `pre-compiled binaries` notice
 * **ci:** Replace deprecated `macos-13` to `macos-15-intel` in `release.yml`
 * **docs:** Add `AI assistance` notice
 * **ci:** Add `release.yml` to pre-compile for arm64/x86_64

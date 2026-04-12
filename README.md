@@ -56,6 +56,8 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 
 ## Breaking Changes
 
+* [v4.4.0](https://github.com/riodelphino/macime/releases/tag/v4.4.0):
+    * Add pre-compiled binaries (`macime`, `macimed`) - no `xcode` required.
 * [v4.0.0](https://github.com/riodelphino/macime/releases/tag/v4.0.0):
     * Switching speed is extremelly accelarated via internal `IME.swift` calling.
 * [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):

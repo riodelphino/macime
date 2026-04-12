@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.3.1](https://github.com/riodelphino/macime/compare/v4.3.0...v4.3.1) (2026-02-22)
+## [4.3.1](https://github.com/riodelphino/macime/compare/v4.3.0...v4.3.1) (2026-04-13)
 
+* **ci:** Rename `ci.yml` to `test.yml`
 * **docs:** Move `Unstable Switching Issue` to Github issue and link it
 
 ## [4.3.0](https://github.com/riodelphino/macime/compare/v4.2.0...v4.3.0) (2026-02-22)

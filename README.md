@@ -539,6 +539,16 @@ MACIME_PATH=.build/release/macime .build/release/macimed
   [Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
 
 
+## AI Assistance
+
+This project is developed with the assistance of AI - though not vibe-coded.
+
+The AI helped significantly with:
+- Git workflow
+- Daemon process (`IMED.swift`)
+- CJK handling (`CJK.swift`)
+
+
 ## Changelog
 
 See [CHANGELOG](CHANGELOG.md)

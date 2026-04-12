@@ -2,6 +2,7 @@
 
 ## [4.3.1](https://github.com/riodelphino/macime/compare/v4.3.0...v4.3.1) (2026-04-13)
 
+* **docs:** Add `AI assistance` notice
 * **ci:** Add `release.yml` to pre-compile for arm64/x86_64
 * **ci:** Rename `ci.yml` to `test.yml`
 * **docs:** Move `Unstable Switching Issue` to Github issue and link it

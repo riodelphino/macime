@@ -386,7 +386,26 @@ daemon set log-level info # Set log level. Use one of debug|info|warn|error (Def
 > Currently `daemon set` is disabled since it requires restarting server and much more modifications.
 
 
-To test these commands via `macime.nvim` (Ensure `macimed` is running):
+#### Socket test
+
+##### A test via bash or zsh
+
+To test socket via bash or zsh command:
+```bash
+echo "ime get" | nc -U /tmp/riodelphino.macimed.sock
+# com.google.inputmethod.Japanese.base
+
+echo "ime set com.google.inputmethod.Japanese.base" | nc -U /tmp/riodelphino.macimed.sock
+# IME is changed to Google Japanese
+```
+Or test socket interactively:
+```bash
+nc -U /tmp/riodelphino.macimed.sock
+```
+
+##### A test via macime.nvim
+
+To test socket via `macime.nvim` (Ensure `macimed` is running):
 (e.g.)
 ```lua
 require("macime").send("ime set com.apple.keylayout.ABC")

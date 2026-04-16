@@ -2,6 +2,7 @@
 
 ## [4.4.2](https://github.com/riodelphino/macime/compare/v4.4.1...v4.4.2) (2026-04-17)
 
+* **docs:** Add a test code for socket in bash
 * **fix:** Remove legacy code for checking `macime` executable path (`macimed` works without `macime` from v4.x)
 
 ## [4.4.1](https://github.com/riodelphino/macime/compare/v4.4.0...v4.4.1) (2026-04-17)

@@ -57,7 +57,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 ## Breaking Changes
 
 * [v4.4.0](https://github.com/riodelphino/macime/releases/tag/v4.4.0):
-    * Add pre-compiled binaries (`macime`, `macimed`) - no `xcode` required.
+    * Add pre-compiled binaries (`macime`, `macimed`) - no `xcode` or build required.
 * [v4.0.0](https://github.com/riodelphino/macime/releases/tag/v4.0.0):
     * Switching speed is extremelly accelarated via internal `IME.swift` calling.
 * [v3.6.0](https://github.com/riodelphino/macime/releases/tag/v3.6.0):
@@ -74,22 +74,61 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 ## Requirements
 
 * macOS (>=10.15)
-* `com.apple.keylayout.ABC` is installed and enabled (Used in `load` sub-command)
+* `com.apple.keylayout.ABC` is installed and enabled (macOS's default. Used in `load` sub-command)
 
 ## Install
+
+### Homebrew
 
 ```bash
 brew tap riodelphino/tap
 brew install macime
 ```
 
+### Manual
+
+Select specific version and CPU architecture from:
+[https://github.com/riodelphino/macime/releases](https://github.com/riodelphino/macime/releases)
+
+for Intel Mac:
+```bash
+curl -L -O https://github.com/riodelphino/macime/releases/download/v4.4.0/macime-v4.4.0-x86_64.tar.gz
+tar -zxvf macime-v4.4.0-x86_64.tar.gz
+mv macime macimed ~/bin
+```
+for Apple Silicon:
+```bash
+curl -L -O https://github.com/riodelphino/macime/releases/download/v4.4.0/macime-v4.4.0-arm64.tar.gz
+tar -zxvf macime-v4.4.0-arm64.tar.gz
+mv macime macimed ~/bin
+```
+Then add environmental variable to your `~/.zshrc` or `~/.bashrc` or `~/.profile`:
+```bash
+export MACIME_PATH="$HOME/bin/macime"
+```
+
+* Replace `v4.4.0` to your desired version tag.
+* Replace `~/bin` and `$HOME/bin/macime` to your desired directory.
+* Execute permission has already been granted.
+
+
 ## Uninstall
+
+### Homebrew
 
 ```bash
 brew uninstall macime
 ```
 
+### Manual
+
+- Remove installed binaries.
+- Remove the `MACIME_PATH` environmental variable.
+
+
 ## Upgrade
+
+### Homebrew
 
 ```bash
 brew update
@@ -100,26 +139,10 @@ If launchd service is enabled, ensure to restart it:
 brew services restart macime
 ```
 
-## Run as a launchd Service
+### Manual
 
-`macimed` can be managed by `launchd` via Homebrew.
+Just overwrite the binaries.
 
-```bash
-# Start `macimed` service
-brew services start macime
-
-# Stop `macimed` service
-brew services stop macime
-```
-> [!Note]
-> Although the service name is `macime`, it runs `macimed` internally.
-
-
-Or, you can also start `macimed` manually to monitor logs and observe its behavior:
-```bash
-macimed
-```
-Useful for debuging. (Almost same performance with `brew services` in `macime` >= v4.x)
 
 
 ## Usage
@@ -258,7 +281,7 @@ macime list --select-capable
 > [!Note]
 > `--detail` and `--select-capable` can be mixtured
 
-### Options
+#### Options
 
 | Option                    | Available for | Description                                                                              |
 | ------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
@@ -270,7 +293,7 @@ macime list --select-capable
 | --cjk-delay <number>      | set, load     | Set CJK refreshing delay time as a number between 0 and 1 (Default: 0.05) (Experimental) |
 | --debug                   | (all)         | Show debug information                                                                   |
 
-### CJK refreshing
+#### CJK refreshing
 
 > [!Warning]
 > Experimental.
@@ -292,7 +315,6 @@ macime set com.sogou.inputmethod.sogou --cjk-refresh --cjk-delay 0.05
 
 # load
 macime load --cjk-refresh --cjk-delay 0.05
-
 ```
 
 ### macimed
@@ -306,7 +328,6 @@ Run `macimed` manually (for debugging):
 macimed
 # Show more detailed err/log
 macimed --debug
-
 ```
 
 Show the `macimed` version:
@@ -326,11 +347,6 @@ Set log level:
 macimed --log-level info # Use: debug|info|warn|error (Default: info)
 macimed -l info
 ````
-
-#### Default Socket Path
-
-`macimed` listens to:
-* /tmp/riodelphino.macime.sock
 
 #### Send Commands
 
@@ -375,20 +391,64 @@ require("macime").send("daemon get sock-path", function(ok, data) if ok then pri
 require("macime").send("daemon set log-level debug", function(ok, data) if ok then print(data) end end)
 ```
 
+#### macime Executable Path
 
-#### Temporary directory used by macimed to stores IME IDs
+`macimed` requires the full-path of `macime`.
 
-Previous IME IDs are stored in the following paths.
+It is determined from one of the following paths:
+- `MACIME_PATH` (Environment variable)
+- `/usr/local/bin/macime` (Homebrew on Intel Mac)
+- `/opt/homebrew/bin/macime` (Homebrew on Apple Silicon)
 
-When running `macimed` manually (socket):
-* /tmp/riodelphino.macime/GLOBAL
-* /tmp/riodelphino.macime/<session_id>
+#### Sock path
 
-When running via `Homebrew service`:
-* /private/tmp/riodelphino.macime/GLOBAL
-* /private/tmp/riodelphino.macime/<session_id>
+`macimed` listen to the `socket` for receiving/sending daemon commands.
 
-These files are deleted when you shutdown macOS.
+The sock path is determined from one of the following paths:
+- `MACIME_SOCK_PATH` (Environment variable)
+- `/tmp/riodelphino.macimed.sock`
+
+#### Temp dir
+
+`macimed` stores previous IME IDs in temp dir.
+
+The temp dir is determined from one of the following paths:
+- `MACIME_TEMP_DIR` (Environment variable)
+- `/tmp/riodelphino.macime/` (When running manually `macimed`)
+- `/private/tmp/riodelphino.macime/` (When running macimed via `brew services`)
+
+The previous IDs are stored in following files:
+- `<temp_dir>/GLOBAL`
+- `<temp_dir>/<session_id>` (with `--session-id <session_id>` option)
+
+These files are deleted automatically when you shutdown macOS.
+
+
+### Run daemon
+
+#### Homebrew
+
+`macimed` can be managed by `launchd` via Homebrew.
+
+```bash
+# Start `macimed` service
+brew services start macime
+
+# Stop `macimed` service
+brew services stop macime
+```
+> [!Note]
+> Although the service name is `macime`, it runs `macimed` internally.
+
+#### Manual
+
+Or, you can also start `macimed` manually:
+```bash
+macimed
+```
+Useful for debuging. You can observe the behaviour immediately.
+
+(Almost same performance with `brew services`.)
 
 
 ## Technical Information
@@ -405,7 +465,7 @@ With `Apple Silicon`:
 * /opt/homebrew/var/log/riodelphino/macimed.out.log
 * /opt/homebrew/var/log/riodelphino.macimed.err.log
 
-To check the log paths, run `:checkhealth macime`.
+To check the log paths, run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
 
 ### plist path via Homebrew
 
@@ -413,13 +473,6 @@ plist path:
 * ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
 
 To check the plist paths, run `:checkhealth macime`.
-
-### macime Executable Path
-
-`macimed` requires the full-path of `macime`, and it is automatically determined from one of the following paths:
-- `MACIME_PATH` (Environment variable)
-- /usr/local/bin/macime (Homebrew on Intel Mac)
-- /opt/homebrew/bin/macime (Homebrew on Apple Silicon)
 
 ### MACIME_PATH Enviroment Variable
 
@@ -433,19 +486,6 @@ service do
   ...
 end
 ```
-
-### Sock path
-
-`macimed` determine the sock path from one of the following paths:
-- `MACIME_SOCK_PATH` (Environment variable)
-- `/tmp/riodelphino.macimed.sock`
-
-### Temp dir
-
-`macimed` determine the temp dir from one of the following paths:
-- `MACIME_TEMP_DIR` (Environment variable)
-- `/tmp/riodelphino.macime`
-
 
 ## Integration
 
@@ -509,7 +549,7 @@ This cleans up the corrupted tap cache and performs a fresh installation.
 
 ### macimed
 
-- [ ] Stable IME switching
+- [ ] Stable IME switching with CJK
 - [ ] Make the server restartable (for `daemon set sock-path xxx`)
 
 

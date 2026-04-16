@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.4.1](https://github.com/riodelphino/macime/compare/v4.4.0...v4.4.1) (2026-04-13)
+## [4.4.1](https://github.com/riodelphino/macime/compare/v4.4.0...v4.4.1) (2026-04-16)
 
+* **docs:** Clarify and re-organize documents. (specially in: Installing/Uninstalling/Run-as-Daemon)
 * **docs:** Correct version badge to `v4.4.1`
 
 ## [4.4.0](https://github.com/riodelphino/macime/compare/v4.3.0...v4.4.0) (2026-04-13)

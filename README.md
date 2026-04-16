@@ -454,7 +454,16 @@ Useful for debuging. You can observe the behaviour immediately.
 
 ## ⛏️ Technical Information
 
-### 📝 Logs
+### 🍺 Homebrew
+
+#### 📍 plist path
+
+plist path:  
+* ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
+
+To check the plist paths, run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
+
+#### 📝 Logs
 
 `macimed` leaves `stdout` and `stderr` logs when it is running via `Homebrew service`.
 
@@ -466,16 +475,11 @@ With `Apple Silicon`:
 * /opt/homebrew/var/log/riodelphino/macimed.out.log
 * /opt/homebrew/var/log/riodelphino.macimed.err.log
 
-To check the log paths, run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
+To check the log path:
+- Run `cat ~/Library/LaunchAgents/homebrew.mxcl.macime.plist`, find `StandardErrorPath` item.
+- or Run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
 
-### 📍 plist path via Homebrew
-
-plist path:
-* ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
-
-To check the plist paths, run `:checkhealth macime`.
-
-### 📍 MACIME_PATH Enviroment Variable
+#### 📍 MACIME_PATH Enviroment Variable
 
 The `MACIME_PATH` is set at `brew install` time via `riodelphino/homebrew-tap/Fomula/macime.rb`:
 ```ruby

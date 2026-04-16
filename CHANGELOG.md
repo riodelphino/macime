@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [4.4.1](https://github.com/riodelphino/macime/compare/v4.4.0...v4.4.1) (2026-04-16)
+## [4.4.1](https://github.com/riodelphino/macime/compare/v4.4.0...v4.4.1) (2026-04-17)
 
+* **docs:** Add how to get `log-path` with `brew services`
 * **docs:** Add `brew untap` for uninstalling
 * **docs:** Remove old issue about homebrew
 * **docs:** Add emoji to titles

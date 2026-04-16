@@ -201,9 +201,6 @@ public enum IMEDArgs {
          }
          i += 1
       }
-      guard FS.pathExists(state.macimePath ?? "") else {
-         throw AppError.imed(.macimeNotFound(state.macimePath ?? ""))
-      }
 
       return state
    }

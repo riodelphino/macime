@@ -73,7 +73,7 @@ public enum IMED {
 
          switch subcmd {
          case .info:
-            let json: [String: Any] = ["status": state.status ?? "", "sock-path": state.sockPath ?? "", "macime-path": state.macimePath ?? ""]
+            let json: [String: Any] = ["status": state.status ?? "", "sock-path": state.sockPath ?? ""]
             stdout = try Util.jsonToString(json, options: [.withoutEscapingSlashes])
          case .get:
             guard args.count > 0 else {
@@ -83,8 +83,6 @@ public enum IMED {
             switch target {
             case "sock-path":
                stdout = state.sockPath ?? ""
-            case "macime-path":
-               stdout = state.macimePath ?? ""
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }

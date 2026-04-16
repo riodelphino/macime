@@ -2,17 +2,7 @@ import Foundation
 
 /// [Common] Default values
 public enum Defaults {
-   public static let version: String = "4.4.1"
-
-   public static func macimePath() throws -> String {
-      let env = ProcessInfo.processInfo.environment
-      let checkPaths = [env["MACIME_PATH"], "/usr/local/bin/macime", "/opt/homebrew/bin/macime"]
-      let path = Util.fallbackPaths(checkPathExists: true, paths: checkPaths)
-      guard let path else {
-         throw AppError.config(.invalidMacimePath)
-      }
-      return path
-   }
+   public static let version: String = "4.4.2"
 
    public static func sockPath() throws -> String {
       let env = ProcessInfo.processInfo.environment
@@ -174,14 +164,12 @@ public enum IMEFieldList {
 
 /// [IMED] State
 public struct IMEDState {
-   public var macimePath: String?
    public var sockPath: String?
    public var status: String?
    public var logPath: String?
    public var errPath: String?
    public var debug: Bool = false
    public init() throws {
-      macimePath = try Defaults.macimePath()
       sockPath = try Defaults.sockPath()
       status = try IMED.isMacimedRunning(sockPath: Defaults.sockPath()) ? "running" : "stopped"
    }

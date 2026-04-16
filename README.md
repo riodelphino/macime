@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.4.1&style=for-the-badge&cacheSeconds=60" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.4.2&style=for-the-badge&cacheSeconds=60" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -56,6 +56,8 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 
 ## ⚠️ Breaking Changes
 
+* [v4.4.2](https://github.com/riodelphino/macime/releases/tag/v4.4.2):
+    * Remove legacy code for checking `macime` executable path. (`macimed` works without `macime` from `v4.x`.)
 * [v4.4.0](https://github.com/riodelphino/macime/releases/tag/v4.4.0):
     * Add pre-compiled binaries (`macime`, `macimed`) - no `xcode` or build required.
 * [v4.0.0](https://github.com/riodelphino/macime/releases/tag/v4.0.0):
@@ -92,23 +94,25 @@ Select specific version and CPU architecture from:
 
 for Intel Mac:
 ```bash
-curl -L -O https://github.com/riodelphino/macime/releases/download/v4.4.0/macime-v4.4.0-x86_64.tar.gz
-tar -zxvf macime-v4.4.0-x86_64.tar.gz
+curl -L -O https://github.com/riodelphino/macime/releases/download/v4.4.2/macime-v4.4.2-x86_64.tar.gz
+tar -zxvf macime-v4.4.2-x86_64.tar.gz
 mv macime macimed ~/bin
 ```
 for Apple Silicon:
 ```bash
-curl -L -O https://github.com/riodelphino/macime/releases/download/v4.4.0/macime-v4.4.0-arm64.tar.gz
-tar -zxvf macime-v4.4.0-arm64.tar.gz
+curl -L -O https://github.com/riodelphino/macime/releases/download/v4.4.2/macime-v4.4.2-arm64.tar.gz
+tar -zxvf macime-v4.4.2-arm64.tar.gz
 mv macime macimed ~/bin
 ```
-Then add environmental variable to your `~/.zshrc` or `~/.bashrc` or `~/.profile`:
+To change default sock-path and temp-dir, set environmental variable to your `~/.zshrc` or `~/.bashrc` or `~/.profile`:
 ```bash
-export MACIME_PATH="$HOME/bin/macime"
+export MACIME_SOCK_PATH="/tmp/riodelphino.macimed.sock"
+export MACIME_TEMP_DIR="/tmp/riodelphino.macime"
 ```
 
-* Replace `v4.4.0` to your desired version tag.
-* Replace `~/bin` and `$HOME/bin/macime` to your desired directory.
+* Replace `v4.4.2` to your desired version tag.
+* Replace `~/bin` and `/tmp/riodelphino.macime` to your desired directory.
+* Relpace `/tmp/riodelphino.macimed.sock` to your desired path.
 * Execute permission has already been granted.
 
 
@@ -124,7 +128,7 @@ brew untap riodelphino/tap
 ### ⚙️ Manual
 
 - Remove installed binaries.
-- Remove the `MACIME_PATH` environmental variable.
+- Remove the environmental variables.
 
 
 ## ⬆️ Upgrade
@@ -392,22 +396,13 @@ require("macime").send("daemon get sock-path", function(ok, data) if ok then pri
 require("macime").send("daemon set log-level debug", function(ok, data) if ok then print(data) end end)
 ```
 
-#### 📍 macime Executable Path
-
-`macimed` requires the full-path of `macime`.
-
-It is determined from one of the following paths:
-- `MACIME_PATH` (Environment variable)
-- `/usr/local/bin/macime` (Homebrew on Intel Mac)
-- `/opt/homebrew/bin/macime` (Homebrew on Apple Silicon)
-
 #### 🔌 Sock path
 
 `macimed` listen to the `socket` for receiving/sending daemon commands.
 
 The sock path is determined from one of the following paths:
 - `MACIME_SOCK_PATH` (Environment variable)
-- `/tmp/riodelphino.macimed.sock`
+- `/tmp/riodelphino.macimed.sock/`
 
 #### 📁 Temp dir
 
@@ -423,6 +418,14 @@ The previous IDs are stored in following files:
 - `<temp_dir>/<session_id>` (with `--session-id <session_id>` option)
 
 These files are deleted automatically when you shutdown macOS.
+
+#### ⚠️ macime path
+
+These legacy code have been deprecated in `v4.4.2`:
+- `MACIME_PATH` environmental variable
+- Checking `macime` executable
+
+Since `macimed` does not require `macime` executable outside anymore in `v4.x`. They are sharing IME switching class/functions internally.
 
 
 ### ▶️ Run daemon
@@ -479,18 +482,6 @@ To check the log path:
 - Run `cat ~/Library/LaunchAgents/homebrew.mxcl.macime.plist`, find `StandardErrorPath` item.
 - or Run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
 
-#### 📍 MACIME_PATH Enviroment Variable
-
-The `MACIME_PATH` is set at `brew install` time via `riodelphino/homebrew-tap/Fomula/macime.rb`:
-```ruby
-service do
-  ...
-  environment_variables(
-    MACIME_PATH: opt_bin/"macime"
-  )
-  ...
-end
-```
 
 ## 🔗 Integration
 
@@ -544,12 +535,6 @@ cd macime
 swift build
 # Build for release
 swift build -c release
-```
-
-For debugging, temporary run the built `macimed` with the locally built `macime`:
-```bash
-# In the macime repository root:
-MACIME_PATH=.build/release/macime .build/release/macimed
 ```
 
 ## 🙏 Thanks To

@@ -92,7 +92,6 @@ public enum UtilError: Error {
 
 public enum IMEDError: Error {
    case dataNotRecieved
-   case macimeNotFound(String)
    case sockPathNotFound(String)
    case macimeReturnsError(String)
    case invalidDaemonMethod(String)
@@ -108,8 +107,6 @@ public enum IMEDError: Error {
       switch self {
       case .dataNotRecieved:
          return "Data not recieved."
-      case let .macimeNotFound(path):
-         return "macime executable not found: \(path)"
       case let .sockPathNotFound(path):
          return "sock-path not found: \(path)"
       case let .macimeReturnsError(err):

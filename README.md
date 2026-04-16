@@ -118,6 +118,7 @@ export MACIME_PATH="$HOME/bin/macime"
 
 ```bash
 brew uninstall macime
+brew untap riodelphino/tap
 ```
 
 ### ⚙️ Manual

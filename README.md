@@ -19,7 +19,7 @@ delivering near-native IME switching speed.
 </p>
 
 
-## Story
+## 📖 Story
 
 I've used [macism](https://github.com/laishulu/macism) and [im-select](https://github.com/daipeihust/im-select) before.  
 But on my older Macs, these tools always required `a short wait` to switch IME modes. It was an unacceptable delay for daily use. (approximately 400ms)
@@ -31,7 +31,7 @@ This tool reduces the delay by about **95%** when running as a daemon or launchd
 If you’re a Mac user frustrated by slow IME switching, give it a try. 
 
 
-## Why it’s fast
+## ⚡ Why it’s fast
 
 1. Sets and gets the IME in a single operation
 2. Works as a daemon or launchd(brew service)
@@ -40,7 +40,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 5. Optimized code
 
 
-## Features
+## ✨️ Features
 
 * Standalone (`macime`):
     * Get, Set, Save current, Load previous, List all IMEs
@@ -54,7 +54,7 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
     * Stable switching for CJK input methods (Experimental)
 
 
-## Breaking Changes
+## ⚠️ Breaking Changes
 
 * [v4.4.0](https://github.com/riodelphino/macime/releases/tag/v4.4.0):
     * Add pre-compiled binaries (`macime`, `macimed`) - no `xcode` or build required.
@@ -71,21 +71,21 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * [v3.0.0](https://github.com/riodelphino/macime/releases/tag/v3.0.0): Deprecate `$MACIME_TEMP_DIR` environmental value
 
 
-## Requirements
+## 📦 Requirements
 
 * macOS (>=10.15)
 * `com.apple.keylayout.ABC` is installed and enabled (macOS's default. Used in `load` sub-command)
 
-## Install
+## 🛠 Install
 
-### Homebrew
+### 🍺 Homebrew
 
 ```bash
 brew tap riodelphino/tap
 brew install macime
 ```
 
-### Manual
+### ⚙️ Manual
 
 Select specific version and CPU architecture from:
 [https://github.com/riodelphino/macime/releases](https://github.com/riodelphino/macime/releases)
@@ -112,23 +112,23 @@ export MACIME_PATH="$HOME/bin/macime"
 * Execute permission has already been granted.
 
 
-## Uninstall
+## 🗑️ Uninstall
 
-### Homebrew
+### 🍺 Homebrew
 
 ```bash
 brew uninstall macime
 ```
 
-### Manual
+### ⚙️ Manual
 
 - Remove installed binaries.
 - Remove the `MACIME_PATH` environmental variable.
 
 
-## Upgrade
+## ⬆️ Upgrade
 
-### Homebrew
+### 🍺 Homebrew
 
 ```bash
 brew update
@@ -139,15 +139,15 @@ If launchd service is enabled, ensure to restart it:
 brew services restart macime
 ```
 
-### Manual
+### ⚙️ Manual
 
 Just overwrite the binaries.
 
 
 
-## Usage
+## 📘 Usage
 
-### macime
+### ⚡ macime
 
 Show `macime` version:
 ```bash
@@ -187,7 +187,7 @@ Save current IME.
 Restore the previous IME.
 
 
-#### Fallback behavior (im-select compatible)
+#### ⚙️ Fallback behavior (im-select compatible)
 
 `macime` supports im-select–style shortcuts.
 
@@ -199,7 +199,7 @@ macime
 macime com.apple.keylayout.ABC
 ```
 
-#### Get current IME
+#### 🔎 Get current IME
 ```bash
 # Get current IME ID
 macime get
@@ -220,7 +220,7 @@ macime get --detail
 # }
 ```
 
-#### Set IME
+#### 🎯 Set IME
 ```bash
 # Set IME
 macime set com.apple.keylayout.ABC
@@ -242,7 +242,7 @@ macime set com.apple.keylayout.ABC --save --session-id nvim-1001
 
 
 
-#### Save IME
+#### 💾 Save IME
 ```bash
 # Save current IME to `GLOBAL`
 macime save
@@ -253,7 +253,7 @@ macime save --session-id nvim-1001
 # Current IME ID is set to `/tmp/riodelphino.macime/prev/nvim-1001`
 ```
 
-#### Load IME
+#### ♻️ Load IME
 ```bash
 # Load IME from `GLOBAL`
 macime load
@@ -267,7 +267,7 @@ macime load --session-id nvim-1001
 `--cjk-refresh` option is also available.
 
 
-#### List IME
+#### 📋 List IME
 ```bash
 # Show IME ID list
 macime list
@@ -281,7 +281,7 @@ macime list --select-capable
 > [!Note]
 > `--detail` and `--select-capable` can be mixtured
 
-#### Options
+#### ⚙️ Options
 
 | Option                    | Available for | Description                                                                              |
 | ------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
@@ -293,7 +293,7 @@ macime list --select-capable
 | --cjk-delay <number>      | set, load     | Set CJK refreshing delay time as a number between 0 and 1 (Default: 0.05) (Experimental) |
 | --debug                   | (all)         | Show debug information                                                                   |
 
-#### CJK refreshing
+#### ⚙️ CJK refreshing
 
 > [!Warning]
 > Experimental.
@@ -317,7 +317,7 @@ macime set com.sogou.inputmethod.sogou --cjk-refresh --cjk-delay 0.05
 macime load --cjk-refresh --cjk-delay 0.05
 ```
 
-### macimed
+### ⚡ macimed
 
 `macimed` is a daemon bundled with `macime`. It enables blazing faster IME switching.  
 It runs in the background and controls `macime` by receiving commands over a Unix domain socket.
@@ -348,7 +348,7 @@ macimed --log-level info # Use: debug|info|warn|error (Default: info)
 macimed -l info
 ````
 
-#### Send Commands
+#### ⚙️ Send Commands
 
 `macimed` recieves commands via socket as plain text.
 
@@ -391,7 +391,7 @@ require("macime").send("daemon get sock-path", function(ok, data) if ok then pri
 require("macime").send("daemon set log-level debug", function(ok, data) if ok then print(data) end end)
 ```
 
-#### macime Executable Path
+#### 📍 macime Executable Path
 
 `macimed` requires the full-path of `macime`.
 
@@ -400,7 +400,7 @@ It is determined from one of the following paths:
 - `/usr/local/bin/macime` (Homebrew on Intel Mac)
 - `/opt/homebrew/bin/macime` (Homebrew on Apple Silicon)
 
-#### Sock path
+#### 🔌 Sock path
 
 `macimed` listen to the `socket` for receiving/sending daemon commands.
 
@@ -408,7 +408,7 @@ The sock path is determined from one of the following paths:
 - `MACIME_SOCK_PATH` (Environment variable)
 - `/tmp/riodelphino.macimed.sock`
 
-#### Temp dir
+#### 📁 Temp dir
 
 `macimed` stores previous IME IDs in temp dir.
 
@@ -424,9 +424,9 @@ The previous IDs are stored in following files:
 These files are deleted automatically when you shutdown macOS.
 
 
-### Run daemon
+### ▶️ Run daemon
 
-#### Homebrew
+#### 🍺 Homebrew
 
 `macimed` can be managed by `launchd` via Homebrew.
 
@@ -440,7 +440,7 @@ brew services stop macime
 > [!Note]
 > Although the service name is `macime`, it runs `macimed` internally.
 
-#### Manual
+#### 📁 Manual
 
 Or, you can also start `macimed` manually:
 ```bash
@@ -451,9 +451,9 @@ Useful for debuging. You can observe the behaviour immediately.
 (Almost same performance with `brew services`.)
 
 
-## Technical Information
+## ⛏️ Technical Information
 
-### Logs
+### 📝 Logs
 
 `macimed` leaves `stdout` and `stderr` logs when it is running via `Homebrew service`.
 
@@ -467,14 +467,14 @@ With `Apple Silicon`:
 
 To check the log paths, run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
 
-### plist path via Homebrew
+### 📍 plist path via Homebrew
 
 plist path:
 * ~/Library/LaunchAgents/homebrew.mxcl.macime.plist
 
 To check the plist paths, run `:checkhealth macime`.
 
-### MACIME_PATH Enviroment Variable
+### 📍 MACIME_PATH Enviroment Variable
 
 The `MACIME_PATH` is set at `brew install` time via `riodelphino/homebrew-tap/Fomula/macime.rb`:
 ```ruby
@@ -487,7 +487,7 @@ service do
 end
 ```
 
-## Integration
+## 🔗 Integration
 
 ### Neovim
 
@@ -497,9 +497,9 @@ end
 It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 
-## Issues
+## ⚠️ Issues
 
-### Unstable Switching
+### ⚠️ Unstable Switching
 
 Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching is unstable in following cases:
 - When have not run IME switching for a while.
@@ -510,7 +510,7 @@ Solution for now:
 See further information: [Unstable CJK Switching #2](https://github.com/riodelphino/macime/issues/2)
 
 
-### azookey prevents macime to change IME
+### ⚠️ azookey prevents macime to change IME
 
 `azookey` | [azookey-Desktop](https://github.com/azooKey/azooKey-Desktop) prevents `macime set` command to work.
 I guess it's because they are still alpha version.
@@ -518,7 +518,7 @@ I guess it's because they are still alpha version.
 Solutions for now:
    - Uninstal `azookey`
 
-### Fix errors on install or upgrade
+### ⚠️ Fix errors on install or upgrade
 
 > [!Note]
 > This error was caused by a merge conflict in the tap repository. Sorry for my git mistake.
@@ -545,15 +545,15 @@ brew install macime
 This cleans up the corrupted tap cache and performs a fresh installation.
 
 
-## TODO
+## 📝 TODO
 
-### macimed
+### ⚡️ macimed
 
 - [ ] Stable IME switching with CJK
 - [ ] Make the server restartable (for `daemon set sock-path xxx`)
 
 
-## Contribution
+## 🤝 Contribution
 
 Contributions are welcome:
 ```bash
@@ -573,7 +573,7 @@ For debugging, temporary run the built `macimed` with the locally built `macime`
 MACIME_PATH=.build/release/macime .build/release/macimed
 ```
 
-## Thanks To
+## 🙏 Thanks To
 
 - The IME switching concept is inspired by [im-select](https://github.com/daipeihust/im-select) and [macism](https://github.com/laishulu/macism)
 - The CJK IME workaround comes from [ims-mac](https://github.com/LuSrackhall/ims-mac)
@@ -581,7 +581,7 @@ MACIME_PATH=.build/release/macime .build/release/macimed
   [Neovim IMEの状態をカーソルの色に反映させる](https://it.commutty.com/denx/articles/b17c2ef01d10486d90fcf6f26f74fe58) (Japanese)
 
 
-## AI Assistance
+## 🤖 AI Assistance
 
 This project is developed with the assistance of AI - though not vibe-coded.
 
@@ -591,17 +591,17 @@ The AI helped significantly with:
 - CJK handling (`CJK.swift`)
 
 
-## Changelog
+## 📜 Changelog
 
 See [CHANGELOG](CHANGELOG.md)
 
 
-## License
+## 📄 License
 
 MIT License. See [LICENSE](LICENSE)
 
 
-## Related
+## 🔗 Related
 
 - [im-select](https://github.com/daipeihust/im-select)
 - [macism](https://github.com/laishulu/macism)

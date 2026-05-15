@@ -538,6 +538,10 @@ Environment:
 * nvim: NVIM v0.12.1 / Build type: Release
 * LuaJIT 2.1.1774896198
 
+Tested CJK IMEs:
+* google-japanese-ime: 3.33.6130.1 (com.apple.keylayout.ABC)
+* JapaneseIM-RomajiTyping.app: unknown (com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese)
+
 Reproducing steps (Maybe):
 1. At the start, 95% success, 5% failure.
 2. Restart terminal app (Ghostty)

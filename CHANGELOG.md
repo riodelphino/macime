@@ -2,6 +2,7 @@
 
 ## [4.4.3](https://github.com/riodelphino/macime/compare/v4.4.2...v4.4.3) (2026-05-15)
 
+* **docs:** Add `Tested CJK IMEs` list
 * **docs:** Update version badge to `v4.4.3`
 * **docs:** Add `The unstable CJK switching issue no longer occurs` note
 * **docs:** Add direct plict command to get stderr path

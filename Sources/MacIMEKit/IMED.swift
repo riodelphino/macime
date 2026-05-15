@@ -83,6 +83,8 @@ public enum IMED {
             switch target {
             case "sock-path":
                stdout = state.sockPath ?? ""
+            case "log-level":
+               stdout = Runtime.logLevel.string
             default:
                throw AppError.imed(.invalidGetTarget(target))
             }

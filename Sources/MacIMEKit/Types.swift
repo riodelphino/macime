@@ -2,7 +2,7 @@ import Foundation
 
 /// [Common] Default values
 public enum Defaults {
-   public static let version: String = "4.4.3"
+   public static let version: String = "4.5.0"
 
    public static func sockPath() throws -> String {
       let env = ProcessInfo.processInfo.environment
@@ -229,6 +229,15 @@ public enum LogLevel: Int, Comparable {
          return " WARN"
       case .error:
          return "ERROR"
+      }
+   }
+
+   public var string: String {
+      switch self {
+      case .debug: return "debug"
+      case .info: return "info"
+      case .warn: return "warn"
+      case .error: return "error"
       }
    }
 

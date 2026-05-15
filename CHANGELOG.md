@@ -1,7 +1,9 @@
 # CHANGELOG
 
-## [4.4.3](https://github.com/riodelphino/macime/compare/v4.4.2...v4.4.3) (2026-05-15)
 
+## [4.5.0](https://github.com/riodelphino/macime/compare/v4.4.2...v4.5.0) (2026-05-16)
+
+* **feat:** Add `daemon get log-level` to `macimed`
 * **docs:** Add macime.nvim version & config
 * **docs:** Update macime version to `v4.4.3`
 * **docs:** Add `Tested CJK IMEs` list

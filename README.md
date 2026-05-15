@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.4.3&style=for-the-badge&cacheSeconds=60" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.5.0&style=for-the-badge&cacheSeconds=60" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -377,6 +377,7 @@ daemon info
 # Get
 daemon get sock-path # Get sock path
 daemon get macime-path # Get macime path
+daemon get log-level # Get log level. debug|info|warn|error (Default: info)
 
 # Set
 daemon set log-level info # Set log level. Use one of debug|info|warn|error (Default: info)
@@ -413,6 +414,7 @@ require("macime").send("ime get", function(ok, data) if ok then print(data) end 
 require("macime").send("daemon info", function(ok, data) if ok then print(data) end end)
 require("macime").send("daemon get sock-path", function(ok, data) if ok then print(data) end end)
 require("macime").send("daemon set log-level debug", function(ok, data) if ok then print(data) end end)
+require("macime").send("daemon get log-level", function(ok, data) if ok then print(data) end end)
 ```
 
 #### 🔌 Sock path

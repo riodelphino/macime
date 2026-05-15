@@ -2,6 +2,7 @@
 
 ## [4.4.3](https://github.com/riodelphino/macime/compare/v4.4.2...v4.4.3) (2026-05-15)
 
+* **docs:** Add `The unstable CJK switching issue no longer occurs` note
 * **docs:** Add direct plict command to get stderr path
 
 ## [4.4.2](https://github.com/riodelphino/macime/compare/v4.4.1...v4.4.2) (2026-04-17)

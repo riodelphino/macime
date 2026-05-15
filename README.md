@@ -519,11 +519,33 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching is unstable in following cases:
 - When have not run IME switching for a while.
+- Too quick `leave/enter insert mode`
 
 Solution for now:
 - Switch IME several times, and might warm up `macimed` or CJK IME. It probably reduces the CJK switching error rate. 
+- If the switching failure occurs repetedly, manually switch the IME mode via keyboard. (e.g. `EISU` key -> `KANA` key in Japanese) This will reset the imcomplete internal mode of IME.
 
 See further information: [Unstable CJK Switching #2](https://github.com/riodelphino/macime/issues/2)
+
+#### Fixed ?
+
+As of 2026-05-15, the issue no longer occurs, but the cause is still unclear.  
+However, it may still recur.
+
+Environment:
+* macOS Sequoia (Intel)
+* tmux: 3.6a
+* nvim: NVIM v0.12.1 / Build type: Release
+* LuaJIT 2.1.1774896198
+
+Reproducing steps (Maybe):
+1. At the start, 95% success, 5% failure.
+2. Restart terminal app (Ghostty)
+3. `tmux a`
+5. `brew services stop macime`
+4. `macimed` to run stand alone (100% success, 0% failure)
+5. `ctrl + c` (kill macimed)
+6. `brew services start macime` (100% success, 0% failure)
 
 
 ### ⚠️ azookey prevents macime to change IME

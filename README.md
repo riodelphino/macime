@@ -536,11 +536,37 @@ Environment:
 * macOS Sequoia (Intel)
 * tmux: 3.6a
 * nvim: NVIM v0.12.1 / Build type: Release
-* LuaJIT 2.1.1774896198
+* LuaJIT: 2.1.1774896198
+* macime.nvim: v2.6.0
 
 Tested CJK IMEs:
 * google-japanese-ime: 3.33.6130.1 (com.apple.keylayout.ABC)
 * JapaneseIM-RomajiTyping.app: unknown (com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese)
+
+macime.nvim config:
+```lua
+return {
+   'riodelphino/macime.nvim',
+   event = 'VimEnter',
+   opts = {
+      vim = {
+         ttimeoutlen = 0,
+      },
+      ime = {
+         default = 'com.apple.keylayout.ABC',
+         cjk_refresh = true,
+         cjk_delay = 0.1,
+      },
+      save = {
+         enabled = true,
+         scope = 'session',
+      },
+      socket = {
+         enabled = true,
+      },
+   },
+}
+```
 
 Reproducing steps (Maybe):
 1. At the start, 95% success, 5% failure.

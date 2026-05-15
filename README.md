@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.5.0&style=for-the-badge&cacheSeconds=60" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.5.1&style=for-the-badge&cacheSeconds=60" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -536,6 +536,7 @@ However, it may still recur.
 
 Environment:
 * macOS Sequoia (Intel)
+* Ghostty: 1.3.1
 * tmux: 3.6a
 * nvim: NVIM v0.12.1 / Build type: Release
 * LuaJIT: 2.1.1774896198

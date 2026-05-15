@@ -309,6 +309,7 @@ It still fails sometimes (Not perfect).
 
 e.g.
 - `Google日本語入力`: Google Japanese Input
+- `日本語 ローマ字入力`: JapaneseIM RomajiTyping (Apple)
 - `百度拼音`: Baidu Pinyin
 - `搜狗拼音`: Sogou Pinyin
 

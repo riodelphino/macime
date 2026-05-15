@@ -2,6 +2,7 @@
 
 ## [4.5.1](https://github.com/riodelphino/macime/compare/v4.5.0...v4.5.1) (2026-05-16)
 
+* **docs:** Add `JapaneseIM RomajiTyping` in CJK example list
 * **docs:** Add `Ghostty` version to the CJK issue environment
 
 ## [4.5.0](https://github.com/riodelphino/macime/compare/v4.4.2...v4.5.0) (2026-05-16)

@@ -499,6 +499,7 @@ With `Apple Silicon`:
 
 To check the log path:
 - Run `cat ~/Library/LaunchAgents/homebrew.mxcl.macime.plist`, find `StandardErrorPath` item.
+- or Simply execute `plutil -extract StandardErrorPath raw ~/Library/LaunchAgents/homebrew.mxcl.macime.plist`
 - or Run `:checkhealth macime` in neovim. (Requires [macime.nvim](https://github.com/riodelphino/macime.nvim))
 
 

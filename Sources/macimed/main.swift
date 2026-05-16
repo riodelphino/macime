@@ -8,13 +8,9 @@ do {
    IMEDArgs.validate(state)
    Log.info("macimed \(Defaults.version) starting...")
    IMED.setState(state)
-   DispatchQueue.global().async {
-      try? IMED.serve()
-   }
+   try await IMED.serve()
 } catch let e as AppError {
    Log.error(e.message)
 } catch {
    Log.error("Unexpected error")
 }
-
-RunLoop.main.run()

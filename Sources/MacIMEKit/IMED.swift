@@ -157,7 +157,7 @@ public enum IMED {
    }
 
    /// Starts the IMED daemon and begins accepting client connections.
-   public static func serve() throws {
+   public static func serve() async throws {
       _ = cleanupSocket()
 
       let fd = socket(AF_UNIX, SOCK_STREAM, 0)
@@ -202,7 +202,7 @@ public enum IMED {
             Log.error("accept() failed")
             continue
          }
-         DispatchQueue.global().async {
+         Task {
             self.handleClient(client)
          }
       }

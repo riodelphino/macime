@@ -84,8 +84,9 @@ enum CJK {
    static func refresh(desiredID: String, cjkDelay: Double?) {
       guard Thread.isMainThread else {
          Log.debug("Recall CJK.refresh() asynchronously")
-         DispatchQueue.main.async { refresh(desiredID: desiredID, cjkDelay: cjkDelay) }
-
+         Task { @MainActor in
+            refresh(desiredID: desiredID, cjkDelay: cjkDelay)
+         }
          return
       }
       Log.debug("CJK.refresh() started")
@@ -103,8 +104,9 @@ enum CJK {
       w.makeFirstResponder(tf)
       Log.debug("Activated CJK temp window.")
 
-      // Hide window (async/simple ver)
-      DispatchQueue.main.asyncAfter(deadline: .now() + defaultCjkDelay) {
+      // Hide window (async/await)
+      Task { @MainActor in
+         try? await Task.sleep(nanoseconds: UInt64((cjkDelay ?? defaultCjkDelay) * 1_000_000_000))
          w.orderOut(nil)
          Log.debug("Deactivated CJK temp window.")
       }

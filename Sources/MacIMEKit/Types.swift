@@ -2,7 +2,7 @@ import Foundation
 
 /// [Common] Default values
 public enum Defaults {
-   public static let version: String = "4.5.1"
+   public static let version: String = "4.6.0"
 
    public static func sockPath() throws -> String {
       let env = ProcessInfo.processInfo.environment

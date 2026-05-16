@@ -11,7 +11,7 @@ delivering near-native IME switching speed.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.5.1&style=for-the-badge&cacheSeconds=60" />
+  <img src="https://img.shields.io/github/v/tag/riodelphino/macime?tag=v4.6.0&style=for-the-badge&cacheSeconds=60" />
   <img src="https://img.shields.io/badge/License-MIT-%232196F3.svg?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Swift-5.x-orange.svg?style=for-the-badge&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/Easy%20Install-Homebrew-%23FBB040?style=for-the-badge" />
@@ -51,11 +51,13 @@ If you’re a Mac user frustrated by slow IME switching, give it a try.
 * Compatibility:
     * Fallback to `im-select` style command usage
 * Others:
-    * Stable switching for CJK input methods (Experimental)
+    * Stable switching for CJK input methods
 
 
 ## ⚠️ Breaking Changes
 
+* [v4.6.0](https://github.com/riodelphino/macime/releases/tag/v4.6.0):
+    * Confirm the CJK switching is stable now.
 * [v4.4.2](https://github.com/riodelphino/macime/releases/tag/v4.4.2):
     * Remove legacy code for checking `macime` executable path. (`macimed` works without `macime` from `v4.x`.)
 * [v4.4.0](https://github.com/riodelphino/macime/releases/tag/v4.4.0):
@@ -288,21 +290,17 @@ macime list --select-capable
 
 #### ⚙️ Options
 
-| Option                    | Available for | Description                                                                              |
-| ------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
-| --detail                  | get, list     | Show detailed IME info as JSON                                                           |
-| --select-capable          | get, list     | Show only selectable IME                                                                 |
-| --save                    | set           | Save current IME (with `macime set` only)                                                |
-| --session-id <string> | save, load    | Specify the save / load session id (= filename in temp dir)                              |
-| --cjk-refresh             | set, load     | Refresh IME for CJK input methods (Experimental)                                         |
-| --cjk-delay <number>      | set, load     | Set CJK refreshing delay time as a number between 0 and 1 (Default: 0.05) (Experimental) |
-| --debug                   | (all)         | Show debug information                                                                   |
+| Option                | Available for | Description                                                               |
+| --------------------- | ------------- | ------------------------------------------------------------------------- |
+| --detail              | get, list     | Show detailed IME info as JSON                                            |
+| --select-capable      | get, list     | Show only selectable IME                                                  |
+| --save                | set           | Save current IME (with `macime set` only)                                 |
+| --session-id <string> | save, load    | Specify the save / load session id (= filename in temp dir)               |
+| --cjk-refresh         | set, load     | Refresh IME for CJK input methods                                         |
+| --cjk-delay <number>  | set, load     | Set CJK refreshing delay time as a number between 0 and 1 (Default: 0.05) |
+| --debug               | (all)         | Show debug information                                                    |
 
 #### ⚙️ CJK refreshing
-
-> [!Warning]
-> Experimental.
-> Please test in your environment, then report any issues or submit a PR.
 
 Reduces the failure rate of CJK IME switching, by creating a hidden window and forcibly refreshing the IME.  
 It still fails sometimes (Not perfect).
@@ -518,7 +516,11 @@ It enables `macime`, `macimed` and `Homebrew service` without extra codings.
 
 ## ⚠️ Issues
 
-### ⚠️ Unstable Switching
+### ⚠️ Unstable Switching (Solved)
+
+> [!Warning]
+> This issue no longer exists in macime >= v4.6.0
+> See: [Unstable CJK Switching #2](https://github.com/riodelphino/macime/issues/2)
 
 Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching is unstable in following cases:
 - When have not run IME switching for a while.
@@ -527,59 +529,6 @@ Via [macime.nvim](https://github.com/riodelphino/macime.nvim), the IME switching
 Solution for now:
 - Switch IME several times, and might warm up `macimed` or CJK IME. It probably reduces the CJK switching error rate. 
 - If the switching failure occurs repetedly, manually switch the IME mode via keyboard. (e.g. `EISU` key -> `KANA` key in Japanese) This will reset the imcomplete internal mode of IME.
-
-See further information: [Unstable CJK Switching #2](https://github.com/riodelphino/macime/issues/2)
-
-#### Fixed ?
-
-As of 2026-05-15, the issue no longer occurs, but the cause is still unclear.  
-However, it may still recur.
-
-Environment:
-* macOS Sequoia (Intel)
-* Ghostty: 1.3.1
-* tmux: 3.6a
-* nvim: NVIM v0.12.1 / Build type: Release
-* LuaJIT: 2.1.1774896198
-* macime.nvim: v2.6.0
-
-Tested CJK IMEs:
-* google-japanese-ime: 3.33.6130.1 (com.apple.keylayout.ABC)
-* JapaneseIM-RomajiTyping.app: unknown (com.apple.inputmethod.Kotoeri.RomajiTyping.Japanese)
-
-macime.nvim config:
-```lua
-return {
-   'riodelphino/macime.nvim',
-   event = 'VimEnter',
-   opts = {
-      vim = {
-         ttimeoutlen = 0,
-      },
-      ime = {
-         default = 'com.apple.keylayout.ABC',
-         cjk_refresh = true,
-         cjk_delay = 0.1,
-      },
-      save = {
-         enabled = true,
-         scope = 'session',
-      },
-      socket = {
-         enabled = true,
-      },
-   },
-}
-```
-
-Reproducing steps (Maybe):
-1. At the start, 95% success, 5% failure.
-2. Restart terminal app (Ghostty)
-3. `tmux a`
-5. `brew services stop macime`
-4. `macimed` to run stand alone (100% success, 0% failure)
-5. `ctrl + c` (kill macimed)
-6. `brew services start macime` (100% success, 0% failure)
 
 
 ### ⚠️ azookey prevents macime to change IME
@@ -595,8 +544,9 @@ Solutions for now:
 
 ### ⚡️ macimed
 
-- [ ] Stable IME switching with CJK
+- [x] Stable IME switching with CJK
 - [ ] Make the server restartable (for `daemon set sock-path xxx`)
+- [ ] Integrate `macimed` into `macime server` sub-command
 
 
 ## 🤝 Contribution

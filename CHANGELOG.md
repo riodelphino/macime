@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [4.6.0](https://github.com/riodelphino/macime/compare/v4.5.1...v4.6.0) (2026-05-17)
+
+* **feat!:** Confirm the CJK switching is stable (Remove the annotations)
+
 ## [4.5.1](https://github.com/riodelphino/macime/compare/v4.5.0...v4.5.1) (2026-05-17)
 
 * **refactor:** Replace `DispatchQueue` to `Task/async/await`

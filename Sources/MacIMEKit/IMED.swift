@@ -1,7 +1,15 @@
+import Darwin
 import Foundation
 
 public enum IMED {
    public static var state: IMEDState!
+
+   /// TIS/TSM APIs are not thread-safe; serialize command execution
+   private static let clientQueue = DispatchQueue(label: "macimed.client", qos: .userInteractive)
+   private static let connectionQueue = DispatchQueue(
+      label: "macimed.connection", qos: .userInteractive, attributes: .concurrent
+   )
+   private static let socketTimeout = timeval(tv_sec: 0, tv_usec: 250_000)
 
    public static func setState(_ newState: IMEDState) {
       state = newState
@@ -110,6 +118,45 @@ public enum IMED {
       return IMEDResult(stdout: stdout, stderr: "")
    }
 
+   private static func ConfigureClient(_ client: Int32) -> Bool {
+      var noSigPipe: Int32 = 1
+      var timeout = socketTimeout
+      let noSigPipeSet = setsockopt(
+         client, SOL_SOCKET, SO_NOSIGPIPE, &noSigPipe,
+         socklen_t(MemoryLayout.size(ofValue: noSigPipe))
+      )
+      let receiveTimeoutSet = setsockopt(
+         client, SOL_SOCKET, SO_RCVTIMEO, &timeout,
+         socklen_t(MemoryLayout.size(ofValue: timeout))
+      )
+      let sendTimeoutSet = setsockopt(
+         client, SOL_SOCKET, SO_SNDTIMEO, &timeout,
+         socklen_t(MemoryLayout.size(ofValue: timeout))
+      )
+      return noSigPipeSet == 0 && receiveTimeoutSet == 0 && sendTimeoutSet == 0
+   }
+
+   private static func WriteAll(_ client: Int32, _ output: String) -> Bool {
+      let bytes = Array(output.utf8)
+      return bytes.withUnsafeBytes { buffer in
+         guard let baseAddress = buffer.baseAddress else { return true }
+         var offset = 0
+         while offset < buffer.count {
+            let written = Darwin.write(
+               client, baseAddress.advanced(by: offset), buffer.count - offset
+            )
+            if written > 0 {
+               offset += written
+            } else if written < 0 && errno == EINTR {
+               continue
+            } else {
+               return false
+            }
+         }
+         return true
+      }
+   }
+
    /// Handles a single connected client socket
    public static func handleClient(_ client: Int32) {
       defer { close(client) }
@@ -117,10 +164,13 @@ public enum IMED {
       Log.info("Client connected: fd=\(client)")
 
       var buffer = [UInt8](repeating: 0, count: 4096)
-      let bytesRead = read(client, &buffer, buffer.count)
+      var bytesRead: Int
+      repeat {
+         bytesRead = read(client, &buffer, buffer.count)
+      } while bytesRead < 0 && errno == EINTR
 
       guard bytesRead > 0 else {
-         Log.error("Client read failed or EOF")
+         Log.debug("Client read failed or EOF: errno=\(errno)")
          return
       }
 
@@ -133,16 +183,24 @@ public enum IMED {
 
       do {
          let ms = try Util.elapsed {
-            let ret: IMEDResult = try self.execute(command)
+            let ret: IMEDResult = try clientQueue.sync {
+               try self.execute(command)
+            }
 
             switch ret {
             case var .success(stdout):
                stdout = stdout.isEmpty ? "OK" : stdout
-               write(client, stdout, strlen(stdout)) // Write stdout
-               Log.info("Client response : \(stdout)")
+               if WriteAll(client, stdout) {
+                  Log.info("Client response : \(stdout)")
+               } else {
+                  Log.debug("Client write failed: errno=\(errno)")
+               }
             case let .failure(stderr):
-               write(client, stderr, strlen(stderr)) // Write stderr
-               Log.error("Client error    : \(stderr)")
+               if WriteAll(client, stderr) {
+                  Log.error("Client error    : \(stderr)")
+               } else {
+                  Log.debug("Client write failed: errno=\(errno)")
+               }
             }
 
             shutdown(client, SHUT_WR)
@@ -190,7 +248,7 @@ public enum IMED {
 
       Log.info("Socket bound to \(state.sockPath ?? "")")
 
-      guard listen(fd, 5) == 0 else {
+      guard listen(fd, 64) == 0 else {
          throw NSError(domain: "listen", code: -1, userInfo: ["msg": "listen() failed"])
       }
 
@@ -202,7 +260,12 @@ public enum IMED {
             Log.error("accept() failed")
             continue
          }
-         Task {
+         guard ConfigureClient(client) else {
+            Log.debug("setsockopt() failed: errno=\(errno)")
+            close(client)
+            continue
+         }
+         connectionQueue.async {
             self.handleClient(client)
          }
       }

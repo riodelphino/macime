@@ -1,6 +1,35 @@
 import Foundation
 import InputMethodKit
 
+final class InputSourceCache {
+   private let load: () -> [TISInputSource]
+   private var cachedSources: [TISInputSource]?
+
+   init(load: @escaping () -> [TISInputSource]) {
+      self.load = load
+   }
+
+   func sources() -> [TISInputSource] {
+      if let cachedSources {
+         return cachedSources
+      }
+      return refresh()
+   }
+
+   func refresh() -> [TISInputSource] {
+      let sources = load()
+      cachedSources = sources
+      return sources
+   }
+
+   func source(id: String) -> TISInputSource? {
+      if let source = cachedSources?.first(where: { $0.id == id }) {
+         return source
+      }
+      return refresh().first(where: { $0.id == id })
+   }
+}
+
 public enum IME {
    public static var state: IMEState!
 
@@ -10,31 +39,41 @@ public enum IME {
 
    private static let BASE_IME = "com.apple.keylayout.ABC"
 
-   /// Lazy load
-   private static var _sources: [TISInputSource]?
-
-   public static var sources: [TISInputSource] {
-      if let cached = _sources {
-         return cached
-      }
+   private static let sourceCache = InputSourceCache {
       let arr =
          TISCreateInputSourceList(nil, false)
             .takeRetainedValue() as NSArray
-      let list = arr as! [TISInputSource]
-      _sources = list
-      return list
+      return arr as! [TISInputSource]
+   }
+
+   public static var sources: [TISInputSource] {
+      return sourceCache.sources()
    }
 
    public static func select(id: String) throws -> TISInputSource {
-      guard let source = sources.first(where: { $0.id == id }) else {
+      return try select(id: id, sourceCache: sourceCache, selectInputSource: TISSelectInputSource)
+   }
+
+   static func select(
+      id: String,
+      sourceCache: InputSourceCache,
+      selectInputSource: (TISInputSource) -> OSStatus
+   ) throws -> TISInputSource {
+      guard let source = sourceCache.source(id: id) else {
          throw AppError.ime(.notFound(id))
       }
-      let ret = TISSelectInputSource(source)
-
-      if ret != 0 {
+      let ret = selectInputSource(source)
+      if ret == 0 {
+         return source
+      }
+      guard let refreshedSource = sourceCache.refresh().first(where: { $0.id == id }) else {
          throw AppError.ime(.selectFailed(id, ret))
       }
-      return source
+      let refreshedRet = selectInputSource(refreshedSource)
+      if refreshedRet != 0 {
+         throw AppError.ime(.selectFailed(id, refreshedRet))
+      }
+      return refreshedSource
    }
 
    public static func current() throws -> TISInputSource? {

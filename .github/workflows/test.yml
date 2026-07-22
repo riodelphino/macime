@@ -15,18 +15,12 @@ jobs:
       - name: Show Swift version
         run: swift --version
 
+      - name: Run tests
+        run: swift test
+
       - name: Build (release)
         run: swift build -c release
 
       - name: Run macime get (direct)
         run: |
           .build/release/macime get
-
-      - name: Start/Stop macimed
-        run: |
-          export MACIME_PATH="$PWD/.build/release/macime"
-          .build/release/macimed &
-          echo $! > macimed.pid
-          sleep 1
-          kill "$(cat macimed.pid)" || true
-

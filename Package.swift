@@ -33,5 +33,15 @@ let package = Package(
          dependencies: ["MacIMEKit"],
          path: "Sources/macimed"
       ),
+
+      .testTarget(
+         name: "MacIMEIntegrationTests",
+         dependencies: ["macimed"]
+      ),
+
+      .testTarget(
+         name: "MacIMEKitTests",
+         dependencies: ["MacIMEKit"]
+      ),
    ]
 )
